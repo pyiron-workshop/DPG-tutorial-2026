@@ -1,0 +1,13 @@
+title: DPG tutorial 2025
+author: Sarath Menon
+
+execute:
+  execute_notebooks           : off
+
+repository:
+    url                       : https://github.com/pyiron-workshop/DPG-tutorial-2025
+    path_to_book              : ""
+
+launch_buttons:
+  notebook_interface          : jupyterlab
+  binderhub_url               : https://mybinder.org
