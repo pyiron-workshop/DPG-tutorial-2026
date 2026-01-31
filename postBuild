@@ -9,4 +9,4 @@ cd ..
 
 # Now clean up everything else
 rm -r .github
-rm _config.yml _toc.yml README.md environment.yaml CITATION.cff postBuild
+rm _config.yml _toc.yml README.md environment.yml CITATION.cff postBuild
