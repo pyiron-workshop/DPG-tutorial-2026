@@ -4,7 +4,7 @@ from ase.constraints import FixAtoms
 from ase.filters import FrechetCellFilter
 from enum import Enum
 import numpy as np
-from pyiron_core import as_function_node, Node
+from pyiron_core import as_function_node, Node, as_inp_dataclass_node
 
 
 @as_inp_dataclass_node

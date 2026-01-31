@@ -7,5 +7,5 @@ pip install . --no-deps --no-build-isolation
 cd ..
 
 # Now clean up everything else
-rm -r .github
+rm -r .github pyiron_core
 rm _config.yml _toc.yml README.md environment.yml CITATION.cff postBuild
