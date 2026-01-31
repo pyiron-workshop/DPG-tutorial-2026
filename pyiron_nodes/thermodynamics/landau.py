@@ -1,3 +1,4 @@
+from dataclasses import replace
 import numpy as np
 from pyiron_core import as_function_node
 import landau
@@ -311,3 +312,29 @@ def PhasesFromDataFrame(
     print("Found phases:", *phase_dict.keys(), sep='\n')
     phase_list = list(phase_dict.values())
     return phase_list, phase_dict
+
+
+def make_phase(dd, temperature_parameters, concentration_parameters):
+    name = dd.phase.iloc[0]
+    # minus 2 for terminals
+    # minus 1 to be not exactly interpolating
+    sub = [landau.phases.TemperatureDependentLinePhase(
+                f'{row.phase}_{c:.03}', c, 
+                row.temperature, row.free_energy, 
+                interpolator=landau.interpolate.SGTE(temperature_parameters)
+            ) for c, row in dd.set_index('composition').iterrows()]
+    # only a single concentration
+    if len(sub) == 1:
+        return replace(sub[0], name=name)
+    if concentration_parameters is not None:
+        interp_params = min(len(dd)-2-1, concentration_parameters)
+        # terminals are present
+        if len({0, 1}.intersection([s.line_concentration for s in sub]))==2:
+            if len(sub) == 2: # only terminals are present
+                return landau.phases.IdealSolution(name, *sub)
+            else:
+                return landau.phases.RegularSolution(name, sub, interp_params)
+        else:
+            return landau.phases.InterpolatingPhase(name, sub, interp_params, num_samples=1000)
+    else:
+        return sub
