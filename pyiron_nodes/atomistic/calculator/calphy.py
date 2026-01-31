@@ -167,6 +167,9 @@ def _prepare_potential_and_structure(potential, structure):
         LammpsStructure,
     ) 
 
+    if isinstance(structure, list):
+        structure = structure[0]
+
     potential = get_potential_by_name(potential_name=potential)
 
     pair_style = []
@@ -247,7 +250,7 @@ def _prepare_input(inp, potential, structure, mode='fe', reference_phase='solid'
     if mode == 'ts':
         inpdict["temperature"] = [inpdict['temperature'], inpdict["temperature_stop"]]
         del inpdict["temperature_stop"]
-        
+
     calc = Calculation(**inpdict)
     return calc
 
