@@ -1,6 +1,5 @@
 channels:
 - conda-forge
-- nodefaults
 dependencies:
 - python >=3.11,<3.14
 - hatchling =1.27.0
