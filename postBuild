@@ -1,6 +1,7 @@
 #!/bin/bash
 git clone https://github.com/pyiron/pyiron_core.git
 cd pyiron_core
+rm -r pyiron_core/pyiron_nodes/electrochemistry pyiron_core/pyiron_nodes/atomistic/structure/view.py pyiron_core/pyiron_nodes/atomistic/engine/lammps.py pyiron_core/pyiron_nodes/atomistic/engine/vasp.py pyiron_core/pyiron_nodes/atomistic/thermodynamics/calphy/calphy.py pyiron_core/pyiron_nodes/atomistic/property/calphy.py pyiron_core/pyiron_nodes/atomistic/structure/build.py pyiron_core/pyiron_nodes/dev_tools.py
 pip install . --no-deps --no-build-isolation
 cd ..
 
