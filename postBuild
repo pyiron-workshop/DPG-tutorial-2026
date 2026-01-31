@@ -2,8 +2,7 @@
 git clone https://github.com/pyiron/pyiron_core.git
 cd pyiron_core
 rm -r pyiron_core/pyiron_nodes
-mkdir pyiron_core/pyiron_nodes
-touch pyiron_core/pyiron_nodes/__init__.py
+mv ../pyiron_nodes pyiron_core
 pip install . --no-deps --no-build-isolation
 cd ..
 
