@@ -167,9 +167,6 @@ def _prepare_potential_and_structure(potential, structure):
         LammpsStructure,
     ) 
 
-    if isinstance(structure, list):
-        structure = structure[0]
-
     potential = get_potential_by_name(potential_name=potential)
 
     pair_style = []

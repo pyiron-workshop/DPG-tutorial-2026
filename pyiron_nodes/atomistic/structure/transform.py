@@ -24,7 +24,7 @@ def stretch(structure: Atoms, hydro: float, shear: float) -> Atoms:
 
 
 @as_function_node
-def Rattle(structure: Atoms, sigma: float, samples: int) -> list[Atoms]:
+def RattleAndStrech(structure: Atoms, sigma: float, samples: int) -> list[Atoms]:
     structures = []
     # no point in rattling single atoms
     if len(structure) > 1:
@@ -39,12 +39,29 @@ def Rattle(structure: Atoms, sigma: float, samples: int) -> list[Atoms]:
 
 
 @as_function_node
+def Rattle(structure, seed: int = 42, stdev: float = 0.1):
+    """
+    Randomly displace the atoms in the structure.
+
+    Parameters:
+
+    seed = 42:
+    Random seed for the random number generator.
+    amplitude = 0.1:
+    The amplitude of the random displacement.
+    """
+    structure = structure.copy()
+    structure.rattle(seed=seed, stdev=stdev)
+    return structure
+
+
+@as_function_node
 def RattleLoop(
         structures: list[Atoms], sigma: float, samples: int
 ) -> list[Atoms]:
     rattled_structures = []
     for structure in structures:
-        rattled_structures += Rattle(structure, sigma, samples).pull()
+        rattled_structures += RattleAndStrech(structure, sigma, samples).pull()
     return rattled_structures
 
 
