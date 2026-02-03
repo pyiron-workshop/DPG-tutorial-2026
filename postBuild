@@ -1,5 +1,5 @@
 #!/bin/bash
-git clone https://github.com/pyiron/pyiron_core.git
+git clone -b IPAM_hackathon https://github.com/pyiron/pyiron_core.git
 cd pyiron_core
 rm -r pyiron_core/pyiron_nodes
 mv ../pyiron_nodes pyiron_core
