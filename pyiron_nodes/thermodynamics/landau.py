@@ -63,7 +63,7 @@ def TransitionTemperature(
     ax.text(Tm + .05 * dft, fm + dfa * .1, rf"$T_m = {Tm:.0f}\,\mathrm{{K}}$", rotation='vertical', ha='center')
     ax.set_xlabel("Temperature [K]")
     ax.set_ylabel("Free Energy [eV/atom]")
-    return Tm, fig
+    return fig
 
 
 @as_function_node
