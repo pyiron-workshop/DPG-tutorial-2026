@@ -289,7 +289,7 @@ def SolidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) -
     job = Solid(calculation=calc, simfolder=simfolder)
     job = routine_fe(job)
     _run_cleanup(simfolder, calc.lattice)
-    free_energy = job.report["results"]["free_energy"]
+    free_energy = job.report["results"]["free_energy"].tolist()
     return free_energy
 
 
@@ -321,7 +321,7 @@ def LiquidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) 
     job = routine_fe(job)
     #run calculation
     _run_cleanup(simfolder, calc.lattice)
-    free_energy = job.report["results"]["free_energy"]
+    free_energy = job.report["results"]["free_energy"].tolist()
     return free_energy
 
 
