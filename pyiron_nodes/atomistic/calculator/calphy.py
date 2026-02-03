@@ -326,7 +326,7 @@ def LiquidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) 
 
 
 @as_function_node
-def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True) -> Tuple[list, list]:
+def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True):
     """
     Calculate the free energy of a solid phase as a function of temperature.
 
@@ -364,7 +364,7 @@ def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool =
 
 
 @as_function_node
-def LiquidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True) -> Tuple[list, list]:
+def LiquidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True):
     """
     Calculate the free energy of a liquid phase as a function of temperature.
 
