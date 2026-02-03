@@ -355,7 +355,9 @@ def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool =
 
     #grab the results
     datafile = os.path.join(os.getcwd(), simfolder, 'temperature_sweep.dat')
-    temperature, free_energy = np.loadtxt(datafile, unpack=True, usecols=(0,1))
+    temperature_array, free_energy_array = np.loadtxt(datafile, unpack=True, usecols=(0,1))
+    temperature = temperature_array.tolist()
+    free_energy = free_energy_array.tolist()
 
     _run_cleanup(simfolder, calc.lattice)
     return temperature, free_energy
@@ -390,7 +392,9 @@ def LiquidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool 
     
     #grab the results
     datafile = os.path.join(os.getcwd(), simfolder, 'temperature_sweep.dat')
-    temperature, free_energy = np.loadtxt(datafile, unpack=True, usecols=(0,1))
+    temperature_array, free_energy_array = np.loadtxt(datafile, unpack=True, usecols=(0,1))
+    temperature = temperature_array.tolist()
+    free_energy = free_energy_array.tolist()
 
     _run_cleanup(simfolder, calc.lattice)
     return temperature, free_energy
