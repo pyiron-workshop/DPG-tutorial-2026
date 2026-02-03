@@ -261,7 +261,7 @@ def _run_cleanup(simfolder, lattice, delete_folder=False):
 
 
 @as_function_node
-def SolidFreeEnergy(inp, structure: Atoms, potential: str) -> float:
+def SolidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) -> float:
     """
     Calculate the free energy of a solid phase.
 
@@ -294,7 +294,7 @@ def SolidFreeEnergy(inp, structure: Atoms, potential: str) -> float:
 
 
 @as_function_node
-def LiquidFreeEnergy(inp, structure: Atoms, potential: str) -> float:
+def LiquidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) -> float:
     """
     Calculate the free energy of a liquid phase.
 
@@ -326,7 +326,7 @@ def LiquidFreeEnergy(inp, structure: Atoms, potential: str) -> float:
 
 
 @as_function_node
-def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str) -> Tuple[np.ndarray, np.ndarray]:
+def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True) -> Tuple[np.ndarray, np.ndarray]:
     """
     Calculate the free energy of a solid phase as a function of temperature.
 
@@ -362,7 +362,7 @@ def SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str) -> Tuple[np.n
 
 
 @as_function_node
-def LiquidFreeEnergyWithTemp(inp, structure: Atoms, potential: str) -> Tuple[np.ndarray, np.ndarray]:
+def LiquidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True) -> Tuple[np.ndarray, np.ndarray]:
     """
     Calculate the free energy of a liquid phase as a function of temperature.
 
