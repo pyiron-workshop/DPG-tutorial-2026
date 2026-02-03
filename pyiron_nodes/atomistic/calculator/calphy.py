@@ -487,7 +487,7 @@ def CalcPhaseTransformationTemp(temp_A: np.ndarray, fe_A: np.ndarray, temp_B: np
     ax.set_xlabel('Temperature (K)')
     ax.legend(frameon=False)
 
-    return phase_transition_temperature, fig
+    return fig
 
 
 @as_function_node
