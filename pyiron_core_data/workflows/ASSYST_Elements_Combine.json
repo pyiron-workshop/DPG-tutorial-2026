@@ -1,0 +1,171 @@
+{
+    "label": "ASSYST_Elements_Combine",
+    "nodes": {
+        "Mg": {
+            "id": "Mg",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+            "label": "Mg",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Mg",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+                "inputs": {
+                    "element": "Mg",
+                    "min_ion": 4,
+                    "step_ion": 2
+                }
+            }
+        },
+        "Ca": {
+            "id": "Ca",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+            "label": "Ca",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Ca",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+                "inputs": {
+                    "element": "Ca",
+                    "min_ion": 2,
+                    "step_ion": 2
+                }
+            }
+        },
+        "Al": {
+            "id": "Al",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+            "label": "Al",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Al",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+                "inputs": {
+                    "element": "Al"
+                }
+            }
+        },
+        "combo": {
+            "id": "combo",
+            "import_path": "pyiron_core.pyiron_nodes.basic.logic.Or",
+            "label": "combo",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "combo",
+                "function": "pyiron_core.pyiron_nodes.basic.logic.Or",
+                "inputs": {}
+            }
+        },
+        "product": {
+            "id": "product",
+            "import_path": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+            "label": "product",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "product",
+                "function": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+                "inputs": {}
+            }
+        },
+        "filter": {
+            "id": "filter",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.FilterSize",
+            "label": "filter",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "filter",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.FilterSize",
+                "inputs": {
+                    "max": 16
+                }
+            }
+        },
+        "ElementsTable": {
+            "id": "ElementsTable",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
+            "label": "ElementsTable",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "ElementsTable",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
+                "inputs": {}
+            }
+        },
+        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+    },
+    "edges": {
+        "values": [
+            {
+                "source": "Mg",
+                "target": "combo",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "x"
+            },
+            {
+                "source": "Ca",
+                "target": "combo",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "y"
+            },
+            {
+                "source": "combo",
+                "target": "product",
+                "sourceHandle": "or",
+                "targetHandle": "x"
+            },
+            {
+                "source": "Al",
+                "target": "product",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "y"
+            },
+            {
+                "source": "product",
+                "target": "filter",
+                "sourceHandle": "product",
+                "targetHandle": "elements"
+            },
+            {
+                "source": "filter",
+                "target": "ElementsTable",
+                "sourceHandle": "filtered",
+                "targetHandle": "stoichiometry"
+            }
+        ],
+        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    }
+}

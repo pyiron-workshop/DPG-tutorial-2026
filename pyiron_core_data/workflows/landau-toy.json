@@ -1,0 +1,231 @@
+{
+    "label": "landau-toy",
+    "nodes": {
+        "LinePhase0": {
+            "id": "LinePhase0",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+            "label": "LinePhase0",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "LinePhase0",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+                "inputs": {
+                    "name": "SolidA",
+                    "concentration": 0,
+                    "energy": 2.45,
+                    "entropy": 1e-05
+                }
+            }
+        },
+        "LinePhase1": {
+            "id": "LinePhase1",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+            "label": "LinePhase1",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "LinePhase1",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+                "inputs": {
+                    "name": "SolidB",
+                    "concentration": 1,
+                    "energy": 2.95,
+                    "entropy": 1e-05
+                }
+            }
+        },
+        "LinePhase2": {
+            "id": "LinePhase2",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+            "label": "LinePhase2",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "LinePhase2",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+                "inputs": {
+                    "name": "LiquidA",
+                    "concentration": 0,
+                    "energy": 2.5,
+                    "entropy": 0.0001
+                }
+            }
+        },
+        "LinePhase3": {
+            "id": "LinePhase3",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+            "label": "LinePhase3",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "LinePhase3",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.LinePhase",
+                "inputs": {
+                    "name": "LiquidB",
+                    "concentration": 1,
+                    "energy": 3.1,
+                    "entropy": 0.0002
+                }
+            }
+        },
+        "IdealSolution": {
+            "id": "IdealSolution",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.IdealSolution",
+            "label": "IdealSolution",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "IdealSolution",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.IdealSolution",
+                "inputs": {
+                    "name": "liquid"
+                }
+            }
+        },
+        "Linspace": {
+            "id": "Linspace",
+            "import_path": "pyiron_core.pyiron_nodes.basic.math.Linspace",
+            "label": "Linspace",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Linspace",
+                "function": "pyiron_core.pyiron_nodes.basic.math.Linspace",
+                "inputs": {
+                    "x_min": 250,
+                    "x_max": 1000,
+                    "num_points": 25
+                }
+            }
+        },
+        "List5": {
+            "id": "List5",
+            "import_path": "pyiron_core.pyiron_nodes.basic.list.List5",
+            "label": "List5",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "List5",
+                "function": "pyiron_core.pyiron_nodes.basic.list.List5",
+                "inputs": {}
+            }
+        },
+        "CalcPhaseDiagram": {
+            "id": "CalcPhaseDiagram",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.CalcPhaseDiagram",
+            "label": "CalcPhaseDiagram",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "CalcPhaseDiagram",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.CalcPhaseDiagram",
+                "inputs": {
+                    "chemical_potentials": 50
+                }
+            }
+        },
+        "PlotConcPhaseDiagram": {
+            "id": "PlotConcPhaseDiagram",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.PlotConcPhaseDiagram",
+            "label": "PlotConcPhaseDiagram",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "PlotConcPhaseDiagram",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.PlotConcPhaseDiagram",
+                "inputs": {}
+            }
+        },
+        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+    },
+    "edges": {
+        "values": [
+            {
+                "source": "LinePhase2",
+                "target": "IdealSolution",
+                "sourceHandle": "phase",
+                "targetHandle": "phase1"
+            },
+            {
+                "source": "LinePhase3",
+                "target": "IdealSolution",
+                "sourceHandle": "phase",
+                "targetHandle": "phase2"
+            },
+            {
+                "source": "LinePhase0",
+                "target": "List5",
+                "sourceHandle": "phase",
+                "targetHandle": "x1"
+            },
+            {
+                "source": "LinePhase1",
+                "target": "List5",
+                "sourceHandle": "phase",
+                "targetHandle": "x2"
+            },
+            {
+                "source": "IdealSolution",
+                "target": "List5",
+                "sourceHandle": "phase",
+                "targetHandle": "x3"
+            },
+            {
+                "source": "List5",
+                "target": "CalcPhaseDiagram",
+                "sourceHandle": "list_out",
+                "targetHandle": "phases"
+            },
+            {
+                "source": "Linspace",
+                "target": "CalcPhaseDiagram",
+                "sourceHandle": "linspace",
+                "targetHandle": "temperatures"
+            },
+            {
+                "source": "CalcPhaseDiagram",
+                "target": "PlotConcPhaseDiagram",
+                "sourceHandle": "phase_data",
+                "targetHandle": "phase_data"
+            }
+        ],
+        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    }
+}

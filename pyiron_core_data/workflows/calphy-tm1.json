@@ -1,0 +1,250 @@
+{
+    "label": "calphy-tm1",
+    "nodes": {
+        "Bulk": {
+            "id": "Bulk",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.build.Bulk",
+            "label": "Bulk",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Bulk",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.build.Bulk",
+                "inputs": {
+                    "name": "Al",
+                    "cubic": true
+                }
+            }
+        },
+        "Repeat": {
+            "id": "Repeat",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.transform.Repeat",
+            "label": "Repeat",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Repeat",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.transform.Repeat",
+                "inputs": {
+                    "repeat_scalar": 3
+                }
+            }
+        },
+        "Rattle": {
+            "id": "Rattle",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.transform.Rattle",
+            "label": "Rattle",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Rattle",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.transform.Rattle",
+                "inputs": {
+                    "stdev": 0.6
+                }
+            }
+        },
+        "InputClass": {
+            "id": "InputClass",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.calphy.InputClass",
+            "label": "InputClass",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "InputClass",
+                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.calphy.InputClass",
+                "inputs": {
+                    "temperature": 800,
+                    "temperature_stop": 1100
+                }
+            }
+        },
+        "SolidFreeEnergyWithTemp": {
+            "id": "SolidFreeEnergyWithTemp",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.calphy.SolidFreeEnergyWithTemp",
+            "label": "SolidFreeEnergyWithTemp",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "SolidFreeEnergyWithTemp",
+                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.calphy.SolidFreeEnergyWithTemp",
+                "inputs": {
+                    "potential": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
+                }
+            }
+        },
+        "LiquidFreeEnergyWithTemp": {
+            "id": "LiquidFreeEnergyWithTemp",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.calphy.LiquidFreeEnergyWithTemp",
+            "label": "LiquidFreeEnergyWithTemp",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "LiquidFreeEnergyWithTemp",
+                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.calphy.LiquidFreeEnergyWithTemp",
+                "inputs": {
+                    "potential": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
+                }
+            }
+        },
+        "Solid": {
+            "id": "Solid",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.TemperatureLinePhase",
+            "label": "Solid",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Solid",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.TemperatureLinePhase",
+                "inputs": {
+                    "name": "AlSolid",
+                    "concentration": 0
+                }
+            }
+        },
+        "Liquid": {
+            "id": "Liquid",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.TemperatureLinePhase",
+            "label": "Liquid",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Liquid",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.TemperatureLinePhase",
+                "inputs": {
+                    "name": "AlLiquid",
+                    "concentration": 0
+                }
+            }
+        },
+        "TransitionTemperature": {
+            "id": "TransitionTemperature",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.TransitionTemperature",
+            "label": "TransitionTemperature",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "TransitionTemperature",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.TransitionTemperature",
+                "inputs": {
+                    "Tmin": 800,
+                    "Tmax": 1000
+                }
+            }
+        },
+        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+    },
+    "edges": {
+        "values": [
+            {
+                "source": "Bulk",
+                "target": "Repeat",
+                "sourceHandle": "structure",
+                "targetHandle": "structure"
+            },
+            {
+                "source": "Repeat",
+                "target": "Rattle",
+                "sourceHandle": "structure",
+                "targetHandle": "structure"
+            },
+            {
+                "source": "InputClass",
+                "target": "SolidFreeEnergyWithTemp",
+                "sourceHandle": "dataclass",
+                "targetHandle": "inp"
+            },
+            {
+                "source": "Repeat",
+                "target": "SolidFreeEnergyWithTemp",
+                "sourceHandle": "structure",
+                "targetHandle": "structure"
+            },
+            {
+                "source": "InputClass",
+                "target": "LiquidFreeEnergyWithTemp",
+                "sourceHandle": "dataclass",
+                "targetHandle": "inp"
+            },
+            {
+                "source": "Rattle",
+                "target": "LiquidFreeEnergyWithTemp",
+                "sourceHandle": "structure",
+                "targetHandle": "structure"
+            },
+            {
+                "source": "SolidFreeEnergyWithTemp",
+                "target": "Solid",
+                "sourceHandle": "temperature",
+                "targetHandle": "temperatures"
+            },
+            {
+                "source": "SolidFreeEnergyWithTemp",
+                "target": "Solid",
+                "sourceHandle": "free_energy",
+                "targetHandle": "free_energies"
+            },
+            {
+                "source": "LiquidFreeEnergyWithTemp",
+                "target": "Liquid",
+                "sourceHandle": "temperature",
+                "targetHandle": "temperatures"
+            },
+            {
+                "source": "LiquidFreeEnergyWithTemp",
+                "target": "Liquid",
+                "sourceHandle": "free_energy",
+                "targetHandle": "free_energies"
+            },
+            {
+                "source": "Solid",
+                "target": "TransitionTemperature",
+                "sourceHandle": "phase",
+                "targetHandle": "phase1"
+            },
+            {
+                "source": "Liquid",
+                "target": "TransitionTemperature",
+                "sourceHandle": "phase",
+                "targetHandle": "phase2"
+            }
+        ],
+        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    }
+}

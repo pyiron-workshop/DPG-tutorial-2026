@@ -1,0 +1,109 @@
+{
+    "label": "youngs_modulus",
+    "nodes": {
+        "read_csv": {
+            "id": "read_csv",
+            "import_path": "__main__.ReadCSV",
+            "label": "read_csv",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "read_csv",
+                "function": "__main__.ReadCSV",
+                "inputs": {
+                    "filename": "data/dataset_1.csv"
+                }
+            }
+        },
+        "stresses": {
+            "id": "stresses",
+            "import_path": "__main__.ConvertLoadToStress",
+            "label": "stresses",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "stresses",
+                "function": "__main__.ConvertLoadToStress",
+                "inputs": {
+                    "area": 120
+                }
+            }
+        },
+        "youngs_modulus": {
+            "id": "youngs_modulus",
+            "import_path": "__main__.CalculateYoungsModulus",
+            "label": "youngs_modulus",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "youngs_modulus",
+                "function": "__main__.CalculateYoungsModulus",
+                "inputs": {}
+            }
+        },
+        "plot": {
+            "id": "plot",
+            "import_path": "__main__.Plot",
+            "label": "plot",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "plot",
+                "function": "__main__.Plot",
+                "inputs": {}
+            }
+        },
+        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+    },
+    "edges": {
+        "values": [
+            {
+                "source": "read_csv",
+                "target": "stresses",
+                "sourceHandle": "csv",
+                "targetHandle": "df"
+            },
+            {
+                "source": "stresses",
+                "target": "youngs_modulus",
+                "sourceHandle": "stress",
+                "targetHandle": "stress"
+            },
+            {
+                "source": "stresses",
+                "target": "youngs_modulus",
+                "sourceHandle": "strain",
+                "targetHandle": "strain"
+            },
+            {
+                "source": "stresses",
+                "target": "plot",
+                "sourceHandle": "stress",
+                "targetHandle": "stress"
+            },
+            {
+                "source": "stresses",
+                "target": "plot",
+                "sourceHandle": "strain",
+                "targetHandle": "strain"
+            }
+        ],
+        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    }
+}

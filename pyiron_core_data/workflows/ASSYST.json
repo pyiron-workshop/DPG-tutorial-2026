@@ -1,0 +1,421 @@
+{
+    "label": "ASSYST",
+    "nodes": {
+        "Element_1": {
+            "id": "Element_1",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+            "label": "Element_1",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Element_1",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+                "inputs": {
+                    "element": "Mg"
+                }
+            }
+        },
+        "Element_2": {
+            "id": "Element_2",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+            "label": "Element_2",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Element_2",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+                "inputs": {
+                    "element": "Ca"
+                }
+            }
+        },
+        "Multiply_1_2": {
+            "id": "Multiply_1_2",
+            "import_path": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+            "label": "Multiply_1_2",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Multiply_1_2",
+                "function": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+                "inputs": {}
+            }
+        },
+        "Element_3": {
+            "id": "Element_3",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+            "label": "Element_3",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Element_3",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+                "inputs": {
+                    "element": "Al"
+                }
+            }
+        },
+        "Multiply_2_3": {
+            "id": "Multiply_2_3",
+            "import_path": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+            "label": "Multiply_2_3",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Multiply",
+                "function": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+                "inputs": {}
+            }
+        },
+        "Multiply": {
+            "id": "Multiply",
+            "import_path": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+            "label": "Multiply",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Multiply",
+                "function": "pyiron_core.pyiron_nodes.basic.math.Multiply",
+                "inputs": {}
+            }
+        },
+        "SpaceGroupSampling": {
+            "id": "SpaceGroupSampling",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.SpaceGroupSampling",
+            "label": "SpaceGroupSampling",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "SpaceGroupSampling",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.SpaceGroupSampling",
+                "inputs": {
+                    "max_atoms": 12,
+                    "max_structures": 50
+                }
+            }
+        },
+        "PlotSPG": {
+            "id": "PlotSPG",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.plot.PlotSPG",
+            "label": "PlotSPG",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "PlotSPG",
+                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.plot.PlotSPG",
+                "inputs": {}
+            }
+        },
+        "Calculator": {
+            "id": "Calculator",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.engine.grace.Grace",
+            "label": "Calculator",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Calculator",
+                "function": "pyiron_core.pyiron_nodes.atomistic.engine.grace.Grace",
+                "inputs": {}
+            }
+        },
+        "OptimizerSettings": {
+            "id": "OptimizerSettings",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.GenericOptimizerSettings",
+            "label": "OptimizerSettings",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "OptimizerSettings",
+                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.GenericOptimizerSettings",
+                "inputs": {}
+            }
+        },
+        "VolumeRelax": {
+            "id": "VolumeRelax",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.RelaxLoop",
+            "label": "VolumeRelax",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "VolumeRelax",
+                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.RelaxLoop",
+                "inputs": {
+                    "mode": "volume"
+                }
+            }
+        },
+        "FullRelax": {
+            "id": "FullRelax",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.RelaxLoop",
+            "label": "FullRelax",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "FullRelax",
+                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.RelaxLoop",
+                "inputs": {
+                    "mode": "full"
+                }
+            }
+        },
+        "Rattle": {
+            "id": "Rattle",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.transform.RattleLoop",
+            "label": "Rattle",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Rattle",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.transform.RattleLoop",
+                "inputs": {
+                    "sigma": 0.25,
+                    "samples": 4
+                }
+            }
+        },
+        "Stretch": {
+            "id": "Stretch",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.transform.StretchLoop",
+            "label": "Stretch",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Stretch",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.transform.StretchLoop",
+                "inputs": {
+                    "hydro": 0.8,
+                    "shear": 0.2,
+                    "samples": 4
+                }
+            }
+        },
+        "CombineStructures": {
+            "id": "CombineStructures",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.group.CombineStructures",
+            "label": "CombineStructures",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "CombineStructures",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.group.CombineStructures",
+                "inputs": {}
+            }
+        },
+        "SaveStructures": {
+            "id": "SaveStructures",
+            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.group.SaveStructures",
+            "label": "SaveStructures",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "SaveStructures",
+                "function": "pyiron_core.pyiron_nodes.atomistic.structure.group.SaveStructures",
+                "inputs": {
+                    "filename": "data/Structures_Everything"
+                }
+            }
+        },
+        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+    },
+    "edges": {
+        "values": [
+            {
+                "source": "Element_1",
+                "target": "Multiply_1_2",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "x"
+            },
+            {
+                "source": "Element_2",
+                "target": "Multiply_1_2",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "y"
+            },
+            {
+                "source": "Multiply_1_2",
+                "target": "Multiply_2_3",
+                "sourceHandle": "product",
+                "targetHandle": "x"
+            },
+            {
+                "source": "Element_3",
+                "target": "Multiply_2_3",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "y"
+            },
+            {
+                "source": "Multiply_1_2",
+                "target": "Multiply",
+                "sourceHandle": "product",
+                "targetHandle": "x"
+            },
+            {
+                "source": "Element_3",
+                "target": "Multiply",
+                "sourceHandle": "stoichiometry",
+                "targetHandle": "y"
+            },
+            {
+                "source": "Multiply",
+                "target": "SpaceGroupSampling",
+                "sourceHandle": "product",
+                "targetHandle": "elements"
+            },
+            {
+                "source": "SpaceGroupSampling",
+                "target": "PlotSPG",
+                "sourceHandle": "structures",
+                "targetHandle": "structures"
+            },
+            {
+                "source": "Calculator",
+                "target": "VolumeRelax",
+                "sourceHandle": "self",
+                "targetHandle": "calculator"
+            },
+            {
+                "source": "OptimizerSettings",
+                "target": "VolumeRelax",
+                "sourceHandle": "self",
+                "targetHandle": "opt"
+            },
+            {
+                "source": "SpaceGroupSampling",
+                "target": "VolumeRelax",
+                "sourceHandle": "structures",
+                "targetHandle": "structures"
+            },
+            {
+                "source": "Calculator",
+                "target": "FullRelax",
+                "sourceHandle": "self",
+                "targetHandle": "calculator"
+            },
+            {
+                "source": "OptimizerSettings",
+                "target": "FullRelax",
+                "sourceHandle": "self",
+                "targetHandle": "opt"
+            },
+            {
+                "source": "VolumeRelax",
+                "target": "FullRelax",
+                "sourceHandle": "relaxed_structures",
+                "targetHandle": "structures"
+            },
+            {
+                "source": "FullRelax",
+                "target": "Rattle",
+                "sourceHandle": "relaxed_structures",
+                "targetHandle": "structures"
+            },
+            {
+                "source": "FullRelax",
+                "target": "Stretch",
+                "sourceHandle": "relaxed_structures",
+                "targetHandle": "structures"
+            },
+            {
+                "source": "SpaceGroupSampling",
+                "target": "CombineStructures",
+                "sourceHandle": "structures",
+                "targetHandle": "spacegroups"
+            },
+            {
+                "source": "VolumeRelax",
+                "target": "CombineStructures",
+                "sourceHandle": "relaxed_structures",
+                "targetHandle": "volume_relax"
+            },
+            {
+                "source": "FullRelax",
+                "target": "CombineStructures",
+                "sourceHandle": "relaxed_structures",
+                "targetHandle": "full_relax"
+            },
+            {
+                "source": "Rattle",
+                "target": "CombineStructures",
+                "sourceHandle": "rattled_structures",
+                "targetHandle": "rattle"
+            },
+            {
+                "source": "Stretch",
+                "target": "CombineStructures",
+                "sourceHandle": "stretched_structures",
+                "targetHandle": "stretch"
+            },
+            {
+                "source": "CombineStructures",
+                "target": "SaveStructures",
+                "sourceHandle": "structures",
+                "targetHandle": "structures"
+            }
+        ],
+        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    }
+}

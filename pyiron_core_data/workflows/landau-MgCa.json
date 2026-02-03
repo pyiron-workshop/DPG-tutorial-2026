@@ -1,0 +1,145 @@
+{
+    "label": "landau-MgCa",
+    "nodes": {
+        "ReadDataFrame": {
+            "id": "ReadDataFrame",
+            "import_path": "pyiron_core.pyiron_nodes.basic.file.ReadDataFrame",
+            "label": "ReadDataFrame",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "ReadDataFrame",
+                "function": "pyiron_core.pyiron_nodes.basic.file.ReadDataFrame",
+                "inputs": {
+                    "filename": "data/MgCaFreeEnergies.pckl.gz",
+                    "compression": "gzip"
+                }
+            }
+        },
+        "PhasesFromDataFrame": {
+            "id": "PhasesFromDataFrame",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.PhasesFromDataFrame",
+            "label": "PhasesFromDataFrame",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "PhasesFromDataFrame",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.PhasesFromDataFrame",
+                "inputs": {}
+            }
+        },
+        "Linspace": {
+            "id": "Linspace",
+            "import_path": "pyiron_core.pyiron_nodes.basic.math.Linspace",
+            "label": "Linspace",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "Linspace",
+                "function": "pyiron_core.pyiron_nodes.basic.math.Linspace",
+                "inputs": {
+                    "x_min": 200,
+                    "x_max": 1200
+                }
+            }
+        },
+        "CalcPhaseDiagram": {
+            "id": "CalcPhaseDiagram",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.CalcPhaseDiagram",
+            "label": "CalcPhaseDiagram",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "CalcPhaseDiagram",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.CalcPhaseDiagram",
+                "inputs": {
+                    "chemical_potentials": 50
+                }
+            }
+        },
+        "PlotConcPhaseDiagram": {
+            "id": "PlotConcPhaseDiagram",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.PlotConcPhaseDiagram",
+            "label": "PlotConcPhaseDiagram",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "PlotConcPhaseDiagram",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.PlotConcPhaseDiagram",
+                "inputs": {}
+            }
+        },
+        "PlotMuPhaseDiagram": {
+            "id": "PlotMuPhaseDiagram",
+            "import_path": "pyiron_core.pyiron_nodes.thermodynamics.landau.PlotMuPhaseDiagram",
+            "label": "PlotMuPhaseDiagram",
+            "parent_id": null,
+            "level": 0,
+            "graph": null,
+            "node_type": "node",
+            "widget_type": "customNode",
+            "expanded": false,
+            "node": {
+                "label": "PlotMuPhaseDiagram",
+                "function": "pyiron_core.pyiron_nodes.thermodynamics.landau.PlotMuPhaseDiagram",
+                "inputs": {}
+            }
+        },
+        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+    },
+    "edges": {
+        "values": [
+            {
+                "source": "ReadDataFrame",
+                "target": "PhasesFromDataFrame",
+                "sourceHandle": "df",
+                "targetHandle": "dataframe"
+            },
+            {
+                "source": "PhasesFromDataFrame",
+                "target": "CalcPhaseDiagram",
+                "sourceHandle": "phase_list",
+                "targetHandle": "phases"
+            },
+            {
+                "source": "Linspace",
+                "target": "CalcPhaseDiagram",
+                "sourceHandle": "linspace",
+                "targetHandle": "temperatures"
+            },
+            {
+                "source": "CalcPhaseDiagram",
+                "target": "PlotConcPhaseDiagram",
+                "sourceHandle": "phase_data",
+                "targetHandle": "phase_data"
+            },
+            {
+                "source": "CalcPhaseDiagram",
+                "target": "PlotMuPhaseDiagram",
+                "sourceHandle": "phase_data",
+                "targetHandle": "phase_data"
+            }
+        ],
+        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    }
+}
