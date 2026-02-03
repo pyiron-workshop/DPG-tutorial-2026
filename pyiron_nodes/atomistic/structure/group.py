@@ -10,6 +10,7 @@ def CombineStructures(
         full_relax: list[Atoms] | None,
         rattle: list[Atoms] | None,
         stretch: list[Atoms] | None,
+        store: bool = True,
 ) -> list[Atoms]:
     """Combine individual structure sets into a full training set."""
     from functools import reduce
