@@ -11,7 +11,7 @@ def CombineStructures(
         rattle: list[Atoms] | None,
         stretch: list[Atoms] | None,
         store: bool = True,
-) -> list[Atoms]:
+):
     """Combine individual structure sets into a full training set."""
     from functools import reduce
     structures = [spacegroups, volume_relax, full_relax, rattle, stretch]
