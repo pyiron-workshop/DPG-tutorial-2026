@@ -8,7 +8,7 @@ def ConvertLoadToStress(df, area):
     """
     kN_to_N = 0.001  # convert kiloNewton to Newton
     mm2_to_m2 = 1e-6  # convert square millimeters to square meters
-    df["Stress"] = df["Load"] * kN_to_N / (area * mm2_to_m2)
+    df["Stress"] = df["Load"] * kN_to_N / (float(area) * mm2_to_m2)
     #although it says extensometer elongation, the values are in percent! 
     strain = df["Extensometer elongation"].values.flatten()
     #subtract the offset from the dataset
