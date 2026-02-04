@@ -1,0 +1,895 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method &#8212; DPG tutorial 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '02_assyst';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parametrising a Machine Learning Interatomic Potential" href="03_fitting.html" />
+    <link rel="prev" title="Introduction to Workflows" href="01_introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DPG tutorial 2026</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/02_assyst.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/02_assyst.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background"><font style="font-family:roboto;color:#455e6c"> Background </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview"><font style="font-family:roboto;color:#455e6c"> Workflow Overview </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transferability"><font style="font-family:roboto;color:#455e6c"> Transferability </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#literature"><font style="font-family:roboto;color:#455e6c"> Literature </font></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructing-element-combinations"><font style="font-family:roboto;color:#455e6c"> Constructing element combinations </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#full-workflow-for-a-small-structure-set"><font style="font-family:roboto;color:#455e6c"> Full Workflow for a Small Structure Set </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#precomputed-full-workflow-with-large-structure-set"><font style="font-family:roboto;color:#455e6c"> Precomputed Full Workflow with Large Structure Set </font></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="generating-datasets-for-machine-learning-interatomic-potentials-with-the-assyst-method">
+<h1><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font><a class="headerlink" href="#generating-datasets-for-machine-learning-interatomic-potentials-with-the-assyst-method" title="Link to this heading">#</a></h1>
+<div class="admonition note" name="html-admonition" style="background:#e3f2fd; padding: 10px">
+<font style="font-family:roboto;color:#455e6c"> <b> DPG Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations </b> </font> </br>
+<font style="font-family:roboto;color:#455e6c"> 8 March 2026 </font> </br> </br>
+Sriram Anand, Prabhath Chilakalapudi, Haitham Gaafer, Marvin Poul, Jan Janssen, Jörg Neugebauer </br>
+<i> Max Planck Institute for Sustainable Materials </i></br>
+</br>
+Sarath Menon, Minaam Qamar, Ralf Drautz </br>
+<i> Ruhr-Universität Bochum </i></br>
+</br>
+Tilmann Hickel </br>
+<i> Bundesanstalt für Materialforschung und -prüfung </i></br>
+</div><section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://doi.org/10.21203/rs.3.rs-4732459/v1">Poul, M., Huber, L. &amp; Neugebauer, J. Automated Generation of Structure Datasets for Machine Learning Potentials and Alloys. Preprint</a> (2024)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">PyironFlow</span><span class="p">,</span> <span class="n">as_function_node</span><span class="p">,</span> <span class="n">as_inp_dataclass_node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementInput</span><span class="p">,</span> <span class="n">Stoichiometry</span><span class="p">,</span> <span class="n">StoichiometryTable</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="background">
+<h2><font style="font-family:roboto;color:#455e6c"> Background </font><a class="headerlink" href="#background" title="Link to this heading">#</a></h2>
+<p><em>Automated Small SYmetric Structure Training</em> or ASSYST is a method to generate training data for machine learning potentials.
+The key idea is to use small structures to automatically explore structurally and chemically diverse atomic environments and provide training data around the energetically most favorable ones.</p>
+<section id="workflow-overview">
+<h3><font style="font-family:roboto;color:#455e6c"> Workflow Overview </font><a class="headerlink" href="#workflow-overview" title="Link to this heading">#</a></h3>
+<p><img alt="image" src="_images/AssystSchematic.svg" /></p>
+</section>
+<section id="transferability">
+<h3><font style="font-family:roboto;color:#455e6c"> Transferability </font><a class="headerlink" href="#transferability" title="Link to this heading">#</a></h3>
+<p>ASSYST trained potentials describe also structures that they are not directly trained on, such as point and planar defects.</p>
+<p><img alt="image" src="_images/Fig8_MTP24_2d0_8d2_DefectsManual.png" /></p>
+<p>Liquid state is also well described and potentials are stable for long running thermodynamic integrations.</p>
+<p><img alt="image" src="_images/Fig11_MgCa.png" /></p>
+<p>This phase diagram is our goal for today!</p>
+</section>
+<section id="literature">
+<h3><font style="font-family:roboto;color:#455e6c"> Literature </font><a class="headerlink" href="#literature" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Mg and Defects: <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.104103">https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.104103</a></p></li>
+<li><p>Ternary Mg/Al/Ca: <a class="reference external" href="https://www.researchsquare.com/article/rs-4732459/v1">https://www.researchsquare.com/article/rs-4732459/v1</a></p></li>
+</ul>
+</section>
+</section>
+<section id="constructing-element-combinations">
+<h2><font style="font-family:roboto;color:#455e6c"> Constructing element combinations </font><a class="headerlink" href="#constructing-element-combinations" title="Link to this heading">#</a></h2>
+<p>The first step in the ASSYST workflow is to decide which chemical space to cover and how densely.
+Increasing the new number of total atoms allows you to generate more and more complex structures
+and also sample the chemical space more densely.</p>
+<p>Here’s an example for a ternary system, where we sampled the unaries with ASSYST datasets of 1-10 Atoms and the binaries and ternaries with 2-8 or 3-8 Atoms, respectively.</p>
+<p><img alt="img" src="_images/Fig3_Everything_Conc_Plot.png" /></p>
+<p>Log-histogram of composition of a final training set.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Elements</span></code> wraps a list of compositions at which we will sample random crystals.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span> <span class="o">=</span> <span class="n">Stoichiometry</span><span class="p">((</span>
+    <span class="p">{</span><span class="s1">&#39;Mg&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;Mg&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="p">))</span>
+<span class="n">mg</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stoichiometry(stoichiometry=({&#39;Mg&#39;: 2}, {&#39;Mg&#39;: 4}))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">al</span> <span class="o">=</span> <span class="n">Stoichiometry</span><span class="p">((</span>
+    <span class="p">{</span><span class="s1">&#39;Al&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;Al&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="p">))</span>
+<span class="n">al</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stoichiometry(stoichiometry=({&#39;Al&#39;: 1}, {&#39;Al&#39;: 2}))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Can be combined with standard python operations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span> <span class="o">+</span> <span class="n">al</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stoichiometry(stoichiometry=({&#39;Mg&#39;: 2}, {&#39;Mg&#39;: 4}, {&#39;Al&#39;: 1}, {&#39;Al&#39;: 2}))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span> <span class="o">|</span> <span class="n">al</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stoichiometry(stoichiometry=({&#39;Mg&#39;: 2, &#39;Al&#39;: 1}, {&#39;Mg&#39;: 4, &#39;Al&#39;: 2}))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mg</span> <span class="o">*</span> <span class="n">al</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Stoichiometry(stoichiometry=({&#39;Mg&#39;: 2, &#39;Al&#39;: 1}, {&#39;Mg&#39;: 2, &#39;Al&#39;: 2}, {&#39;Mg&#39;: 4, &#39;Al&#39;: 1}, {&#39;Mg&#39;: 4, &#39;Al&#39;: 2}))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Created by the ElementInput node and visualized by StoichiometryTable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;ASSYST_Elements_Unary&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">Element</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s2">&quot;Mg&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">ElementsTable</span> <span class="o">=</span> <span class="n">StoichiometryTable</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">Element</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "3c5a1111323a46ce957a7d7f37e74f0d"}</script></div>
+</div>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Task</b></p>
+<p>Build a small workflow that creates a table with Mg, Al and Ca so that:</p>
+<ol class="arabic simple">
+<li><p>Mg:Ca is always 2:1</p></li>
+<li><p>combines it with 2-8 Al</p></li>
+<li><p>has at least 2 Ca in every composition</p></li>
+<li><p>contains at most 16 Atoms</p></li>
+</ol>
+<p>Check <code class="docutils literal notranslate"><span class="pre">utilities</span></code> for nodes to <code class="docutils literal notranslate"><span class="pre">Add()</span></code>, <code class="docutils literal notranslate"><span class="pre">Multiply()</span></code> or <code class="docutils literal notranslate"><span class="pre">Or()</span></code> objects together.</p>
+<p>Check <code class="docutils literal notranslate"><span class="pre">atomistic</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">mlips</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">fitting</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">assyst</span></code> for nodes to <code class="docutils literal notranslate"><span class="pre">FilterSize()</span></code> or <code class="docutils literal notranslate"><span class="pre">ElementsTable()</span></code></p>
+</div><div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Solution</b></p>
+    Load this workflow for the solution
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Or</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">Multiply</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilterSize</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;ASSYST_Elements_Combine&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">Mg</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s2">&quot;Mg&quot;</span><span class="p">,</span> <span class="n">min_ion</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_ion</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_ion</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">Ca</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s2">&quot;Ca&quot;</span><span class="p">,</span> <span class="n">min_ion</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_ion</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_ion</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">Al</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">min_ion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_ion</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_ion</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">combo</span> <span class="o">=</span> <span class="n">Or</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Mg</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Ca</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="n">Multiply</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">combo</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Al</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">FilterSize</span><span class="p">(</span><span class="n">elements</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">product</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">ElementsTable</span> <span class="o">=</span> <span class="n">StoichiometryTable</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "b9f0c91be40f4c60b737cf528da8b14e"}</script></div>
+</div>
+</section>
+<section id="full-workflow-for-a-small-structure-set">
+<h2><font style="font-family:roboto;color:#455e6c"> Full Workflow for a Small Structure Set </font><a class="headerlink" href="#full-workflow-for-a-small-structure-set" title="Link to this heading">#</a></h2>
+<p>This demonstration uses the GRACE universal force fields for the relaxation steps.
+Usually we would run them in low convergence DFT.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotSPG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceGroupSampling</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.calculator.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">RelaxLoop</span><span class="p">,</span> <span class="n">GenericOptimizerSettings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">RattleLoop</span><span class="p">,</span> <span class="n">StretchLoop</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.engine.grace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">CombineStructures</span><span class="p">,</span> <span class="n">SaveStructures</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_assyst</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span><span class="p">,</span>
+        <span class="n">min_atoms</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_atoms</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_structures</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">delete_existing_savefiles</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+    <span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">element_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">e1</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="n">stoi</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">min_atoms</span><span class="o">=</span><span class="n">min_atoms</span><span class="p">,</span> <span class="n">max_atoms</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="s1">&#39;Element_1&#39;</span><span class="p">,</span> <span class="n">stoi</span><span class="p">)</span>
+        <span class="n">element_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stoi</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
+            <span class="n">en</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">min_atoms</span><span class="o">=</span><span class="n">min_atoms</span><span class="p">,</span> <span class="n">max_atoms</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Element_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">en</span><span class="p">)</span>
+            <span class="n">element_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">en</span><span class="p">)</span>
+            <span class="n">stoi</span> <span class="o">=</span> <span class="n">Multiply</span><span class="p">(</span><span class="n">stoi</span><span class="p">,</span> <span class="n">en</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Multiply_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">stoi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">Multiply</span> <span class="o">=</span> <span class="n">stoi</span>
+        <span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
+                <span class="n">elements</span><span class="o">=</span><span class="n">stoi</span><span class="p">,</span>
+                <span class="n">spacegroups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">max_atoms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">element_nodes</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_atoms</span><span class="p">,</span>
+                <span class="n">max_structures</span><span class="o">=</span><span class="n">max_structures</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
+                <span class="n">max_atoms</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">,</span>
+                <span class="n">max_structures</span><span class="o">=</span><span class="n">max_structures</span>
+        <span class="p">)</span>
+    <span class="n">plotspg</span> <span class="o">=</span> <span class="n">PlotSPG</span><span class="p">(</span><span class="n">spg</span><span class="p">)</span>
+
+    <span class="n">calc_config</span> <span class="o">=</span> <span class="n">Grace</span><span class="p">()</span>
+    <span class="n">optimizer_settings</span> <span class="o">=</span> <span class="n">GenericOptimizerSettings</span><span class="p">()</span>
+
+    <span class="n">volume_relax</span> <span class="o">=</span> <span class="n">RelaxLoop</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">calc_config</span><span class="p">,</span>
+                             <span class="n">opt</span><span class="o">=</span><span class="n">optimizer_settings</span><span class="p">,</span> <span class="n">structures</span><span class="o">=</span><span class="n">spg</span><span class="p">)</span>
+    <span class="n">full_relax</span> <span class="o">=</span> <span class="n">RelaxLoop</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">calc_config</span><span class="p">,</span>
+                           <span class="n">opt</span><span class="o">=</span><span class="n">optimizer_settings</span><span class="p">,</span>
+                           <span class="n">structures</span><span class="o">=</span><span class="n">volume_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">)</span>
+
+    <span class="n">rattle</span> <span class="o">=</span> <span class="n">RattleLoop</span><span class="p">(</span>
+            <span class="n">structures</span><span class="o">=</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+            <span class="n">sigma</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+            <span class="n">samples</span><span class="o">=</span><span class="mi">4</span>
+    <span class="p">)</span>
+
+    <span class="n">stretch</span> <span class="o">=</span> <span class="n">StretchLoop</span><span class="p">(</span>
+            <span class="n">structures</span><span class="o">=</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+            <span class="n">hydro</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+            <span class="n">shear</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">samples</span><span class="o">=</span><span class="mi">4</span>
+    <span class="p">)</span>
+
+    <span class="n">combine_structures</span> <span class="o">=</span> <span class="n">CombineStructures</span><span class="p">(</span>
+            <span class="n">spg</span><span class="p">,</span>
+            <span class="n">volume_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+            <span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+            <span class="n">rattle</span><span class="p">,</span>
+            <span class="n">stretch</span>
+    <span class="p">)</span>
+
+    <span class="n">savestructures</span> <span class="o">=</span> <span class="n">SaveStructures</span><span class="p">(</span><span class="n">combine_structures</span><span class="p">,</span> <span class="s2">&quot;data/Structures_Everything&quot;</span><span class="p">)</span>
+
+    <span class="n">wf</span><span class="o">.</span><span class="n">SpaceGroupSampling</span> <span class="o">=</span> <span class="n">spg</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">PlotSPG</span> <span class="o">=</span> <span class="n">plotspg</span>
+
+    <span class="n">wf</span><span class="o">.</span><span class="n">Calculator</span> <span class="o">=</span> <span class="n">calc_config</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">OptimizerSettings</span> <span class="o">=</span> <span class="n">optimizer_settings</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">VolumeRelax</span> <span class="o">=</span> <span class="n">volume_relax</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">FullRelax</span> <span class="o">=</span> <span class="n">full_relax</span>
+
+    <span class="n">wf</span><span class="o">.</span><span class="n">Rattle</span> <span class="o">=</span> <span class="n">rattle</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">Stretch</span> <span class="o">=</span> <span class="n">stretch</span>
+
+    <span class="n">wf</span><span class="o">.</span><span class="n">CombineStructures</span> <span class="o">=</span> <span class="n">combine_structures</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">SaveStructures</span> <span class="o">=</span> <span class="n">savestructures</span>
+    <span class="k">return</span> <span class="n">wf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">make_assyst</span><span class="p">(</span><span class="s1">&#39;ASSYST&#39;</span><span class="p">,</span> <span class="s1">&#39;Mg&#39;</span><span class="p">,</span> <span class="s1">&#39;Ca&#39;</span><span class="p">,</span> <span class="s1">&#39;Al&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7f3fe2a6fa60&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>implement connect to self
+implement connect to self
+implement connect to self
+implement connect to self
+connected to node (self)
+connected to node (self)
+connected to node (self)
+connected to node (self)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f8912b786efd429fa4967593bf27f06f"}</script></div>
+</div>
+</section>
+<section id="precomputed-full-workflow-with-large-structure-set">
+<h2><font style="font-family:roboto;color:#455e6c"> Precomputed Full Workflow with Large Structure Set </font><a class="headerlink" href="#precomputed-full-workflow-with-large-structure-set" title="Link to this heading">#</a></h2>
+<p>This is the same workflow, but pre-run with realistic input for a Unary system.
+It contains ~10k structures and you can attach plotting functions at various nodes to view them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">make_assyst</span><span class="p">(</span><span class="s1">&#39;ASSYST_Mg_FULL&#39;</span><span class="p">,</span> <span class="s1">&#39;Mg&#39;</span><span class="p">,</span> <span class="n">min_atoms</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_atoms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_structures</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7f3fe2a6fa60&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>implement connect to self
+implement connect to self
+implement connect to self
+implement connect to self
+connected to node (self)
+connected to node (self)
+connected to node (self)
+connected to node (self)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "eb8c95a6532b4b0ca80b0713505cd63b"}</script></div>
+</div>
+<img src="img/logo_roll.png" width="1200"></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_fitting.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background"><font style="font-family:roboto;color:#455e6c"> Background </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview"><font style="font-family:roboto;color:#455e6c"> Workflow Overview </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transferability"><font style="font-family:roboto;color:#455e6c"> Transferability </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#literature"><font style="font-family:roboto;color:#455e6c"> Literature </font></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructing-element-combinations"><font style="font-family:roboto;color:#455e6c"> Constructing element combinations </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#full-workflow-for-a-small-structure-set"><font style="font-family:roboto;color:#455e6c"> Full Workflow for a Small Structure Set </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#precomputed-full-workflow-with-large-structure-set"><font style="font-family:roboto;color:#455e6c"> Precomputed Full Workflow with Large Structure Set </font></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sarath Menon
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

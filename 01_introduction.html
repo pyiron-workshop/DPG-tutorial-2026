@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction to Workflows &#8212; DPG tutorial 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '01_introduction';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method" href="02_assyst.html" />
+    <link rel="prev" title="Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations" href="README.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DPG tutorial 2026</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/01_introduction.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/01_introduction.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-crash-course"><font style="font-family:roboto;color:#455e6c"> Jupyter Crash Course </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-in-the-experimental-results"><font style="font-family:roboto;color:#455e6c"> Reading in the experimental results </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-young-s-modulus"><font style="font-family:roboto;color:#455e6c"> Calculate Young’s modulus </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-the-results"><font style="font-family:roboto;color:#455e6c"> Plotting the results </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-workflow"><font style="font-family:roboto;color:#455e6c"> Creating a workflow </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-graphical-user-interface-for-running-workflows"><font style="font-family:roboto;color:#455e6c"> A graphical user interface for running workflows </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-used-in-this-notebook"><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-workflows">
+<h1><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font><a class="headerlink" href="#introduction-to-workflows" title="Link to this heading">#</a></h1>
+<div class="admonition note" name="html-admonition" style="background:#e3f2fd; padding: 10px">
+<font style="font-family:roboto;color:#455e6c"> <b> DPG Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations </b> </font> </br>
+<font style="font-family:roboto;color:#455e6c"> 8 March 2026 </font> </br> </br>
+Sriram Anand, Prabhath Chilakalapudi, Haitham Gaafer, Marvin Poul, Jan Janssen, Jörg Neugebauer </br>
+<i> Max Planck Institute for Sustainable Materials </i></br>
+</br>
+Sarath Menon, Minaam Qamar, Ralf Drautz </br>
+<i> Ruhr-Universität Bochum </i></br>
+</br>
+Tilmann Hickel </br>
+<i> Bundesanstalt für Materialforschung und -prüfung </i></br>
+</div><p>We will use <a class="reference external" href="https://github.com/pyiron/pyiron_workflow">pyiron_workflow</a>, a framework for constructing workflows as computational graphs from simple python functions, to create a simple workflow for data analysis. Coverting your script to a workflow that you can use a number of powerful features that pyiron provides, such as data management, job management, at the same time ensuring that they are fully reproducible.</p>
+<p>In this example, we will use a very common use case in Materials Science, which is to use data from a <a class="reference external" href="https://en.wikipedia.org/wiki/Tensile_testing">tensile test</a> to calculate the <a class="reference external" href="https://en.wikipedia.org/wiki/Young%27s_modulus">Young’s modulus</a>.</p>
+<p>We start from a datafile in csv format. The file containes data from a tensile test of typical S355 (material number: 1.0577) structural steel (designation of steel according to DIN EN 10025-2:2019). The data were generated in the <a class="reference external" href="https://zenodo.org/communities/bam">Bundesanstalt für Materialforschung und -prüfung (BAM)</a> in the framework of the digitization project <a class="reference external" href="https://www.materialdigital.de/">Innovationplatform MaterialDigital (PMD)</a> which, amongst other activities, aims to store data in a semantically and machine understandable way.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Schilling, M., Glaubitz, S., Matzak, K., Rehmer, B., &amp; Skrotzki, B. (2022). Full dataset of several mechanical tests on an S355 steel sheet as reference data for digital representations (1.0.0) <a class="reference external" href="https://doi.org/10.5281/zenodo.6778336">Data set</a></p></li>
+</ul>
+<p>Let’s start with the visualisation of how such a workflow would look like:</p>
+<img src="img/workflow-dpg.png" width="700"><p>In the tensile test experiment, the force (load) and elongation values are recorded, and saved in a csv file which forms the dataset. We would like to read in this dataset, and convert the load and elongation to stress and strain. Then we plot the results, and calculate a the Young’s modulus, which is the slope of the linear, elastic part of the stress-strain curve. Your calculation could depend on the value of this strain-cutoff that is used, which is something we will explore.</p>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Note</b></p>
+Note that the stress and strain used in this notebook are actually <a href="https://en.wikipedia.org/wiki/Stress%E2%80%93strain_curve">engineering stress and strain</a>
+</div><p>To create such a workflow, we start by defining some functions which does each of this step. We will use ‘pyiron_workflow’ to compose them into a workflow, which can then be easily visualised and executed.</p>
+<p>Before we move on to the actual workflow, a crash course on Jupyter notebooks.</p>
+</section>
+<section id="jupyter-crash-course">
+<h2><font style="font-family:roboto;color:#455e6c"> Jupyter Crash Course </font><a class="headerlink" href="#jupyter-crash-course" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Select cells by clicking on them.</p></li>
+<li><p>Navigate through with <code class="docutils literal notranslate"><span class="pre">up</span></code> and <code class="docutils literal notranslate"><span class="pre">down</span></code> keys (or <code class="docutils literal notranslate"><span class="pre">k</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> for you vimmers).</p></li>
+<li><p>Press Enter to edit a cell.</p></li>
+<li><p>Press Shift-Enter to execute it.</p></li>
+<li><p>Create new cells above or below the current one with <code class="docutils literal notranslate"><span class="pre">a</span></code> or <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p></li>
+<li><p>Copy, cut and paste them with <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">v</span></code>.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">m</span></code> to turn a cell into a markdown cell.</p></li>
+<li><p>See the <code class="docutils literal notranslate"><span class="pre">Help</span></code> in the toolbar for more.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">as_function_node</span><span class="p">,</span> <span class="n">Workflow</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reading-in-the-experimental-results">
+<h2><font style="font-family:roboto;color:#455e6c"> Reading in the experimental results </font><a class="headerlink" href="#reading-in-the-experimental-results" title="Link to this heading">#</a></h2>
+<p>This function reads in the csv file:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ReadCSV</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">decimal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">decimal</span><span class="o">=</span><span class="n">decimal</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then a function to convert the load to stress:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ConvertLoadToStress</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read in csv file, convert load to stress</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kN_to_N</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># convert kiloNewton to Newton</span>
+    <span class="n">mm2_to_m2</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># convert square millimeters to square meters</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Stress&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Load&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">kN_to_N</span> <span class="o">/</span> <span class="p">(</span><span class="n">area</span> <span class="o">*</span> <span class="n">mm2_to_m2</span><span class="p">)</span>
+    <span class="c1">#although it says extensometer elongation, the values are in percent! </span>
+    <span class="n">strain</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Extensometer elongation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="c1">#subtract the offset from the dataset</span>
+    <span class="n">strain</span> <span class="o">=</span> <span class="n">strain</span> <span class="o">-</span> <span class="n">strain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">stress</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Stress&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">stress</span><span class="p">,</span> <span class="n">strain</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculate-young-s-modulus">
+<h2><font style="font-family:roboto;color:#455e6c"> Calculate Young’s modulus </font><a class="headerlink" href="#calculate-young-s-modulus" title="Link to this heading">#</a></h2>
+<p>The stress and strain values, which are outputs of the previous function is used for a linear fit in this function, and the slope is calculated. The slope is the Young’s modulus. The calculated value of Young’s modulus will depend on the <code class="docutils literal notranslate"><span class="pre">strain_cutoff</span></code> parameter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">CalculateYoungsModulus</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">strain</span><span class="p">,</span> <span class="n">strain_cutoff</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="n">percent_to_fraction</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># convert</span>
+    <span class="n">MPa_to_GPa</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert MPa to GPa</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">strain</span><span class="p">)</span> <span class="o">-</span> <span class="n">strain_cutoff</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">strain</span><span class="p">[:</span><span class="n">arg</span><span class="p">],</span> <span class="n">stress</span><span class="p">[:</span><span class="n">arg</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">youngs_modulus</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">percent_to_fraction</span> <span class="o">*</span> <span class="n">MPa_to_GPa</span>
+    <span class="k">return</span> <span class="n">youngs_modulus</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-the-results">
+<h2><font style="font-family:roboto;color:#455e6c"> Plotting the results </font><a class="headerlink" href="#plotting-the-results" title="Link to this heading">#</a></h2>
+<p>This function plots the stress and strain.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span><span class="p">(</span><span class="s2">&quot;fig&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Plot</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">strain</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Strain [%]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Stress [MPa]&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-workflow">
+<h2><font style="font-family:roboto;color:#455e6c"> Creating a workflow </font><a class="headerlink" href="#creating-a-workflow" title="Link to this heading">#</a></h2>
+<p>Now we can combine all the functions together to compose a workflow. Each function corresponds to a step in the workflow and their inputs and outputs are linked.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;youngs_modulus&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">read_csv</span> <span class="o">=</span> <span class="n">ReadCSV</span><span class="p">(</span><span class="s1">&#39;data/dataset_1.csv&#39;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">stresses</span> <span class="o">=</span> <span class="n">ConvertLoadToStress</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+
+<span class="n">wf</span><span class="o">.</span><span class="n">youngs_modulus</span> <span class="o">=</span> <span class="n">CalculateYoungsModulus</span><span class="p">(</span>
+    <span class="n">stress</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">stress</span><span class="p">,</span>
+    <span class="n">strain</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">strain</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">wf</span><span class="o">.</span><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span>
+    <span class="n">stress</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">stress</span><span class="p">,</span>
+    <span class="n">strain</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">strain</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we execute the workflow</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" src="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" />
+<img alt="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" src="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" />
+</div>
+</div>
+</section>
+<section id="a-graphical-user-interface-for-running-workflows">
+<h2><font style="font-family:roboto;color:#455e6c"> A graphical user interface for running workflows </font><a class="headerlink" href="#a-graphical-user-interface-for-running-workflows" title="Link to this heading">#</a></h2>
+<p>We can use use the tool <a class="reference external" href="https://github.com/pyiron/pyironflow">pyironflow</a> to visually compose and execute the workflow.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Library</span></code> tab on the left side of the GUI provides the necessary nodes to compose the workflow. You can add them to our workflow by clicking on it. The different nodes can be connected together by clicking on the input and outputs. Finally, a Node, or a connection can be deleted by using the <code class="docutils literal notranslate"><span class="pre">Backspace</span></code> key.</p>
+<p>The following nodes would be useful to compose the workflow:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">utilities</span> <span class="pre">-&gt;</span> <span class="pre">ReadCSV</span></code> to read csv file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experimental</span> <span class="pre">-&gt;</span> <span class="pre">tensile_test</span> <span class="pre">-&gt;</span> <span class="pre">ConvertLoadToStress</span></code> and <code class="docutils literal notranslate"><span class="pre">experimental</span> <span class="pre">-&gt;</span> <span class="pre">tensile_test</span> <span class="pre">-&gt;</span> <span class="pre">CalculateYoungsModulus</span></code> nodes for converting the data, and for calculating the Youngs Modulus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plotting</span> <span class="pre">-&gt;</span> <span class="pre">Plot</span></code> for creating the plot.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">(</span><span class="n">wf_list</span><span class="o">=</span><span class="p">[</span><span class="n">wf</span><span class="p">])</span>
+<span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "01b26014530d4eb3898faf0795793bcd"}</script></div>
+</div>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Need the solution?</b></p>
+Copy paste the following code into a cell and execute:
+</br>
+</br>
+pf = PyironFlow([Workflow('tensile_example_1')]) </br>
+pf.gui
+</div><div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Note</b></p>
+As we have seen, the ranges of stress and strain have to chosen carefully. In practice, this is done by calculating <a href="https://materion.com/-/media/files/alloy/newsletters/technical-tidbits/issue-no-47---yield-strength-and-other-near-elastic-properties.pdf">R<sub>P0,2</sub> yield stress</a>
+</div><section id="software-used-in-this-notebook">
+<h3><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font><a class="headerlink" href="#software-used-in-this-notebook" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pyiron.org/">pyiron</a></p></li>
+<li><p><a class="reference external" href="https://github.com/pyiron/pyiron_workflow">pyiron_workflow</a></p></li>
+</ul>
+<img src="img/logo_roll.png" width="1200"></section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_assyst.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-crash-course"><font style="font-family:roboto;color:#455e6c"> Jupyter Crash Course </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-in-the-experimental-results"><font style="font-family:roboto;color:#455e6c"> Reading in the experimental results </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-young-s-modulus"><font style="font-family:roboto;color:#455e6c"> Calculate Young’s modulus </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-the-results"><font style="font-family:roboto;color:#455e6c"> Plotting the results </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-workflow"><font style="font-family:roboto;color:#455e6c"> Creating a workflow </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-graphical-user-interface-for-running-workflows"><font style="font-family:roboto;color:#455e6c"> A graphical user interface for running workflows </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-used-in-this-notebook"><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sarath Menon
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
