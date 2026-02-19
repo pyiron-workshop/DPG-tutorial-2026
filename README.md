@@ -1,4 +1,5 @@
 # Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+[![Binder](https://notebooks.mpcdf.mpg.de/binder/badge_logo.svg)](https://notebooks.mpcdf.mpg.de/binder/v2/gl/pyiron%2Fdpg_tutorial_2026/HEAD)
 DPG Dresden 2026
 
 ### Abstract
