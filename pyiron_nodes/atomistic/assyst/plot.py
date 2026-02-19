@@ -1,5 +1,5 @@
 from ase.atoms import Atoms
-from pyiron_core import as_function_node
+from core import as_function_node
 
 
 @as_function_node("plot", use_cache=False)

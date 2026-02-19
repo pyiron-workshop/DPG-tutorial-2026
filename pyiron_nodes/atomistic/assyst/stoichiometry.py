@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from itertools import product
 from collections.abc import Sequence
 import pandas as pd
-from pyiron_core import as_function_node
+from core import as_function_node
 from assyst.crystals import pyxtal
 
 

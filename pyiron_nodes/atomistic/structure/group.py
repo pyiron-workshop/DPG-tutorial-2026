@@ -1,6 +1,6 @@
 from ase.atoms import Atoms
 import logging
-from pyiron_core import as_function_node
+from core import as_function_node
 
 
 @as_function_node
@@ -53,3 +53,15 @@ def SaveStructures(
     os.makedirs(dirname, exist_ok=True)
     df.to_pickle(filename)
     return df
+
+
+@as_function_node
+def generate_structures(structure, strain_lst):
+    structure_lst = []
+    for strain in strain_lst:
+        structure_strain = structure.copy()
+        structure_strain.set_cell(
+            structure_strain.cell * strain ** (1 / 3), scale_atoms=True
+        )
+        structure_lst.append(structure_strain)
+    return structure_lst

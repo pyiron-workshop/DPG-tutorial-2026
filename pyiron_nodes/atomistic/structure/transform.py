@@ -1,7 +1,7 @@
 from ase.atoms import Atoms
 from enum import Enum
 import numpy as np
-from pyiron_core import as_function_node
+from core import as_function_node
 
 
 def rattle(structure: Atoms, sigma: float) -> Atoms:

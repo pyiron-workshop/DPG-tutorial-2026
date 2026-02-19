@@ -15,6 +15,10 @@ dependencies:
 - sqlalchemy =2.0.38
 - traitlets =5.14.3
 - ase =3.27.0
+- qe =7.5
+- qe-tools
+- optimade
+- xmlschema
 - assyst =0.12.0
 - calphy =1.4.6
 - grace-tensorpotential =0.5.1
@@ -29,6 +33,7 @@ dependencies:
 - pint =0.24.4
 - pyiron-data =0.0.30
 - pyiron_lammps =0.5.4
+- pylammpsmpi =0.3.10
 - python-ace =0.3.1
 - python-ternary =1.0.8
 - pyxtal =1.1.2
@@ -37,4 +42,9 @@ dependencies:
 - scipy =1.15.2
 - seaborn =0.13.2
 - structuretoolkit = 0.0.39
-- nodejs=18
+- flux-core =0.64.0
+- pysqa =0.3.4
+- h5py =3.15.1
+- executorlib =1.8.1
+- chromadb
+- openai

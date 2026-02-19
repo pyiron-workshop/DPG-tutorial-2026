@@ -1,6 +1,6 @@
 from dataclasses import replace
 import numpy as np
-from pyiron_core import as_function_node
+from core import as_function_node
 import landau
 
 

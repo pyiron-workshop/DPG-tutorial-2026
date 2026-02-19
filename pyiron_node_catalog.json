@@ -1,0 +1,2953 @@
+[
+  {
+    "name": "TemperatureLinePhase",
+    "module": "thermodynamics.landau",
+    "description": "",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "concentration",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "temperatures",
+        "type": "numpy.ndarray | list[float]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "free_energies",
+        "type": "numpy.ndarray | list[float]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "num_parameters",
+        "type": "int | None",
+        "default": 3,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "phase"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef TemperatureLinePhase(\n        name: str,\n        concentration: float,\n        temperatures: np.ndarray | list[float],\n        free_energies: np.ndarray | list[float],\n        num_parameters: int | None = 3\n):\n    phase = landau.phases.TemperatureDependentLinePhase(\n            name, concentration, temperatures, free_energies,\n            landau.interpolate.SGTE(num_parameters)\n    )\n    return phase\n",
+    "example": "TemperatureLinePhase(num_parameters=3)"
+  },
+  {
+    "name": "TransitionTemperature",
+    "module": "thermodynamics.landau",
+    "description": "Plot free energies of two phases and find their intersection, i.e. the transition temperature.\n\nAssumes that both phases are of the same concentration, otherwise the results will be off, as it takes the chemical\npotential difference to be zero.\n\nArgs:\n    phase1, phase2 (landau.phases.Phase): the two phases to plot\n    Tmin (float): minimum temperature\n    Tmax (float): maximum temperature\n\nReturns:\n    float: transition temperature if found, else NaN",
+    "inputs": [
+      {
+        "name": "phase1",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "phase2",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "Tmin",
+        "type": "int | float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "Tmax",
+        "type": "int | float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "float"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef TransitionTemperature(\n        phase1, phase2,\n        Tmin: int | float,\n        Tmax: int | float,\n) -> float:\n    \"\"\"Plot free energies of two phases and find their intersection, i.e. the transition temperature.\n\n    Assumes that both phases are of the same concentration, otherwise the results will be off, as it takes the chemical\n    potential difference to be zero.\n\n    Args:\n        phase1, phase2 (landau.phases.Phase): the two phases to plot\n        Tmin (float): minimum temperature\n        Tmax (float): maximum temperature\n\n    Returns:\n        float: transition temperature if found, else NaN\n    \"\"\"\n    import seaborn as sns\n    import matplotlib.pyplot as plt\n    import numpy as np\n    df = landau.calculate.calc_phase_diagram([phase1, phase2], np.linspace(Tmin, Tmax), mu=0.0, keep_unstable=True)\n    try:\n        fm, Tm = df.query('border and T!=@Tmin and T!=@Tmax')[['f','T']].iloc[0].tolist()\n    except IndexError:\n        print(\"Transition Point not found!\")\n        fm, Tm = np.nan, np.nan\n    fig, ax = plt.subplots()\n    sns.lineplot(\n        data=df,\n        x='T', y='f',\n        hue='phase',\n        style='stable', style_order=[True, False],\n        ax=ax,\n    )\n    ax.axvline(Tm, color='k', linestyle='dotted', alpha=.5)\n    ax.scatter(Tm, fm, marker='o', c='k', zorder=10)\n\n    dfa = np.ptp(df['f'].dropna())\n    dft = np.ptp(df['T'].dropna())\n    ax.text(Tm + .05 * dft, fm + dfa * .1, rf\"$T_m = {Tm:.0f}\\,\\mathrm{{K}}$\", rotation='vertical', ha='center')\n    ax.set_xlabel(\"Temperature [K]\")\n    ax.set_ylabel(\"Free Energy [eV/atom]\")\n    return fig\n",
+    "example": "TransitionTemperature()"
+  },
+  {
+    "name": "LinePhase",
+    "module": "thermodynamics.landau",
+    "description": "",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "concentration",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "energy",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "entropy",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "LinePhase"
+      }
+    ],
+    "output_labels": [
+      "phase"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef LinePhase(name: str, concentration: float, energy: float, entropy: float) -> landau.phases.LinePhase:\n    import landau\n    phase = landau.phases.LinePhase(name, concentration, energy, entropy)\n    return phase\n",
+    "example": "LinePhase()"
+  },
+  {
+    "name": "IdealSolution",
+    "module": "thermodynamics.landau",
+    "description": "",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "phase1",
+        "type": "Phase",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "phase2",
+        "type": "Phase",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Phase"
+      }
+    ],
+    "output_labels": [
+      "phase"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef IdealSolution(name: str, phase1: landau.phases.Phase, phase2: landau.phases.Phase) -> landau.phases.Phase:\n    import landau\n    phase = landau.phases.IdealSolution(name, phase1, phase2)\n    return phase\n",
+    "example": "IdealSolution()"
+  },
+  {
+    "name": "CalcPhaseDiagram",
+    "module": "thermodynamics.landau",
+    "description": "Calculate thermodynamic potentials and respective stable phases in a range of temperatures.\n\nThe chemical potential range is chosen automatically to cover the full concentration space.\n\nArgs:\n    phases: list of phases to consider\n    temperatures: temperature samples\n    mu_samples: number of samples in chemical potential space\n    refine (bool): add additional sampling points along exact phase transitions\n\nReturns:\n    dataframe with phase data",
+    "inputs": [
+      {
+        "name": "phases",
+        "type": "list",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "temperatures",
+        "type": "list[float] | numpy.ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "chemical_potentials",
+        "type": "list[float] | numpy.ndarray | int",
+        "default": 100,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "refine",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "phase_data"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef CalcPhaseDiagram(\n        phases: list,\n        temperatures: list[float] | np.ndarray,\n        chemical_potentials: list[float] | np.ndarray | int = 100,\n        refine: bool = True\n):\n    \"\"\"Calculate thermodynamic potentials and respective stable phases in a range of temperatures.\n\n    The chemical potential range is chosen automatically to cover the full concentration space.\n\n    Args:\n        phases: list of phases to consider\n        temperatures: temperature samples\n        mu_samples: number of samples in chemical potential space\n        refine (bool): add additional sampling points along exact phase transitions\n\n    Returns:\n        dataframe with phase data\n    \"\"\"\n    import matplotlib.pyplot as plt\n    import landau\n\n    if isinstance(chemical_potentials, int):\n        mus = guess_mu_range(phases, max(temperatures), chemical_potentials)\n    else:\n        mus = chemical_potentials\n    phase_data = landau.calculate.calc_phase_diagram(\n            phases, np.asarray(temperatures), mus,\n            refine=refine, keep_unstable=False\n    )\n    return phase_data\n",
+    "example": "CalcPhaseDiagram(chemical_potentials=100, refine=True)"
+  },
+  {
+    "name": "PlotConcPhaseDiagram",
+    "module": "thermodynamics.landau",
+    "description": "Plot a concentration-temperature phase diagram.\n\nphase_data should originate from CalcPhaseDiagram.\n\nArgs:\n    phases: list of phases to consider\n    plot_samples (bool): overlay points where phase data has been sampled\n    plot_isolines (bool): overlay lines of constance chemical potential\n    plot_tielines (bool): add grey lines connecting triple points\n    linephase_width (float): phases that have a solubility less than this\n        will be plotted as a rectangle\n    concavity (float, optional, range in [0, 1]): how aggressive to be when\n        fitting polyhedra to samples phase data; lower means more ragged\n        shapes, higher means smoother; 1 corresponds to convex hull of points",
+    "inputs": [
+      {
+        "name": "phase_data",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "plot_samples",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "plot_isolines",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "plot_tielines",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "linephase_width",
+        "type": "float",
+        "default": 0.01,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "concavity",
+        "type": "float | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef PlotConcPhaseDiagram(\n        phase_data,\n        plot_samples: bool = False,\n        plot_isolines: bool = False,\n        plot_tielines: bool = True,\n        linephase_width: float = 0.01,\n        concavity: float | None = None,\n):\n    \"\"\"Plot a concentration-temperature phase diagram.\n\n    phase_data should originate from CalcPhaseDiagram.\n\n    Args:\n        phases: list of phases to consider\n        plot_samples (bool): overlay points where phase data has been sampled\n        plot_isolines (bool): overlay lines of constance chemical potential\n        plot_tielines (bool): add grey lines connecting triple points\n        linephase_width (float): phases that have a solubility less than this\n            will be plotted as a rectangle\n        concavity (float, optional, range in [0, 1]): how aggressive to be when\n            fitting polyhedra to samples phase data; lower means more ragged\n            shapes, higher means smoother; 1 corresponds to convex hull of points\n    \"\"\"\n    import matplotlib.pyplot as plt\n    import seaborn as sns\n    import landau\n    \n    fig, ax = plt.subplots()\n    landau.plot.plot_phase_diagram(\n            df=phase_data.drop('refined', errors='ignore', axis='columns'),\n            min_c_width=linephase_width,\n            alpha=concavity or 0.1,\n    )\n    if plot_samples:\n        sns.scatterplot(\n            data=phase_data,\n            x='c', y='T',\n            hue='phase',\n            legend=False,\n            s=1\n        )\n    if plot_isolines:\n        sns.lineplot(\n            data=phase_data.loc[np.isfinite(phase_data.mu)],\n            x='c', y='T',\n            hue='mu',\n            units='phase', estimator=None,\n            legend=False,\n            sort=False,\n        )\n    if plot_tielines and 'refined' in phase_data.columns:\n        # hasn't made it upstream yet\n        for T, dd in phase_data.query('refined==\"delaunay-triple\"').groupby('T'):\n            plt.plot(dd.c, [T]*3, c='k', alpha=.5, zorder=-10)\n    plt.xlabel(\"Concentration\")\n    plt.ylabel(\"Temperature [K]\")\n    return fig\n",
+    "example": "PlotConcPhaseDiagram(plot_samples=False, plot_isolines=False, plot_tielines=True, linephase_width=0.01)"
+  },
+  {
+    "name": "PlotMuPhaseDiagram",
+    "module": "thermodynamics.landau",
+    "description": "Plot a chemical potential-temperature phase diagram.\n\nphase_data should originate from CalcPhaseDiagram.\nPhase boundaries are plotted in black.",
+    "inputs": [
+      {
+        "name": "phase_data",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef PlotMuPhaseDiagram(phase_data):\n    \"\"\"Plot a chemical potential-temperature phase diagram.\n\n    phase_data should originate from CalcPhaseDiagram.\n    Phase boundaries are plotted in black.\n    \"\"\"\n    import seaborn as sns\n    import matplotlib.pyplot as plt\n    border = None\n    if 'border' not in phase_data.columns:\n        body = phase_data.query('not border')\n    else:\n        border = phase_data.query('border')\n        body = phase_data.query('not border')\n    fig, ax = plt.subplots()\n    sns.scatterplot(\n        data=body,\n        x='mu', y='T',\n        hue='phase',\n        s=5,\n        ax=ax\n    )\n    if border is not None:\n        sns.scatterplot(\n            data=border,\n            x='mu', y='T',\n            c='k',\n            s=5,\n            ax=ax\n        )\n    ax.set_xlabel(\"Chemical Potential Difference [eV]\")\n    ax.set_ylabel(\"Temperature [K]\")\n    return fig\n",
+    "example": "PlotMuPhaseDiagram()"
+  },
+  {
+    "name": "PhasesFromDataFrame",
+    "module": "thermodynamics.landau",
+    "description": "Convert a dataframe of free energies to list of phase objects.\n\nPrints the names of all found phases.\n\nArgs:\n    dataframe: should contain columns\n                `phase`: the name of the phase; rows of the same phase name\n                         will be grouped in a solution phase\n                `composition`: the mole fraction of one of the constitutents\n                `temperature`: array of temperature at which free energy\n                               was sampled\n                `free_energy`: corresponding free energies\n    temperature_parameters (int): how many parameters to use when\n                interpolating free energies in temperature\n    concentration_parameters (int, optional): how many parameters to use\n                when interpolating free energies in concentration; if not\n                given output individual phases and change the name to\n                include the concentration\n\nReturns:\n    list of Phase objects\n    dict of Phase objects, where the dict keys are the names of the phases",
+    "inputs": [
+      {
+        "name": "dataframe",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "temperature_parameters",
+        "type": "int | None",
+        "default": 4,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "concentration_parameters",
+        "type": "int | None",
+        "default": 1,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "phase_list",
+      "phase_dict"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef PhasesFromDataFrame(\n        dataframe,\n        temperature_parameters: int | None = 4,\n        concentration_parameters: int | None = 1,\n):\n    \"\"\"Convert a dataframe of free energies to list of phase objects.\n\n    Prints the names of all found phases.\n\n    Args:\n        dataframe: should contain columns\n                    `phase`: the name of the phase; rows of the same phase name\n                             will be grouped in a solution phase\n                    `composition`: the mole fraction of one of the constitutents\n                    `temperature`: array of temperature at which free energy\n                                   was sampled\n                    `free_energy`: corresponding free energies\n        temperature_parameters (int): how many parameters to use when\n                    interpolating free energies in temperature\n        concentration_parameters (int, optional): how many parameters to use\n                    when interpolating free energies in concentration; if not\n                    given output individual phases and change the name to\n                    include the concentration\n\n    Returns:\n        list of Phase objects\n        dict of Phase objects, where the dict keys are the names of the phases\n    \"\"\"\n    phases = dataframe.groupby('phase')[dataframe.columns].apply(\n            make_phase, include_groups=False,\n            temperature_parameters=temperature_parameters,\n            concentration_parameters=concentration_parameters,\n    )\n    phase_dict = {p.name: p for p in phases.explode()}\n    print(\"Found phases:\", *phase_dict.keys(), sep='\\n')\n    phase_list = list(phase_dict.values())\n    return phase_list, phase_dict\n",
+    "example": "PhasesFromDataFrame(temperature_parameters=4, concentration_parameters=1)"
+  },
+  {
+    "name": "IterToDataFrame",
+    "module": "basic.loop",
+    "description": "Iterate over ``values`` feeding each element into ``node`` under the name\n``input_label`` and collect the results in a pandas DataFrame.\n\nNew feature:\n    – If the node returns a *dataclass* instance, each field of the\n      dataclass becomes its own column in the DataFrame.\n\nParameters\n----------\nnode : Node\n    The node that will be executed for each value.\ninput_label : str\n    Name of the input attribute on ``node`` that receives each element of\n    ``values``.\nvalues : list | np.ndarray\n    Iterable of input values.\ndebug : bool, optional\n    Print debugging information.\nexecutor : concurrent.futures.Executor, optional\n    If supplied, the iteration runs in parallel using the executor.\nstore : bool, optional\n    Used by decorator to implement hash storage (if set to True)\n\nReturns\n-------\npd.DataFrame\n    DataFrame where each column corresponds to an input or an output\n    field.  When the node returns a dataclass, each field of the\n    dataclass is a separate column.",
+    "inputs": [
+      {
+        "name": "node",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "input_label",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "values",
+        "type": "Union[list, ndarray]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "debug",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "executor",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "DataFrame"
+      }
+    ],
+    "output_labels": [
+      "df"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef IterToDataFrame(\n    node: Node,\n    input_label: str,\n    values: Union[list, np.ndarray],\n    debug: bool = False,\n    executor=None,\n    store: bool = False,\n) -> pd.DataFrame:\n    \"\"\"\n    Iterate over ``values`` feeding each element into ``node`` under the name\n    ``input_label`` and collect the results in a pandas DataFrame.\n\n    New feature:\n        – If the node returns a *dataclass* instance, each field of the\n          dataclass becomes its own column in the DataFrame.\n\n    Parameters\n    ----------\n    node : Node\n        The node that will be executed for each value.\n    input_label : str\n        Name of the input attribute on ``node`` that receives each element of\n        ``values``.\n    values : list | np.ndarray\n        Iterable of input values.\n    debug : bool, optional\n        Print debugging information.\n    executor : concurrent.futures.Executor, optional\n        If supplied, the iteration runs in parallel using the executor.\n    store : bool, optional\n        Used by decorator to implement hash storage (if set to True)\n\n    Returns\n    -------\n    pd.DataFrame\n        DataFrame where each column corresponds to an input or an output\n        field.  When the node returns a dataclass, each field of the\n        dataclass is a separate column.\n    \"\"\"\n    from dataclasses import fields, is_dataclass\n\n    # ------------------------------------------------------------------\n    # 1️⃣ Run the node over all values\n    # ------------------------------------------------------------------\n    out_lst, inp_lst = _iterate_node(\n        node,\n        input_label,\n        values,\n        copy_results=True,\n        collect_input=True,\n        debug=debug,\n        executor=executor,\n    )\n\n    # ------------------------------------------------------------------\n    # 2️⃣ Prepare a dict that will be fed to pd.DataFrame\n    # ------------------------------------------------------------------\n    data_dict: dict[str, List[Any]] = {}\n\n    # ------------------------------------------------------------------\n    # 2.1 Input column – avoid name clash with node outputs\n    # ------------------------------------------------------------------\n    output_labels = list(node.outputs.keys())\n    if input_label in output_labels:\n        data_dict[f\"input_{input_label}\"] = inp_lst\n    else:\n        data_dict[input_label] = inp_lst\n\n    # ------------------------------------------------------------------\n    # 3️⃣ Analyse the first output to decide how to unpack the rest\n    # ------------------------------------------------------------------\n    first_out = out_lst[0] if out_lst else None\n\n    # Helper: is the result a dataclass instance?\n    def _is_dataclass_instance(obj: Any) -> bool:\n        return is_dataclass(obj) and not isinstance(obj, type)\n\n    # ------------------------------------------------------------------\n    # 3.1 Tuple / list / np.ndarray output (multiple scalar outputs)\n    # ------------------------------------------------------------------\n    multi_output = isinstance(first_out, (tuple, list, np.ndarray)) and len(\n        first_out\n    ) == len(output_labels)\n\n    # ------------------------------------------------------------------\n    # 3.2 Dataclass output – each field becomes a column\n    # ------------------------------------------------------------------\n    if _is_dataclass_instance(first_out):\n        # Extract field names once – they will be the column names\n        dc_fields = [f.name for f in fields(first_out)]\n\n        # Initialise a list for each field\n        for f_name in dc_fields:\n            data_dict[f_name] = []\n\n        # Fill the column lists\n        for out in out_lst:\n            # Defensive: if a particular iteration returned something else,\n            # fall back to NaN for all fields.\n            if _is_dataclass_instance(out):\n                for f_name in dc_fields:\n                    data_dict[f_name].append(getattr(out, f_name))\n            else:\n                for f_name in dc_fields:\n                    data_dict[f_name].append(np.nan)\n\n    # ------------------------------------------------------------------\n    # 3.3 Regular scalar / single‑value output\n    # ------------------------------------------------------------------\n    elif multi_output:\n        # Node returns a sequence that matches the declared output labels\n        for idx, label in enumerate(output_labels):\n            data_dict[label] = [out[idx] for out in out_lst]\n\n    else:\n        # Node returns a single scalar (or a single object) per iteration\n        if len(output_labels) == 1:\n            # Simple case – one declared output\n            data_dict[output_labels[0]] = out_lst\n        else:\n            # Ambiguous case – more declared outputs than we can unpack.\n            # We store the whole object under each label (the original\n            # behaviour) – this mirrors the previous implementation.\n            for label in output_labels:\n                data_dict[label] = out_lst\n\n    # ------------------------------------------------------------------\n    # 4️⃣ Build the DataFrame (fallback to raw dict on error)\n    # ------------------------------------------------------------------\n    try:\n        df = pd.DataFrame(data_dict)\n    except Exception as e:\n        print(f\"Error creating DataFrame: {e}\")\n        df = pd.DataFrame.from_dict(data_dict, orient=\"columns\")\n\n    return df\n",
+    "example": "IterToDataFrame(debug=False, store=False)"
+  },
+  {
+    "name": "ReadCSV",
+    "module": "basic.file",
+    "description": "",
+    "inputs": [
+      {
+        "name": "filename",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "header",
+        "type": "list",
+        "default": [
+          0,
+          1
+        ],
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "decimal",
+        "type": "str",
+        "default": ",",
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "delimiter",
+        "type": "str",
+        "default": ";",
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "csv"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"csv\")\ndef ReadCSV(filename: str, header: list = [0, 1], decimal: str = \",\", delimiter: str = \";\"):\n    import pandas as pd\n    return pd.read_csv(filename, delimiter=delimiter, header=header, decimal=decimal)\n",
+    "example": "ReadCSV(header=[0, 1], decimal=',', delimiter=';')"
+  },
+  {
+    "name": "ReadDataFrame",
+    "module": "basic.file",
+    "description": "",
+    "inputs": [
+      {
+        "name": "filename",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "compression",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "df"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"df\")\ndef ReadDataFrame(filename: str, compression: str = None):\n    import pandas as pd\n\n    return pd.read_pickle(filename, compression=compression)\n",
+    "example": "ReadDataFrame()"
+  },
+  {
+    "name": "Or",
+    "module": "basic.logic",
+    "description": "",
+    "inputs": [
+      {
+        "name": "x",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "y",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "or"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"or\")\ndef Or(x, y):\n    return x | y\n",
+    "example": "Or()"
+  },
+  {
+    "name": "List5",
+    "module": "basic.list",
+    "description": "",
+    "inputs": [
+      {
+        "name": "x1",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "x2",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "x3",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "x4",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "x5",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list"
+      }
+    ],
+    "output_labels": [
+      "list_out"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef List5(x1, x2=None, x3=None, x4=None, x5=None) -> list:\n    list_out = [x for x in (x1, x2, x3, x4, x5) if x is not None]\n    return list_out\n",
+    "example": "List5()"
+  },
+  {
+    "name": "SingleNodeExecutor",
+    "module": "basic.executor",
+    "description": "",
+    "inputs": [
+      {
+        "name": "max_workers",
+        "type": "int",
+        "default": 1,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "Executor"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"Executor\")\ndef SingleNodeExecutor(max_workers: int = 1):\n    from executorlib import SingleNodeExecutor as Executor\n\n    return Executor(max_workers=int(max_workers))\n",
+    "example": "SingleNodeExecutor(max_workers=1)"
+  },
+  {
+    "name": "FluxClusterExecutor",
+    "module": "basic.executor",
+    "description": "",
+    "inputs": [
+      {
+        "name": "cache_directory",
+        "type": "str",
+        "default": "./cache",
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "Executor"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"Executor\")\ndef FluxClusterExecutor(cache_directory: str = \"./cache\"):\n    from executorlib import FluxClusterExecutor as Executor\n\n    return Executor(cache_directory=cache_directory)\n",
+    "example": "FluxClusterExecutor(cache_directory='./cache')"
+  },
+  {
+    "name": "Multiply",
+    "module": "basic.math",
+    "description": "",
+    "inputs": [
+      {
+        "name": "x",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "y",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "product"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"product\")\ndef Multiply(x, y):\n    return x * y\n",
+    "example": "Multiply()"
+  },
+  {
+    "name": "SliceArray",
+    "module": "basic.math",
+    "description": "",
+    "inputs": [
+      {
+        "name": "matrix",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "indices",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "matrix"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"matrix\")\ndef SliceArray(matrix, indices):\n    return matrix[indices]\n",
+    "example": "SliceArray()"
+  },
+  {
+    "name": "GetVector",
+    "module": "basic.math",
+    "description": "",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "indices",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "scale_energy_per_atom",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "vector"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"vector\")\ndef GetVector(\n    df: pd.DataFrame,\n    indices,\n    scale_energy_per_atom: bool = False,\n):\n    import numpy as np\n\n    vec = df.energy_corrected\n    if scale_energy_per_atom:\n        vec /= df.NUMBER_OF_ATOMS\n\n    forces_vec = []\n    for f in df.forces.apply(lambda x: x.flatten()):\n        forces_vec += list(f)\n    vec = np.append(vec, forces_vec)\n    return vec[indices]\n",
+    "example": "GetVector(scale_energy_per_atom=False)"
+  },
+  {
+    "name": "MinMaxIndices",
+    "module": "basic.math",
+    "description": "",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "i_min",
+        "type": "int",
+        "default": 0,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "i_max",
+        "type": "int",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "energy_only",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "indices"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef MinMaxIndices(\n    df: pd.DataFrame,\n    i_min: int = 0,\n    i_max: int = None,\n    energy_only: bool = False,\n):\n    num_structures = len(df)\n    num_atoms = np.sum(df.NUMBER_OF_ATOMS)\n\n    indices = np.arange(num_structures + 3 * num_atoms)\n    if i_max is None or i_max == \"\":\n        i_max = num_structures\n    energies = indices[i_min:i_max]\n    forces = indices[num_atoms + 3 * i_min : num_atoms + 3 * i_max]\n    if energy_only:\n        indices = energies\n    else:\n        indices = np.append(energies, forces, axis=0)\n    return indices\n",
+    "example": "MinMaxIndices(i_min=0, energy_only=False)"
+  },
+  {
+    "name": "Linspace",
+    "module": "basic.math",
+    "description": "",
+    "inputs": [
+      {
+        "name": "x_min",
+        "type": "float",
+        "default": 0,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "x_max",
+        "type": "float",
+        "default": 1,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "num_points",
+        "type": "int",
+        "default": 50,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "endpoint",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "linspace"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"linspace\")\ndef Linspace(\n    x_min: float = 0,\n    x_max: float = 1,\n    num_points: int = 50,\n    endpoint: bool = True,\n):\n    return np.linspace(x_min, x_max, num_points, endpoint=endpoint)\n",
+    "example": "Linspace(x_min=0, x_max=1, num_points=50, endpoint=True)"
+  },
+  {
+    "name": "ConvertLoadToStress",
+    "module": "experiment.youngs_modulus",
+    "description": "Read in csv file, convert load to stress",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "area",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "stress",
+      "strain"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef ConvertLoadToStress(df, area):\n    \"\"\"\n    Read in csv file, convert load to stress\n    \"\"\"\n    kN_to_N = 0.001  # convert kiloNewton to Newton\n    mm2_to_m2 = 1e-6  # convert square millimeters to square meters\n    df[\"Stress\"] = df[\"Load\"] * kN_to_N / (float(area) * mm2_to_m2)\n    #although it says extensometer elongation, the values are in percent! \n    strain = df[\"Extensometer elongation\"].values.flatten()\n    #subtract the offset from the dataset\n    strain = strain - strain[0]\n    stress = df[\"Stress\"].values.flatten()\n    return stress, strain\n",
+    "example": "ConvertLoadToStress()"
+  },
+  {
+    "name": "CalculateYoungsModulus",
+    "module": "experiment.youngs_modulus",
+    "description": "",
+    "inputs": [
+      {
+        "name": "stress",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "strain",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "strain_cutoff",
+        "type": "Any",
+        "default": 0.2,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "youngs_modulus"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef CalculateYoungsModulus(stress, strain, strain_cutoff=0.2):\n    import numpy as np\n    percent_to_fraction = 100  # convert\n    MPa_to_GPa = 1 / 1000  # convert MPa to GPa\n    arg = np.argsort(np.abs(np.array(strain) - strain_cutoff))[0]\n    fit = np.polyfit(strain[:arg], stress[:arg], 1)\n    youngs_modulus = fit[0] * percent_to_fraction * MPa_to_GPa\n    return youngs_modulus\n",
+    "example": "CalculateYoungsModulus(strain_cutoff=0.2)"
+  },
+  {
+    "name": "Plot",
+    "module": "experiment.youngs_modulus",
+    "description": "",
+    "inputs": [
+      {
+        "name": "stress",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "strain",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "format",
+        "type": "Any",
+        "default": "-",
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"fig\")\ndef Plot(stress, strain, format=\"-\"):\n    import matplotlib.pyplot as plt\n    fig, ax = plt.subplots()\n    ax.plot(strain, stress, format)\n    ax.set_xlabel(\"Strain [%]\")\n    ax.set_ylabel(\"Stress [MPa]\")\n    return fig\n",
+    "example": "Plot(format='-')"
+  },
+  {
+    "name": "calculate_qe",
+    "module": "atomistic.engine.quantumespresso",
+    "description": "",
+    "inputs": [
+      {
+        "name": "working_directory",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "pseudopotentials",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structure",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "encut",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kpts",
+        "type": "Any",
+        "default": [
+          3,
+          3,
+          3
+        ],
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "energy",
+      "volume"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef calculate_qe(working_directory, pseudopotentials, structure, encut, kpts=(3, 3, 3), store: bool=True):\n    if structure is None:\n        structure = bulk(name=\"Al\", a=4.04, cubic=False)\n    element = structure.get_chemical_symbols()[-1]\n    input_dict = {\n        \"structure\": structure,\n        \"pseudopotentials\": {element: pseudopotentials},\n        \"kpts\": kpts,\n        \"calculation\": \"scf\",\n        \"smearing\": 0.02,\n        \"ecutwfc\": encut,\n    }\n    _write_input(\n        input_dict=input_dict,\n        working_directory=working_directory,\n    )\n    subprocess.check_output(\n        \"mpirun -np 1 pw.x -in input.pwi > output.pwo\",\n        cwd=working_directory,\n        shell=True,\n    )\n    result_dict = _collect_output(working_directory=working_directory)\n    energy, volume = result_dict[\"energy\"], result_dict[\"volume\"]\n    return energy, volume\n",
+    "example": "calculate_qe(kpts=(3, 3, 3), store=True)"
+  },
+  {
+    "name": "converge_energy_cutoff",
+    "module": "atomistic.engine.quantumespresso",
+    "description": "",
+    "inputs": [
+      {
+        "name": "dft_function",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "limit",
+        "type": "float",
+        "default": 0.0001,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "max_steps",
+        "type": "int",
+        "default": 10,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "energy_lst"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef converge_energy_cutoff(dft_function: Node, limit: float = 0.0001, max_steps: int = 10):\n    import numpy as np\n    \n    encut = dft_function.inputs.encut.value\n    energy_lst = [dft_function()[0]]\n    for i in range(max_steps):\n        dft_function.inputs.encut.value += 1\n        energy_lst.append(dft_function()[0])\n        print(\"loop: \", dft_function.inputs.encut.value, energy_lst)\n\n        if np.abs(energy_lst[-2] - energy_lst[-1]) < limit:\n            break\n\n    return energy_lst\n",
+    "example": "converge_energy_cutoff(limit=0.0001, max_steps=10)"
+  },
+  {
+    "name": "Ace",
+    "module": "atomistic.engine.ace",
+    "description": "",
+    "inputs": [
+      {
+        "name": "potential_file",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "use_symmetry",
+        "type": "Any",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "calc"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef Ace(potential_file, use_symmetry=True):\n    from pyace import PyACECalculator\n    calc = PyACECalculator(potential_file)\n    from logging import ERROR\n    from pyiron_snippets.logger import logger\n    logger.setLevel(ERROR)\n    return calc\n",
+    "example": "Ace(use_symmetry=True)"
+  },
+  {
+    "name": "ListPotentials",
+    "module": "atomistic.engine.lammps",
+    "description": "",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "potentials"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef ListPotentials(structure):\n    from pyiron_lammps.potential import view_potentials\n\n    potentials = list(view_potentials(structure)[\"Name\"].values)\n    return potentials\n",
+    "example": "ListPotentials()"
+  },
+  {
+    "name": "Grace",
+    "module": "atomistic.engine.grace",
+    "description": "Universal Graph Atomic Cluster Expansion models.",
+    "inputs": [
+      {
+        "name": "model",
+        "type": "str",
+        "default": "GRACE-FS-OAM",
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "use_symmetry",
+        "type": "Any",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "grace_obj"
+    ],
+    "tags": [],
+    "source": "@as_function_node\n@lru_cache\ndef Grace(model: str = \"GRACE-FS-OAM\",  use_symmetry=True):\n    \"\"\"Universal Graph Atomic Cluster Expansion models.\"\"\"\n    import os\n    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' \n    from tensorpotential.calculator import grace_fm\n    grace_obj = grace_fm(model)\n    return grace_obj\n",
+    "example": "Grace(model='GRACE-FS-OAM', use_symmetry=True)"
+  },
+  {
+    "name": "ReadPickledDatasetAsDataframe",
+    "module": "atomistic.fitting.dataset",
+    "description": "",
+    "inputs": [
+      {
+        "name": "file_path",
+        "type": "str",
+        "default": "",
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "compression",
+        "type": "Optional[str]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "df"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef ReadPickledDatasetAsDataframe(\n    file_path: str = \"\", compression: Optional[str] = None\n):\n\n    from ase.atoms import Atoms as aseAtoms\n\n    df = pd.read_pickle(file_path, compression=compression)\n\n    # Atoms check\n    if \"atoms\" in df.columns:\n        at = df.iloc[0][\"atoms\"]\n        # Checking that the elements themselves have the correct atoms format\n        if isinstance(at, aseAtoms):\n            df.rename(columns={\"atoms\": \"ase_atoms\"}, inplace=True)\n    elif \"ase_atoms\" not in df.columns:\n        raise ValueError(\n            \"DataFrame should contain 'atoms' or 'ase_atoms' (ASE atoms) columns\"\n        )\n\n    # NUMBER OF ATOMS check\n    if \"NUMBER_OF_ATOMS\" not in df.columns and \"number_of_atoms\" in df.columns:\n        df.rename(columns={\"number_of_atoms\": \"NUMBER_OF_ATOMS\"}, inplace=True)\n\n    df[\"NUMBER_OF_ATOMS\"] = df[\"NUMBER_OF_ATOMS\"].astype(int)\n\n    # energy corrected check\n    if \"energy_corrected\" not in df.columns and \"energy\" in df.columns:\n        df.rename(columns={\"energy\": \"energy_corrected\"}, inplace=True)\n\n    if \"pbc\" not in df.columns:\n        df[\"pbc\"] = df[\"ase_atoms\"].map(lambda atoms: np.all(atoms.pbc))\n\n    return df\n",
+    "example": "ReadPickledDatasetAsDataframe(file_path='')"
+  },
+  {
+    "name": "SplitTrainingAndTesting",
+    "module": "atomistic.fitting.dataset",
+    "description": "Splits the filtered dataframe into training and testing sets based on a fraction of the dataset\n\nArgs:\n    data_df: A pandas.DataFrame of the filtered data DataFrame\n    training_frac: A float number which dictates what is the precentage of the dataset to be used for training should be set between 0 to 1\n    random_state (default = 42): Sets the random seed used to shuffle the data\n\nReturns:\n    df_training: The training dataframe\n    df_testing: The testing dataframe",
+    "inputs": [
+      {
+        "name": "data_df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "training_frac",
+        "type": "float",
+        "default": 0.5,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "random_state",
+        "type": "int",
+        "default": 42,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "df_training",
+      "df_testing"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef SplitTrainingAndTesting(\n    data_df: pd.DataFrame, training_frac: float = 0.5, random_state: int = 42\n):\n    \"\"\"\n    Splits the filtered dataframe into training and testing sets based on a fraction of the dataset\n\n    Args:\n        data_df: A pandas.DataFrame of the filtered data DataFrame\n        training_frac: A float number which dictates what is the precentage of the dataset to be used for training should be set between 0 to 1\n        random_state (default = 42): Sets the random seed used to shuffle the data\n\n    Returns:\n        df_training: The training dataframe\n        df_testing: The testing dataframe\n    \"\"\"\n    if isinstance(training_frac, float):\n        training_frac = np.abs(training_frac)\n\n    if training_frac > 1:\n        print(\"\"\"\n            Can't have the training dataset more than 100 % of the dataset\n            Setting the value to 100%\n            \"\"\")\n        training_frac = 1\n    elif training_frac == 0:\n        print(\"Can'fit with no training dataset\\nSetting the value to 1%\")\n        training_frac = 0.01\n    df_training = data_df.sample(frac=training_frac, random_state=random_state)\n    df_testing = data_df.loc[(i for i in data_df.index if i not in df_training.index)]\n\n    return df_training, df_testing\n",
+    "example": "SplitTrainingAndTesting(training_frac=0.5, random_state=42)"
+  },
+  {
+    "name": "ParameterizePotentialConfig",
+    "module": "atomistic.fitting.ace",
+    "description": "",
+    "inputs": [
+      {
+        "name": "nrad_max",
+        "type": "tuple | list",
+        "default": [
+          15,
+          6,
+          4,
+          1
+        ],
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "l_max",
+        "type": "tuple | list",
+        "default": [
+          0,
+          6,
+          5,
+          1
+        ],
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "number_of_functions_per_element",
+        "type": "int",
+        "default": 10,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "rcut",
+        "type": "float",
+        "default": 7.0,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "potential_config"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef ParameterizePotentialConfig(\n    nrad_max: tuple | list = (15, 6, 4, 1),\n    l_max: tuple | list = (0, 6, 5, 1),\n    number_of_functions_per_element: int = 10,\n    rcut: float = 7.0,\n):\n\n    potential_config = PotentialConfig()\n\n    potential_config.bonds.ALL.rcut = rcut\n    potential_config.functions.ALL.nradmax_by_orders = list(nrad_max)\n    potential_config.functions.ALL.lmax_by_orders = list(l_max)\n    potential_config.functions.number_of_functions_per_element = (\n        number_of_functions_per_element\n    )\n\n    return potential_config\n",
+    "example": "ParameterizePotentialConfig(nrad_max=(15, 6, 4, 1), l_max=(0, 6, 5, 1), number_of_functions_per_element=10, rcut=7.0)"
+  },
+  {
+    "name": "RunLinearFit",
+    "module": "atomistic.fitting.ace",
+    "description": "",
+    "inputs": [
+      {
+        "name": "potential_config",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "df_train",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "df_test",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "verbose",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "basis"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef RunLinearFit(\n    potential_config,\n    df_train: pd.DataFrame,\n    df_test: pd.DataFrame,\n    verbose: bool = False,\n    store: bool = True,\n):\n\n    from pyace import create_multispecies_basis_config\n    from pyace.linearacefit import LinearACEDataset, LinearACEFit\n    from pyiron_snippets.logger import logger\n\n    logger.setLevel(30)\n\n    elements_set = set()\n    for at in df_train[\"ase_atoms\"]:\n        elements_set.update(at.get_chemical_symbols())\n    for at in df_test[\"ase_atoms\"]:\n        elements_set.update(at.get_chemical_symbols())\n\n    elements = sorted(elements_set)\n    potential_config.elements = elements\n    potential_config_dict = potential_config.to_dict()\n\n    bconf = create_multispecies_basis_config(potential_config_dict)\n\n    train_ds = LinearACEDataset(bconf, df_train)\n    train_ds.construct_design_matrix(verbose=verbose)\n    if df_test.empty is False:\n        test_ds = LinearACEDataset(bconf, df_test)\n        test_ds.construct_design_matrix(verbose=verbose)\n    else:\n        test_ds = None\n\n    linear_fit = LinearACEFit(train_dataset=train_ds)\n    linear_fit.fit()\n\n    training_dict = linear_fit.compute_errors(train_ds)\n    training_e_rmse = round(training_dict[\"epa_rmse\"] * 1000, 2)\n    training_f_rmse = round(training_dict[\"f_comp_rmse\"] * 1000, 2)\n    print(\"====================== TRAINING INFO ======================\")\n    print(f\"Training E RMSE: {training_e_rmse:.2f} meV/atom\")\n    print(f\"Training F RMSE: {training_f_rmse:.2f} meV/A\")\n\n    if test_ds is not None:\n        testing_dict = linear_fit.compute_errors(test_ds)\n        testing_e_rmse = round(testing_dict[\"epa_rmse\"] * 1000, 2)\n        testing_f_rmse = round(testing_dict[\"f_comp_rmse\"] * 1000, 2)\n        print(\"======================= TESTING INFO =======================\")\n        print(f\"Testing E RMSE: {testing_e_rmse:.2f} meV/atom\")\n        print(f\"Testing F RMSE: {testing_f_rmse:.2f} meV/A\")\n\n    basis = linear_fit.get_bbasis()\n    return basis\n",
+    "example": "RunLinearFit(verbose=False, store=True)"
+  },
+  {
+    "name": "SavePotential",
+    "module": "atomistic.fitting.ace",
+    "description": "",
+    "inputs": [
+      {
+        "name": "basis",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "filename",
+        "type": "str",
+        "default": "",
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "basis",
+      "yace_file_path"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef SavePotential(basis, filename: str = \"\"):\n    import os\n\n    if filename == \"\":\n        filename = f\"{'_'.join(basis.elements_name)}_linear_potential\"\n        folder_name = \"Linear_ace_potentials\"\n    else:\n        folder_name = os.path.dirname(filename)\n        filename = os.path.basename(filename)\n\n    folder_name = \"Linear_ace_potentials\"\n    os.makedirs(folder_name, exist_ok=True)\n\n    current_path = os.getcwd()\n    folder_path = current_path + \"/\" + folder_name\n    # Saving yaml and yace files\n    print(\n        f'Potentials \"{filename}.yaml\" and \"{filename}.yace\" are saved in \"{folder_path}\".'\n    )\n\n    yace_file_path = f\"{folder_path}/{filename}.yace\"\n    basis.save(f\"{folder_path}/{filename}.yaml\")\n    basis.to_ACECTildeBasisSet().save_yaml(yace_file_path)\n\n    return basis, yace_file_path\n",
+    "example": "SavePotential(filename='')"
+  },
+  {
+    "name": "PredictEnergiesAndForces",
+    "module": "atomistic.fitting.ace",
+    "description": "",
+    "inputs": [
+      {
+        "name": "basis",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "df_train",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "df_test",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "data_dict"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef PredictEnergiesAndForces(\n    basis, df_train: pd.DataFrame, df_test: pd.DataFrame, store: bool = True\n):\n\n    from pyace import PyACECalculator\n\n    data_dict = {}\n\n    ace = PyACECalculator(basis)\n\n    training_structures = df_train.ase_atoms\n\n    # Reference data\n    training_number_of_atoms = df_train.NUMBER_OF_ATOMS.to_numpy()\n    training_energies = df_train.energy_corrected.to_numpy()\n\n    training_epa = training_energies / training_number_of_atoms\n    training_fpa = np.concatenate(df_train.forces.to_numpy()).flatten()\n    data_dict[\"reference_training_epa\"] = training_epa\n    data_dict[\"reference_training_fpa\"] = training_fpa\n\n    # Predicted data\n    training_predict = _get_predicted_energies_forces(\n        ace=ace, structures=training_structures\n    )\n    data_dict[\"predicted_training_epa\"] = (\n        np.array(training_predict[0]) / training_number_of_atoms\n    )\n    data_dict[\"predicted_training_fpa\"] = np.concatenate(training_predict[1]).flatten()\n\n    if df_test.empty is False:\n\n        testing_structures = df_test.ase_atoms\n\n        # Reference data\n        testing_number_of_atoms = df_test.NUMBER_OF_ATOMS.to_numpy()\n        testing_energies = df_test.energy_corrected.to_numpy()\n\n        testing_epa = testing_energies / testing_number_of_atoms\n        testing_fpa = np.concatenate(df_test.forces.to_numpy()).flatten()\n        data_dict[\"reference_testing_epa\"] = testing_epa\n        data_dict[\"reference_testing_fpa\"] = testing_fpa\n\n        # Predicted data\n        testing_predict = _get_predicted_energies_forces(\n            ace=ace, structures=testing_structures\n        )\n        data_dict[\"predicted_testing_epa\"] = (\n            np.array(testing_predict[0]) / testing_number_of_atoms\n        )\n        data_dict[\"predicted_testing_fpa\"] = np.concatenate(\n            testing_predict[1]\n        ).flatten()\n\n    return data_dict\n",
+    "example": "PredictEnergiesAndForces(store=True)"
+  },
+  {
+    "name": "DesignMatrix",
+    "module": "atomistic.fitting.ace",
+    "description": "Constructs the design matrix for the training dataset using the provided potential configuration.\nArgs:\n    df_train (pd.DataFrame): The training dataset containing ASE atoms and other properties.\n    potential_config (PotentialConfig): The configuration for the potential.\nReturns:\n    LinearACEDataset: The constructed design matrix for the training dataset.",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "potential_config",
+        "type": "PotentialConfig",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "verbose",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "design_matrix"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"design_matrix\")\ndef DesignMatrix(\n    df: pd.DataFrame,\n    potential_config: PotentialConfig,\n    verbose: bool = False,\n    store: bool = True,\n):\n    \"\"\"\n    Constructs the design matrix for the training dataset using the provided potential configuration.\n    Args:\n        df_train (pd.DataFrame): The training dataset containing ASE atoms and other properties.\n        potential_config (PotentialConfig): The configuration for the potential.\n    Returns:\n        LinearACEDataset: The constructed design matrix for the training dataset.\n    \"\"\"\n\n    from pyace import create_multispecies_basis_config\n    from pyace.linearacefit import LinearACEDataset\n    from pyiron_snippets.logger import logger\n\n    logger.setLevel(30)\n\n    elements_set = set()\n    for atoms in df[\"ase_atoms\"]:\n        elements_set.update(atoms.get_chemical_symbols())\n\n    elements = sorted(elements_set)\n    potential_config.elements = elements\n    potential_config_dict = potential_config.to_dict()\n\n    bconf = create_multispecies_basis_config(potential_config_dict)\n\n    ds = LinearACEDataset(bconf, df)\n    ds.construct_design_matrix(verbose=verbose)\n    return ds.design_matrix\n",
+    "example": "DesignMatrix(verbose=False, store=True)"
+  },
+  {
+    "name": "PlotEnergyHistogram",
+    "module": "atomistic.fitting.plot",
+    "description": "Plot histogram of the per-atom energies.\n\nParameters\n----------\ndf : pandas.DataFrame\n    Must contain 'energy_corrected' and 'NUMBER_OF_ATOMS' columns.\nbins : int\n    Number of histogram bins.\nlog_scale : bool\n    Whether to use a logarithmic scale on the y-axis.\n\nReturns\n-------\nfig : matplotlib.figure.Figure\n    The generated histogram figure.",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "bins",
+        "type": "int",
+        "default": 100,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "log_scale",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "plot"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"plot\")\ndef PlotEnergyHistogram(df: \"pd.DataFrame\", bins: int = 100, log_scale: bool = True):\n    \"\"\"\n    Plot histogram of the per-atom energies.\n\n    Parameters\n    ----------\n    df : pandas.DataFrame\n        Must contain 'energy_corrected' and 'NUMBER_OF_ATOMS' columns.\n    bins : int\n        Number of histogram bins.\n    log_scale : bool\n        Whether to use a logarithmic scale on the y-axis.\n\n    Returns\n    -------\n    fig : matplotlib.figure.Figure\n        The generated histogram figure.\n    \"\"\"\n    import matplotlib.pyplot as plt\n\n    # Calculate energy per atom (convert to meV/atom if desired)\n    df[\"energy_per_atom\"] = df[\"energy_corrected\"] / df[\"NUMBER_OF_ATOMS\"]\n\n    fig, ax = plt.subplots()\n    ax.hist(df[\"energy_per_atom\"], bins=bins, log=log_scale)\n\n    ax.set_ylabel(\"Count\")\n    ax.set_xlabel(\"Energy per atom (meV/atom)\")\n    return fig\n",
+    "example": "PlotEnergyHistogram(bins=100, log_scale=True)"
+  },
+  {
+    "name": "PlotForcesHistogram",
+    "module": "atomistic.fitting.plot",
+    "description": "Plot histogram of atomic force magnitudes.\n\nParameters\n----------\ndf : pandas.DataFrame\n    Must contain a 'forces' column with per-atom force arrays.\nbins : int\n    Number of histogram bins.\nlog_scale : bool\n    Whether to use a logarithmic scale on the y-axis.\n\nReturns\n-------\nfig : matplotlib.figure.Figure\n    The generated histogram figure.",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "bins",
+        "type": "int",
+        "default": 100,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "log_scale",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "plot"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"plot\")\ndef PlotForcesHistogram(df: \"pd.DataFrame\", bins: int = 100, log_scale: bool = True):\n    \"\"\"\n    Plot histogram of atomic force magnitudes.\n\n    Parameters\n    ----------\n    df : pandas.DataFrame\n        Must contain a 'forces' column with per-atom force arrays.\n    bins : int\n        Number of histogram bins.\n    log_scale : bool\n        Whether to use a logarithmic scale on the y-axis.\n\n    Returns\n    -------\n    fig : matplotlib.figure.Figure\n        The generated histogram figure.\n    \"\"\"\n    import matplotlib.pyplot as plt\n    import numpy as np\n\n    array = np.concatenate(df.forces.values).flatten()\n\n    fig, ax = plt.subplots()\n    ax.hist(array, bins=bins, log=log_scale)\n\n    ax.set_ylabel(\"Count\")\n    ax.set_xlabel(r\"Force (eV/$\\mathrm{\\AA}$)\")\n    return fig\n",
+    "example": "PlotForcesHistogram(bins=100, log_scale=True)"
+  },
+  {
+    "name": "PlotEnergyFittingCurve",
+    "module": "atomistic.fitting.plot",
+    "description": "Plot predicted vs reference energies for training and optional testing datasets.\n\nParameters\n----------\ndata_dict : dict\n    Dictionary with keys:\n    - 'reference_training_epa', 'predicted_training_epa'\n    - optional: 'reference_testing_epa', 'predicted_testing_epa'\n    All arrays are in eV/atom.\n\nReturns\n-------\nfig : matplotlib.figure.Figure\n    The generated figure for display.",
+    "inputs": [
+      {
+        "name": "data_dict",
+        "type": "dict",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "plot"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"plot\")\ndef PlotEnergyFittingCurve(data_dict: dict):\n    \"\"\"\n    Plot predicted vs reference energies for training and optional testing datasets.\n\n    Parameters\n    ----------\n    data_dict : dict\n        Dictionary with keys:\n        - 'reference_training_epa', 'predicted_training_epa'\n        - optional: 'reference_testing_epa', 'predicted_testing_epa'\n        All arrays are in eV/atom.\n\n    Returns\n    -------\n    fig : matplotlib.figure.Figure\n        The generated figure for display.\n    \"\"\"\n    import matplotlib.pyplot as plt\n\n    fig, ax = plt.subplots()\n\n    # Plot y=x dashed reference line\n    lims = [\n        data_dict[\"reference_training_epa\"].min(),\n        data_dict[\"reference_training_epa\"].max(),\n    ]\n    ax.plot(lims, lims, ls=\"--\", color=\"C0\")\n\n    # Optional testing set\n    if \"reference_testing_epa\" in data_dict and \"predicted_testing_epa\" in data_dict:\n        rmse_testing = _calc_rmse(\n            data_dict[\"reference_testing_epa\"], data_dict[\"predicted_testing_epa\"]\n        )\n        ax.scatter(\n            data_dict[\"reference_testing_epa\"],\n            data_dict[\"predicted_testing_epa\"],\n            color=\"black\",\n            s=30,\n            marker=\"+\",\n            label=f\"Testing RMSE = {rmse_testing:.2f} (meV/atom)\",\n        )\n\n    # Training set\n    rmse_training = _calc_rmse(\n        data_dict[\"reference_training_epa\"], data_dict[\"predicted_training_epa\"]\n    )\n    ax.scatter(\n        data_dict[\"reference_training_epa\"],\n        data_dict[\"predicted_training_epa\"],\n        color=\"C0\",\n        s=30,\n        label=f\"Training RMSE = {rmse_training:.2f} (meV/atom)\",\n    )\n\n    # Labels and title\n    ax.set_xlabel(\"DFT E (eV/atom)\")\n    ax.set_ylabel(\"Predicted E (eV/atom)\")\n    ax.set_title(\"Predicted Energy Vs Reference Energy\")\n    ax.legend()\n\n    return fig\n",
+    "example": "PlotEnergyFittingCurve()"
+  },
+  {
+    "name": "PlotForcesFittingCurve",
+    "module": "atomistic.fitting.plot",
+    "description": "Plot predicted vs reference atomic forces for training and optional testing datasets.\n\nParameters\n----------\ndata_dict : dict\n    Dictionary with keys:\n    - 'reference_training_fpa', 'predicted_training_fpa'\n    - optional: 'reference_testing_fpa', 'predicted_testing_fpa'\n    All arrays are in eV/Å.\n\nReturns\n-------\nfig : matplotlib.figure.Figure\n    The generated figure for display.",
+    "inputs": [
+      {
+        "name": "data_dict",
+        "type": "dict",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "plot"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"plot\")\ndef PlotForcesFittingCurve(data_dict: dict):\n    \"\"\"\n    Plot predicted vs reference atomic forces for training and optional testing datasets.\n\n    Parameters\n    ----------\n    data_dict : dict\n        Dictionary with keys:\n        - 'reference_training_fpa', 'predicted_training_fpa'\n        - optional: 'reference_testing_fpa', 'predicted_testing_fpa'\n        All arrays are in eV/Å.\n\n    Returns\n    -------\n    fig : matplotlib.figure.Figure\n        The generated figure for display.\n    \"\"\"\n    import matplotlib.pyplot as plt\n\n    fig, ax = plt.subplots()\n\n    # 1:1 reference line\n    lims = [\n        data_dict[\"reference_training_fpa\"].min(),\n        data_dict[\"reference_training_fpa\"].max(),\n    ]\n    ax.plot(lims, lims, ls=\"--\", color=\"C1\")\n\n    # Optional testing set\n    if \"reference_testing_fpa\" in data_dict and \"predicted_testing_fpa\" in data_dict:\n        rmse_testing = _calc_rmse(\n            data_dict[\"reference_testing_fpa\"], data_dict[\"predicted_testing_fpa\"]\n        )\n        ax.scatter(\n            data_dict[\"reference_testing_fpa\"],\n            data_dict[\"predicted_testing_fpa\"],\n            color=\"black\",\n            s=30,\n            marker=\"+\",\n            label=f\"Testing RMSE = {rmse_testing:.2f}\" + r\" (meV/$\\AA$)\",\n        )\n\n    # Training set\n    rmse_training = _calc_rmse(\n        data_dict[\"reference_training_fpa\"], data_dict[\"predicted_training_fpa\"]\n    )\n    ax.scatter(\n        data_dict[\"reference_training_fpa\"],\n        data_dict[\"predicted_training_fpa\"],\n        color=\"C1\",\n        s=30,\n        label=f\"Training RMSE = {rmse_training:.2f}\" + r\" (meV/$\\AA$)\",\n    )\n\n    # Labels and title\n    ax.set_xlabel(r\"DFT $F_i$ (eV/$\\AA$)\")\n    ax.set_ylabel(r\"Predicted $F_i$ (eV/$\\AA$)\")\n    ax.set_title(\"Predicted Force Vs Reference Force\")\n    ax.legend()\n\n    return fig\n",
+    "example": "PlotForcesFittingCurve()"
+  },
+  {
+    "name": "RattleAndStrech",
+    "module": "atomistic.structure.transform",
+    "description": "",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "sigma",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "samples",
+        "type": "int",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list[Atoms]"
+      }
+    ],
+    "output_labels": [
+      "structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef RattleAndStrech(structure: Atoms, sigma: float, samples: int) -> list[Atoms]:\n    structures = []\n    # no point in rattling single atoms\n    if len(structure) > 1:\n        for _ in range(samples):\n            structures.append(\n                    stretch(\n                        rattle(structure.copy(), sigma),\n                        hydro=0.05, shear=0.005\n                    )\n            )\n    return structures\n",
+    "example": "RattleAndStrech()"
+  },
+  {
+    "name": "Rattle",
+    "module": "atomistic.structure.transform",
+    "description": "Randomly displace the atoms in the structure.\n\nParameters:\n\nseed = 42:\nRandom seed for the random number generator.\namplitude = 0.1:\nThe amplitude of the random displacement.",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "seed",
+        "type": "int",
+        "default": 42,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "stdev",
+        "type": "float",
+        "default": 0.1,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "structure"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef Rattle(structure, seed: int = 42, stdev: float = 0.1):\n    \"\"\"\n    Randomly displace the atoms in the structure.\n\n    Parameters:\n\n    seed = 42:\n    Random seed for the random number generator.\n    amplitude = 0.1:\n    The amplitude of the random displacement.\n    \"\"\"\n    structure = structure.copy()\n    structure.rattle(seed=seed, stdev=stdev)\n    return structure\n",
+    "example": "Rattle(seed=42, stdev=0.1)"
+  },
+  {
+    "name": "RattleLoop",
+    "module": "atomistic.structure.transform",
+    "description": "",
+    "inputs": [
+      {
+        "name": "structures",
+        "type": "list[Atoms]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "sigma",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "samples",
+        "type": "int",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list[Atoms]"
+      }
+    ],
+    "output_labels": [
+      "rattled_structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef RattleLoop(\n        structures: list[Atoms], sigma: float, samples: int\n) -> list[Atoms]:\n    rattled_structures = []\n    for structure in structures:\n        rattled_structures += RattleAndStrech(structure, sigma, samples).pull()\n    return rattled_structures\n",
+    "example": "RattleLoop()"
+  },
+  {
+    "name": "Stretch",
+    "module": "atomistic.structure.transform",
+    "description": "",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "hydro",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "shear",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "samples",
+        "type": "int",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "hydro_shear_ratio",
+        "type": "float",
+        "default": 0.7,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list[Atoms]"
+      }
+    ],
+    "output_labels": [
+      "structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef Stretch(\n        structure: Atoms, hydro: float, shear: float, samples: int,\n        hydro_shear_ratio: float = 0.7\n) -> list[Atoms]:\n    structures = []\n    for _ in range(samples):\n        if np.random.rand() < hydro_shear_ratio:\n            ihydro, ishear = hydro, 0.05\n        else:\n            ihydro, ishear = 0.05, shear\n        structures.append(\n                stretch(structure.copy(), hydro=ihydro, shear=ishear)\n        )\n    return structures\n",
+    "example": "Stretch(hydro_shear_ratio=0.7)"
+  },
+  {
+    "name": "StretchLoop",
+    "module": "atomistic.structure.transform",
+    "description": "",
+    "inputs": [
+      {
+        "name": "structures",
+        "type": "list[Atoms]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "hydro",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "shear",
+        "type": "float",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "samples",
+        "type": "int",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "hydro_shear_ratio",
+        "type": "float",
+        "default": 0.7,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list[Atoms]"
+      }
+    ],
+    "output_labels": [
+      "stretched_structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef StretchLoop(\n        structures: list[Atoms], hydro: float, shear: float, samples: int,\n        hydro_shear_ratio: float = 0.7\n) -> list[Atoms]:\n    stretched_structures = []\n    for structure in structures:\n        stretched_structures += Stretch(\n                structure, hydro, shear, samples, hydro_shear_ratio\n        ).pull()\n    return stretched_structures\n",
+    "example": "StretchLoop(hydro_shear_ratio=0.7)"
+  },
+  {
+    "name": "Repeat",
+    "module": "atomistic.structure.transform",
+    "description": "Repeat a crystal structure periodically along all lattice vectors.\n\nParameters\n----------\nstructure : Atoms\n    The ASE ``Atoms`` object to be repeated.\nrepeat_scalar : int, optional\n    Number of repetitions along each lattice vector (default is ``1`` – no change).\n\nReturns\n-------\nAtoms\n    A new ``Atoms`` object containing the repeated supercell.\n\nTask hint\n----------\nUse this node when the workflow requires building a larger supercell\nfrom a primitive cell (e.g., “create a 2×2×2 bulk Al supercell”).",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "repeat_scalar",
+        "type": "int",
+        "default": 1,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Atoms"
+      }
+    ],
+    "output_labels": [
+      "structure"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"structure\")\ndef Repeat(structure: Atoms, repeat_scalar: int = 1) -> Atoms:\n    \"\"\"\n    Repeat a crystal structure periodically along all lattice vectors.\n\n    Parameters\n    ----------\n    structure : Atoms\n        The ASE ``Atoms`` object to be repeated.\n    repeat_scalar : int, optional\n        Number of repetitions along each lattice vector (default is ``1`` – no change).\n\n    Returns\n    -------\n    Atoms\n        A new ``Atoms`` object containing the repeated supercell.\n\n    Task hint\n    ----------\n    Use this node when the workflow requires building a larger supercell\n    from a primitive cell (e.g., “create a 2×2×2 bulk Al supercell”).\n    \"\"\"\n    return structure.repeat(int(repeat_scalar))\n",
+    "example": "Repeat(repeat_scalar=1)"
+  },
+  {
+    "name": "Bulk",
+    "module": "atomistic.structure.build",
+    "description": "Create a bulk crystal structure.\n\n**Scientific purpose**\nGenerate a pristine bulk unit cell for a given element and crystal lattice\n(e.g. fcc Al, bcc Fe, hcp Mg). This is the typical starting point for defect\nstudies, molecular‑dynamics simulations, or high‑throughput materials screening.\n\n**Required inputs**\n- ``name``: Chemical symbol of the element (e.g. ``\"Al\"``).\n- ``crystalstructure``: One of ``\"fcc\"``, ``\"bcc\"``, ``\"hcp\"``, ``\"diamond\"``,\n  ``\"rocksalt\"``; if omitted the default of the underlying factory is used.\n- ``a``, ``c``, ``c_over_a``, ``u``: Optional lattice parameters or internal\n  coordinates.\n- ``orthorhombic`` / ``cubic``: Force the cell shape to be orthorhombic or cubic.\n\n**Typical use‑cases**\n* Building a bulk material before inserting vacancies, interstitials, or\n  surfaces.\n* Preparing input structures for relaxation or MD runs.\n* Generating a library of bulk cells for high‑throughput workflows.\n\nReturns\n-------\nNode returns an Atoms object from ``pyiron_atomistics._StructureFactory().bulk`` compatible\nwith ASE/pyiron.",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "crystalstructure",
+        "type": "Optional[Literal['fcc', 'bcc', 'hcp', 'diamond', 'rocksalt']]",
+        "default": null,
+        "optional": false,
+        "choices": [
+          "fcc",
+          "bcc",
+          "hcp",
+          "diamond",
+          "rocksalt"
+        ]
+      },
+      {
+        "name": "a",
+        "type": "Optional[float]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "c",
+        "type": "Optional[float]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "u",
+        "type": "Optional[float]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "orthorhombic",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "cubic",
+        "type": "bool",
+        "default": false,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Atoms"
+      }
+    ],
+    "output_labels": [
+      "structure"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"structure\")\ndef Bulk(\n    name: str,\n    crystalstructure: Optional[\n        Literal[\"fcc\", \"bcc\", \"hcp\", \"diamond\", \"rocksalt\"]\n    ] = None,\n    a: Optional[float] = None,\n    c: Optional[float] = None,\n    u: Optional[float] = None,\n    orthorhombic: bool = False,\n    cubic: bool = False,\n) -> Atoms:\n    \"\"\"\n    Create a bulk crystal structure.\n\n    **Scientific purpose**\n    Generate a pristine bulk unit cell for a given element and crystal lattice\n    (e.g. fcc Al, bcc Fe, hcp Mg). This is the typical starting point for defect\n    studies, molecular‑dynamics simulations, or high‑throughput materials screening.\n\n    **Required inputs**\n    - ``name``: Chemical symbol of the element (e.g. ``\"Al\"``).\n    - ``crystalstructure``: One of ``\"fcc\"``, ``\"bcc\"``, ``\"hcp\"``, ``\"diamond\"``,\n      ``\"rocksalt\"``; if omitted the default of the underlying factory is used.\n    - ``a``, ``c``, ``c_over_a``, ``u``: Optional lattice parameters or internal\n      coordinates.\n    - ``orthorhombic`` / ``cubic``: Force the cell shape to be orthorhombic or cubic.\n\n    **Typical use‑cases**\n    * Building a bulk material before inserting vacancies, interstitials, or\n      surfaces.\n    * Preparing input structures for relaxation or MD runs.\n    * Generating a library of bulk cells for high‑throughput workflows.\n\n    Returns\n    -------\n    Node returns an Atoms object from ``pyiron_atomistics._StructureFactory().bulk`` compatible\n    with ASE/pyiron.\n    \"\"\"\n    return bulk(\n        name=name,\n        crystalstructure=crystalstructure,\n        a=a,\n        c=c,\n        u=u,\n        orthorhombic=orthorhombic,\n        cubic=cubic,\n    )\n",
+    "example": "Bulk(orthorhombic=False, cubic=False)"
+  },
+  {
+    "name": "CombineStructures",
+    "module": "atomistic.structure.group",
+    "description": "Combine individual structure sets into a full training set.",
+    "inputs": [
+      {
+        "name": "spacegroups",
+        "type": "list[ase.atoms.Atoms] | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "volume_relax",
+        "type": "list[ase.atoms.Atoms] | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "full_relax",
+        "type": "list[ase.atoms.Atoms] | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "rattle",
+        "type": "list[ase.atoms.Atoms] | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "stretch",
+        "type": "list[ase.atoms.Atoms] | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef CombineStructures(\n        spacegroups: list[Atoms] | None,\n        volume_relax: list[Atoms] | None,\n        full_relax: list[Atoms] | None,\n        rattle: list[Atoms] | None,\n        stretch: list[Atoms] | None,\n        store: bool = True,\n):\n    \"\"\"Combine individual structure sets into a full training set.\"\"\"\n    from functools import reduce\n    structures = [spacegroups, volume_relax, full_relax, rattle, stretch]\n    structures = reduce(list.__add__, (s or [] for s in structures), [])\n    if len(structures) == 0:\n        logging.warn(\"Either no inputs given or all inputs are empty. \"\n                     \"Returning the empty list!\")\n    return structures\n",
+    "example": "CombineStructures(store=True)"
+  },
+  {
+    "name": "SaveStructures",
+    "module": "atomistic.structure.group",
+    "description": "Save list of structures into a pickled dataframe.\n\nColumns are:\n    'name': a structure label\n    'ase_atoms': the ASE object for the actual structure\n    'number_of_atoms': the number of atoms inside the structure\n\nIf `filename` does not end with 'pckl.gz', it is added.\n\nArgs:\n    structures (list of Atoms): structures to save\n    filename (str): path where the dataframe is written to",
+    "inputs": [
+      {
+        "name": "structures",
+        "type": "list[Atoms]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "filename",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "df"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef SaveStructures(\n        structures: list[Atoms],\n        filename: str\n):\n    \"\"\"Save list of structures into a pickled dataframe.\n\n    Columns are:\n        'name': a structure label\n        'ase_atoms': the ASE object for the actual structure\n        'number_of_atoms': the number of atoms inside the structure\n\n    If `filename` does not end with 'pckl.gz', it is added.\n\n    Args:\n        structures (list of Atoms): structures to save\n        filename (str): path where the dataframe is written to\n    \"\"\"\n    import pandas as pd\n    import os.path\n    df = pd.DataFrame([\n        {'name': s.info.get('label', f'structure_{i}'),\n         'ase_atoms': s,\n         'number_of_atoms': len(s),\n         } for i, s in enumerate(structures)])\n    if not filename.endswith(\"pckl.gz\"):\n        filename += \".pckl.gz\"\n    dirname = os.path.dirname(filename)\n    os.makedirs(dirname, exist_ok=True)\n    df.to_pickle(filename)\n    return df\n",
+    "example": "SaveStructures()"
+  },
+  {
+    "name": "generate_structures",
+    "module": "atomistic.structure.group",
+    "description": "",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "strain_lst",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "structure_lst"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef generate_structures(structure, strain_lst):\n    structure_lst = []\n    for strain in strain_lst:\n        structure_strain = structure.copy()\n        structure_strain.set_cell(\n            structure_strain.cell * strain ** (1 / 3), scale_atoms=True\n        )\n        structure_lst.append(structure_strain)\n    return structure_lst\n",
+    "example": "generate_structures()"
+  },
+  {
+    "name": "ElementInput",
+    "module": "atomistic.assyst.stoichiometry",
+    "description": "",
+    "inputs": [
+      {
+        "name": "element",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "min_ion",
+        "type": "int",
+        "default": 1,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "max_ion",
+        "type": "int",
+        "default": 10,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "step_ion",
+        "type": "int",
+        "default": 1,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Stoichiometry"
+      }
+    ],
+    "output_labels": [
+      "stoichiometry"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef ElementInput(\n    element: str,\n    min_ion: int = 1,\n    max_ion: int = 10,\n    step_ion: int = 1,\n) -> Stoichiometry:\n    stoichiometry = Stoichiometry(\n        tuple({element: i} for i in range(min_ion, max_ion + 1, step_ion))\n    )\n    return stoichiometry\n",
+    "example": "ElementInput(min_ion=1, max_ion=10, step_ion=1)"
+  },
+  {
+    "name": "StoichiometryTable",
+    "module": "atomistic.assyst.stoichiometry",
+    "description": "",
+    "inputs": [
+      {
+        "name": "stoichiometry",
+        "type": "Stoichiometry",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "DataFrame"
+      }
+    ],
+    "output_labels": [
+      "df"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"df\")\ndef StoichiometryTable(stoichiometry: Stoichiometry) -> pd.DataFrame:\n    return pd.DataFrame(stoichiometry.stoichiometry)\n",
+    "example": "StoichiometryTable()"
+  },
+  {
+    "name": "FilterSize",
+    "module": "atomistic.assyst.stoichiometry",
+    "description": "Filter an Elements object by size.\n\nArgs:\n    min (int): new object has at least this number of atoms\n    max (int): new object has at most this number of atoms\n\nReturns:\n    Elements: filtered object",
+    "inputs": [
+      {
+        "name": "elements",
+        "type": "Stoichiometry",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "min",
+        "type": "int | None",
+        "default": 0,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "max",
+        "type": "int | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "filtered"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"filtered\")\ndef FilterSize(\n    elements: Stoichiometry,\n    min: int | None = 0,\n    max: int | None = None,\n):\n    \"\"\"Filter an Elements object by size.\n\n    Args:\n        min (int): new object has at least this number of atoms\n        max (int): new object has at most this number of atoms\n\n    Returns:\n        Elements: filtered object\n    \"\"\"\n    import math\n    if max is None:\n        max = math.inf\n    return Stoichiometry(tuple(s for s in elements\n                                if min <= sum(s.values()) <= max ))\n",
+    "example": "FilterSize(min=0)"
+  },
+  {
+    "name": "SpaceGroupSampling",
+    "module": "atomistic.assyst.stoichiometry",
+    "description": "Create symmetric random structures.\n\nArgs:\n    elements (Elements): list of compositions per structure\n    spacegroups (list of int): which space groups to generate\n    max_atoms (int): do not generate structures larger than this\n    max_structures (int): generate at most this many structures\nReturns:\n    list of Atoms: generated structures",
+    "inputs": [
+      {
+        "name": "elements",
+        "type": "Stoichiometry",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "spacegroups",
+        "type": "list[int] | tuple[int, ...] | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "max_atoms",
+        "type": "int",
+        "default": 10,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "max_structures",
+        "type": "int | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list[Atoms]"
+      }
+    ],
+    "output_labels": [
+      "structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef SpaceGroupSampling(\n        elements: Stoichiometry,\n        spacegroups: list[int] | tuple[int,...] | None = None,\n        max_atoms: int = 10,\n        max_structures: int | None = None,\n) -> list[Atoms]:\n    \"\"\"\n    Create symmetric random structures.\n\n    Args:\n        elements (Elements): list of compositions per structure\n        spacegroups (list of int): which space groups to generate\n        max_atoms (int): do not generate structures larger than this\n        max_structures (int): generate at most this many structures\n    Returns:\n        list of Atoms: generated structures\n    \"\"\"\n    from warnings import catch_warnings\n    from tqdm.auto import tqdm\n    import math\n\n    if spacegroups is None:\n        spacegroups = list(range(1,231))\n    if max_structures is None:\n        max_structures = math.inf\n\n    structures = []\n    with catch_warnings(category=UserWarning, action='ignore'):\n        for stoich in (bar := tqdm(elements)):\n            elements, num_atomss = zip(*stoich.items())\n            stoich_str = \"\".join(f\"{s}{n}\" for s, n in zip(elements, num_atomss))\n            bar.set_description(stoich_str)\n            structures += [s['atoms'] for s in pyxtal(spacegroups, elements, num_atomss)]\n            if len(structures) > max_structures:\n                structures = structures[:max_structures]\n                break\n    return structures\n",
+    "example": "SpaceGroupSampling(max_atoms=10)"
+  },
+  {
+    "name": "CalculateEVCurve",
+    "module": "atomistic.property.bulk",
+    "description": "Computes an energy vs volume (EV) curve for a given structure.\n\nArgs:\n    structure (Atoms): atomic structure\n    calculator (AseCalculatorConfig): energy/force engine to use\n    num_of_points (int): volume samples\n    vol_range (float): minimum/maximum volumetric strain\n    per_atom (float): output per atom quantities rather than supercell quantities\n\nReturns:\n    DataFrame: columns 'volume', 'energy', 'ase_atoms'",
+    "inputs": [
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "calculator",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "num_of_points",
+        "type": "int",
+        "default": 7,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "vol_range",
+        "type": "float",
+        "default": 0.3,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "per_atom",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "opt",
+        "type": "dict | None",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "df"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef CalculateEVCurve(\n    structure: Atoms,\n    calculator: Node,\n    num_of_points: int = 7,\n    vol_range: float = 0.3,\n    per_atom: bool = True,\n    opt: dict | None = None,\n):\n    \"\"\"\n    Computes an energy vs volume (EV) curve for a given structure.\n\n    Args:\n        structure (Atoms): atomic structure\n        calculator (AseCalculatorConfig): energy/force engine to use\n        num_of_points (int): volume samples\n        vol_range (float): minimum/maximum volumetric strain\n        per_atom (float): output per atom quantities rather than supercell quantities\n\n    Returns:\n        DataFrame: columns 'volume', 'energy', 'ase_atoms'\n    \"\"\"\n    from ase.optimize import BFGS\n    from ase.filters import ExpCellFilter\n\n    volume_factors = np.linspace((1 - vol_range)**(1/3), (1.0 + vol_range)**(1/3), num_of_points)\n\n    structure = structure.copy()\n\n    if per_atom:\n        nd = len(structure)\n    else:\n        nd = 1\n\n    calculator.inputs.use_symmetry = False\n    structure.calc = calculator.pull()\n    initial_volume = structure.get_volume()\n\n    data = {\"volume\": [], \"energy\": [], \"ase_atoms\":[]}\n\n    for factor in volume_factors:\n        scaled_structure = structure.copy()\n        scaled_structure.set_cell(structure.cell * factor, scale_atoms=True)\n        calculator.inputs.use_symmetry = False\n        scaled_structure.calc = calculator.pull()\n\n        if opt is not None:\n            opt = BFGS(scaled_structure)\n            # Relax atomic positions\n            opt.run(fmax=opt.force_tolerance, steps=opt.max_steps)\n\n        energy = scaled_structure.get_potential_energy()\n        volume = scaled_structure.get_volume()\n\n        data[\"volume\"].append(volume/nd)\n        data[\"energy\"].append(energy/nd)\n        data[\"ase_atoms\"].append(scaled_structure)\n\n    df = pd.DataFrame(data)\n    return df\n",
+    "example": "CalculateEVCurve(num_of_points=7, vol_range=0.3, per_atom=True)"
+  },
+  {
+    "name": "FitBirchMurnaghanEOS",
+    "module": "atomistic.property.bulk",
+    "description": "Fits the energy vs volume data to the Birch-Murnaghan EOS\nand returns a tuple of equilibrium properties: (E0, V0, B0).",
+    "inputs": [
+      {
+        "name": "ev_curve_df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "tuple[float, float, float]"
+      }
+    ],
+    "output_labels": [
+      "E0",
+      "V0",
+      "B0_GPa"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef FitBirchMurnaghanEOS(ev_curve_df: pd.DataFrame) -> tuple[float, float, float]:\n    \"\"\"\n    Fits the energy vs volume data to the Birch-Murnaghan EOS\n    and returns a tuple of equilibrium properties: (E0, V0, B0).\n    \"\"\"\n    from scipy.optimize import curve_fit\n\n    volumes = ev_curve_df[\"volume\"].values\n    energies = ev_curve_df[\"energy\"].values\n\n    # Initial guesses for the fitting parameters\n    V0_guess = volumes[np.argmin(energies)]\n    E0_guess = min(energies)\n    B0_guess = 1.0  # in eV/Å³\n    B1_guess = 4.0\n\n    popt, _ = curve_fit(birch_murnaghan, volumes, energies, p0=[E0_guess, V0_guess, B0_guess, B1_guess])\n    E0, V0, B0, B1 = popt\n    B0_GPa = B0 * 160.21766208  # Conversion factor\n\n    return E0, V0, B0_GPa\n",
+    "example": "FitBirchMurnaghanEOS()"
+  },
+  {
+    "name": "PlotEVCurve",
+    "module": "atomistic.property.bulk",
+    "description": "Plots the Energy vs. Volume (EV) curve from a computed EV dataset.\n\nArgs:\n    ev_curve_df (pd.DataFrame): DataFrame containing 'volume' and 'energy' columns.\n    xlabel (str, optional): Label for the x-axis. Defaults to \"Volume (Å³)\".\n    ylabel (str, optional): Label for the y-axis. Defaults to \"Energy (eV)\".\n    title (str, optional): Title of the plot. Defaults to \"Energy vs Volume Curve\".\n    fontsize (int, optional): Font size for labels and title. Defaults to 12.\n\nReturns:\n    fig, ax: The matplotlib figure and axis objects.",
+    "inputs": [
+      {
+        "name": "ev_curve_df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "xlabel",
+        "type": "str",
+        "default": "Volume (Å³)",
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "ylabel",
+        "type": "str",
+        "default": "Energy (eV)",
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "title",
+        "type": "str",
+        "default": "Energy vs Volume Curve",
+        "optional": true,
+        "choices": null
+      },
+      {
+        "name": "fontsize",
+        "type": "int",
+        "default": 12,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node()\ndef PlotEVCurve(\n    ev_curve_df: pd.DataFrame,\n    xlabel: str = \"Volume (Å³)\",\n    ylabel: str = \"Energy (eV)\",\n    title: str = \"Energy vs Volume Curve\",\n    fontsize: int = 12\n):\n    \"\"\"\n    Plots the Energy vs. Volume (EV) curve from a computed EV dataset.\n\n    Args:\n        ev_curve_df (pd.DataFrame): DataFrame containing 'volume' and 'energy' columns.\n        xlabel (str, optional): Label for the x-axis. Defaults to \"Volume (Å³)\".\n        ylabel (str, optional): Label for the y-axis. Defaults to \"Energy (eV)\".\n        title (str, optional): Title of the plot. Defaults to \"Energy vs Volume Curve\".\n        fontsize (int, optional): Font size for labels and title. Defaults to 12.\n\n    Returns:\n        fig, ax: The matplotlib figure and axis objects.\n    \"\"\"\n    fig, ax = plt.subplots()\n    ax.plot(ev_curve_df['volume'], ev_curve_df['energy'], marker='o', linestyle='-', color='b')\n    ax.set_xlabel(xlabel, fontsize=fontsize)\n    ax.set_ylabel(ylabel, fontsize=fontsize)\n    ax.set_title(title, fontsize=fontsize)\n    # ax.legend()\n    return fig\n",
+    "example": "PlotEVCurve(xlabel='Volume (Å³)', ylabel='Energy (eV)', title='Energy vs Volume Curve', fontsize=12)"
+  },
+  {
+    "name": "GenericOptimizerSettings",
+    "module": "atomistic.calculator.optimize",
+    "description": "GenericOptimizerSettings(max_steps: int = 10, force_tolerance: float = 0.01)",
+    "inputs": [
+      {
+        "name": "pos_args",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "label",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kwargs",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "output"
+    ],
+    "tags": [],
+    "source": "    class DataclassNode(Node):\n        def __init__(self, *pos_args, label=None, **kwargs):\n            super().__init__(label or cls.__name__)\n\n            for field in fields(cls):\n                port_type = field.type if field.type is not MISSING else None\n                has_default = field.default is not MISSING\n                default = field.default if has_default else None\n                if getattr(field, 'default_factory', MISSING) is not MISSING:  # type: ignore\n                    default = field.default_factory()\n                    has_default = True\n                self.add_input(field.name, port_type=port_type, default=default)\n                if has_default:\n                    self.inputs[field.name]._value = default\n                    self.inputs[field.name].ready = True\n                else:\n                    self.inputs[field.name]._value = NotData\n                    self.inputs[field.name].ready = False\n\n            self.add_output('output', port_type=cls)\n            try:\n                self._source = inspect.getsource(cls)\n            except Exception:\n                self._source = None\n            if hasattr(cls, '__module__'):\n                self._module_path = f\"{cls.__module__}.{cls.__name__}\"\n            else:\n                self._module_path = cls.__name__\n\n            for arg_val, field in zip(pos_args, fields(cls)):\n                self.inputs[field.name].value = arg_val\n\n            for key, val in kwargs.items():\n                if key in self.inputs:\n                    self.inputs[key].value = val\n                else:\n                    raise ValueError(f'Input port \\\"{key}\\\" does not exist on node \\\"{self.label}\\\"')\n\n        def execute(self):\n            inputs = {}\n            for field in fields(cls):\n                port = self.inputs[field.name]\n                inputs[field.name] = port.value if port.ready else port.default\n\n            instance = cls(**inputs)\n            self.outputs['output'].set_value(instance)\n",
+    "example": "GenericOptimizerSettings()"
+  },
+  {
+    "name": "RelaxLoop",
+    "module": "atomistic.calculator.optimize",
+    "description": "",
+    "inputs": [
+      {
+        "name": "mode",
+        "type": "str | /.home.jovyan.pyiron_nodes.atomistic.calculator.optimize.RelaxMode",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "calculator",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "opt",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structures",
+        "type": "list[Atoms]",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "list[Atoms]"
+      }
+    ],
+    "output_labels": [
+      "relaxed_structures"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef RelaxLoop(\n        mode: str | RelaxMode,\n        calculator: Node,\n        opt: Node,\n        structures: list[Atoms]\n) -> list[Atoms]:\n    from tqdm.auto import tqdm\n    mode = RelaxMode(mode)\n    relaxed_structures = []\n    for structure in tqdm(structures, desc=f\"Relax {mode.value}\"):\n        relaxed_structures.append(\n                Relax(mode, calculator, opt, structure).pull()\n        )\n    return relaxed_structures\n",
+    "example": "RelaxLoop()"
+  },
+  {
+    "name": "Relax",
+    "module": "atomistic.calculator.optimize",
+    "description": "",
+    "inputs": [
+      {
+        "name": "mode",
+        "type": "str | /.home.jovyan.pyiron_nodes.atomistic.calculator.optimize.RelaxMode",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "calculator",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "opt",
+        "type": "Node",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Atoms"
+      }
+    ],
+    "output_labels": [
+      "relaxed_structure"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef Relax(mode: str | RelaxMode, calculator: Node, opt: Node, structure: Atoms) -> Atoms:\n    from ase.optimize import LBFGS\n    from ase.calculators.singlepoint import SinglePointCalculator\n\n    if isinstance(mode, str):\n        mode = mode.lower()\n    mode = RelaxMode(mode)\n\n    structure = structure.copy()\n\n    # FIXME: meh\n    match mode:\n        case RelaxMode.VOLUME:\n            calculator.inputs.use_symmetry = True\n            structure.calc = calculator.pull()\n        case RelaxMode.FULL | RelaxLoop.INTERNAL:\n            calculator.inputs.use_symmetry = False\n            structure.calc = calculator.pull()\n        case _:\n            assert False\n\n    filtered_structure = mode.apply_filter_and_constraints(structure)\n    lbfgs = LBFGS(filtered_structure, logfile=\"/dev/null\")\n    lbfgs.run(fmax=opt.inputs.force_tolerance.value, steps=opt.inputs.max_steps.value)\n    calc = structure.calc\n    structure.calc = SinglePointCalculator(structure, **{\n            'energy': calc.get_potential_energy(),\n            'forces': calc.get_forces(),\n            'stress': calc.get_stress()\n    })\n    relaxed_structure = structure\n    relaxed_structure.constraints.clear()\n    return relaxed_structure\n",
+    "example": "Relax()"
+  },
+  {
+    "name": "MD",
+    "module": "atomistic.calculator.calphy",
+    "description": "Molecular dynamics parameters.\n\nAttributes:\n-----------\ntimestep: float\n    https://calphy.org/en/latest/inputfile.html#timestep\nn_small_steps: int\n    https://calphy.org/en/latest/inputfile.html#n-small-steps\nn_every_steps: int\n    https://calphy.org/en/latest/inputfile.html#n-every-steps\nn_repeat_steps: int\n    https://calphy.org/en/latest/inputfile.html#n-repeat-steps\nn_cycles: int\n    https://calphy.org/en/latest/inputfile.html#n-cycles\nthermostat_damping: float\n    https://calphy.org/en/latest/inputfile.html#thermostat-damping\nbarostat_damping: float\n    https://calphy.org/en/latest/inputfile.html#barostat-damping",
+    "inputs": [
+      {
+        "name": "pos_args",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "label",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kwargs",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "output"
+    ],
+    "tags": [],
+    "source": "    class DataclassNode(Node):\n        def __init__(self, *pos_args, label=None, **kwargs):\n            super().__init__(label or cls.__name__)\n\n            for field in fields(cls):\n                port_type = field.type if field.type is not MISSING else None\n                has_default = field.default is not MISSING\n                default = field.default if has_default else None\n                if getattr(field, 'default_factory', MISSING) is not MISSING:  # type: ignore\n                    default = field.default_factory()\n                    has_default = True\n                self.add_input(field.name, port_type=port_type, default=default)\n                if has_default:\n                    self.inputs[field.name]._value = default\n                    self.inputs[field.name].ready = True\n                else:\n                    self.inputs[field.name]._value = NotData\n                    self.inputs[field.name].ready = False\n\n            self.add_output('output', port_type=cls)\n            try:\n                self._source = inspect.getsource(cls)\n            except Exception:\n                self._source = None\n            if hasattr(cls, '__module__'):\n                self._module_path = f\"{cls.__module__}.{cls.__name__}\"\n            else:\n                self._module_path = cls.__name__\n\n            for arg_val, field in zip(pos_args, fields(cls)):\n                self.inputs[field.name].value = arg_val\n\n            for key, val in kwargs.items():\n                if key in self.inputs:\n                    self.inputs[key].value = val\n                else:\n                    raise ValueError(f'Input port \\\"{key}\\\" does not exist on node \\\"{self.label}\\\"')\n\n        def execute(self):\n            inputs = {}\n            for field in fields(cls):\n                port = self.inputs[field.name]\n                inputs[field.name] = port.value if port.ready else port.default\n\n            instance = cls(**inputs)\n            self.outputs['output'].set_value(instance)\n",
+    "example": "MD()"
+  },
+  {
+    "name": "NoseHoover",
+    "module": "atomistic.calculator.calphy",
+    "description": "Nose-Hoover parameters.\n\nAttributes:\n-----------\nthermostat_damping: float\n    https://calphy.org/en/latest/inputfile.html#nose-hoover-thermostat-damping\nbarostat_damping: float\n    https://calphy.org/en/latest/inputfile.html#nose-hoover-barostat-damping",
+    "inputs": [
+      {
+        "name": "pos_args",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "label",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kwargs",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "output"
+    ],
+    "tags": [],
+    "source": "    class DataclassNode(Node):\n        def __init__(self, *pos_args, label=None, **kwargs):\n            super().__init__(label or cls.__name__)\n\n            for field in fields(cls):\n                port_type = field.type if field.type is not MISSING else None\n                has_default = field.default is not MISSING\n                default = field.default if has_default else None\n                if getattr(field, 'default_factory', MISSING) is not MISSING:  # type: ignore\n                    default = field.default_factory()\n                    has_default = True\n                self.add_input(field.name, port_type=port_type, default=default)\n                if has_default:\n                    self.inputs[field.name]._value = default\n                    self.inputs[field.name].ready = True\n                else:\n                    self.inputs[field.name]._value = NotData\n                    self.inputs[field.name].ready = False\n\n            self.add_output('output', port_type=cls)\n            try:\n                self._source = inspect.getsource(cls)\n            except Exception:\n                self._source = None\n            if hasattr(cls, '__module__'):\n                self._module_path = f\"{cls.__module__}.{cls.__name__}\"\n            else:\n                self._module_path = cls.__name__\n\n            for arg_val, field in zip(pos_args, fields(cls)):\n                self.inputs[field.name].value = arg_val\n\n            for key, val in kwargs.items():\n                if key in self.inputs:\n                    self.inputs[key].value = val\n                else:\n                    raise ValueError(f'Input port \\\"{key}\\\" does not exist on node \\\"{self.label}\\\"')\n\n        def execute(self):\n            inputs = {}\n            for field in fields(cls):\n                port = self.inputs[field.name]\n                inputs[field.name] = port.value if port.ready else port.default\n\n            instance = cls(**inputs)\n            self.outputs['output'].set_value(instance)\n",
+    "example": "NoseHoover()"
+  },
+  {
+    "name": "Berendsen",
+    "module": "atomistic.calculator.calphy",
+    "description": "Berendsen parameters.\n\nAttributes:\n-----------\nthermostat_damping: float\n    https://calphy.org/en/latest/inputfile.html#berendsen-thermostat-damping\nbarostat_damping: float\n    https://calphy.org/en/latest/inputfile.html#berendsen-barostat-damping",
+    "inputs": [
+      {
+        "name": "pos_args",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "label",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kwargs",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "output"
+    ],
+    "tags": [],
+    "source": "    class DataclassNode(Node):\n        def __init__(self, *pos_args, label=None, **kwargs):\n            super().__init__(label or cls.__name__)\n\n            for field in fields(cls):\n                port_type = field.type if field.type is not MISSING else None\n                has_default = field.default is not MISSING\n                default = field.default if has_default else None\n                if getattr(field, 'default_factory', MISSING) is not MISSING:  # type: ignore\n                    default = field.default_factory()\n                    has_default = True\n                self.add_input(field.name, port_type=port_type, default=default)\n                if has_default:\n                    self.inputs[field.name]._value = default\n                    self.inputs[field.name].ready = True\n                else:\n                    self.inputs[field.name]._value = NotData\n                    self.inputs[field.name].ready = False\n\n            self.add_output('output', port_type=cls)\n            try:\n                self._source = inspect.getsource(cls)\n            except Exception:\n                self._source = None\n            if hasattr(cls, '__module__'):\n                self._module_path = f\"{cls.__module__}.{cls.__name__}\"\n            else:\n                self._module_path = cls.__name__\n\n            for arg_val, field in zip(pos_args, fields(cls)):\n                self.inputs[field.name].value = arg_val\n\n            for key, val in kwargs.items():\n                if key in self.inputs:\n                    self.inputs[key].value = val\n                else:\n                    raise ValueError(f'Input port \\\"{key}\\\" does not exist on node \\\"{self.label}\\\"')\n\n        def execute(self):\n            inputs = {}\n            for field in fields(cls):\n                port = self.inputs[field.name]\n                inputs[field.name] = port.value if port.ready else port.default\n\n            instance = cls(**inputs)\n            self.outputs['output'].set_value(instance)\n",
+    "example": "Berendsen()"
+  },
+  {
+    "name": "Tolerance",
+    "module": "atomistic.calculator.calphy",
+    "description": "Tolerance parameters.\n\nAttributes:\n-----------\nspring_constant: float\n    https://calphy.org/en/latest/inputfile.html#tol-spring-constant\nsolid_fraction: float\n    https://calphy.org/en/latest/inputfile.html#tol-solid-fraction\nliquid_fraction: float\n    https://calphy.org/en/latest/inputfile.html#tol-liquid-fraction\npressure: float\n    https://calphy.org/en/latest/inputfile.html#tol-pressure",
+    "inputs": [
+      {
+        "name": "pos_args",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "label",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kwargs",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "output"
+    ],
+    "tags": [],
+    "source": "    class DataclassNode(Node):\n        def __init__(self, *pos_args, label=None, **kwargs):\n            super().__init__(label or cls.__name__)\n\n            for field in fields(cls):\n                port_type = field.type if field.type is not MISSING else None\n                has_default = field.default is not MISSING\n                default = field.default if has_default else None\n                if getattr(field, 'default_factory', MISSING) is not MISSING:  # type: ignore\n                    default = field.default_factory()\n                    has_default = True\n                self.add_input(field.name, port_type=port_type, default=default)\n                if has_default:\n                    self.inputs[field.name]._value = default\n                    self.inputs[field.name].ready = True\n                else:\n                    self.inputs[field.name]._value = NotData\n                    self.inputs[field.name].ready = False\n\n            self.add_output('output', port_type=cls)\n            try:\n                self._source = inspect.getsource(cls)\n            except Exception:\n                self._source = None\n            if hasattr(cls, '__module__'):\n                self._module_path = f\"{cls.__module__}.{cls.__name__}\"\n            else:\n                self._module_path = cls.__name__\n\n            for arg_val, field in zip(pos_args, fields(cls)):\n                self.inputs[field.name].value = arg_val\n\n            for key, val in kwargs.items():\n                if key in self.inputs:\n                    self.inputs[key].value = val\n                else:\n                    raise ValueError(f'Input port \\\"{key}\\\" does not exist on node \\\"{self.label}\\\"')\n\n        def execute(self):\n            inputs = {}\n            for field in fields(cls):\n                port = self.inputs[field.name]\n                inputs[field.name] = port.value if port.ready else port.default\n\n            instance = cls(**inputs)\n            self.outputs['output'].set_value(instance)\n",
+    "example": "Tolerance()"
+  },
+  {
+    "name": "InputClass",
+    "module": "atomistic.calculator.calphy",
+    "description": "Input parameters for calphy calculations.\n\nAttributes:\n-----------\nmd: MD\n    Molecular dynamics parameters.\ntolerance: Tolerance\n    Tolerance parameters.\nnose_hoover: NoseHoover\n    Nose-Hoover parameters.\nberendsen: Berendsen\n    Berendsen parameters.\nqueue: Queue\n    Queue parameters.\npressure: int\n    https://calphy.org/en/latest/inputfile.html#pressure\ntemperature: int\n    https://calphy.org/en/latest/inputfile.html#temperature\nnpt: bool\n    https://calphy.org/en/latest/inputfile.html#npt\nn_equilibration_steps: int\n    https://calphy.org/en/latest/inputfile.html#n-equilibration-steps\nn_switching_steps: int\n    https://calphy.org/en/latest/inputfile.html#n-switching-steps\nn_print_steps: int\n    https://calphy.org/en/latest/inputfile.html#n-print-steps\nn_iterations: int\n    https://calphy.org/en/latest/inputfile.html#n-iterations\nequilibration_control: str\n    https://calphy.org/en/latest/inputfile.html#equilibration-control\nmelting_cycle: bool\n    https://calphy.org/en/latest/inputfile.html#melting-cycle\nspring_constants: Optional[float]\n    https://calphy.org/en/latest/inputfile.html#spring-constants        ",
+    "inputs": [
+      {
+        "name": "pos_args",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "label",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "kwargs",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "output"
+    ],
+    "tags": [],
+    "source": "    class DataclassNode(Node):\n        def __init__(self, *pos_args, label=None, **kwargs):\n            super().__init__(label or cls.__name__)\n\n            for field in fields(cls):\n                port_type = field.type if field.type is not MISSING else None\n                has_default = field.default is not MISSING\n                default = field.default if has_default else None\n                if getattr(field, 'default_factory', MISSING) is not MISSING:  # type: ignore\n                    default = field.default_factory()\n                    has_default = True\n                self.add_input(field.name, port_type=port_type, default=default)\n                if has_default:\n                    self.inputs[field.name]._value = default\n                    self.inputs[field.name].ready = True\n                else:\n                    self.inputs[field.name]._value = NotData\n                    self.inputs[field.name].ready = False\n\n            self.add_output('output', port_type=cls)\n            try:\n                self._source = inspect.getsource(cls)\n            except Exception:\n                self._source = None\n            if hasattr(cls, '__module__'):\n                self._module_path = f\"{cls.__module__}.{cls.__name__}\"\n            else:\n                self._module_path = cls.__name__\n\n            for arg_val, field in zip(pos_args, fields(cls)):\n                self.inputs[field.name].value = arg_val\n\n            for key, val in kwargs.items():\n                if key in self.inputs:\n                    self.inputs[key].value = val\n                else:\n                    raise ValueError(f'Input port \\\"{key}\\\" does not exist on node \\\"{self.label}\\\"')\n\n        def execute(self):\n            inputs = {}\n            for field in fields(cls):\n                port = self.inputs[field.name]\n                inputs[field.name] = port.value if port.ready else port.default\n\n            instance = cls(**inputs)\n            self.outputs['output'].set_value(instance)\n",
+    "example": "InputClass()"
+  },
+  {
+    "name": "SolidFreeEnergy",
+    "module": "atomistic.calculator.calphy",
+    "description": "Calculate the free energy of a solid phase.\n\nParameters:\n-----------\ninp: InputClass\n    Input parameters for calphy calculations.\nstructure: Atoms\n    Atomic structure.\npotential: str\n    Potential name.\n\nReturns:\n--------\nfloat\n    Free energy in eV/atom",
+    "inputs": [
+      {
+        "name": "inp",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "potential",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "float"
+      }
+    ],
+    "output_labels": [
+      "free_energy"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef SolidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) -> float:\n    \"\"\"\n    Calculate the free energy of a solid phase.\n\n    Parameters:\n    -----------\n    inp: InputClass\n        Input parameters for calphy calculations.\n    structure: Atoms\n        Atomic structure.\n    potential: str\n        Potential name.\n    \n    Returns:\n    --------\n    float\n        Free energy in eV/atom\n    \"\"\"\n    from calphy.solid import Solid\n    from calphy.routines import routine_fe\n    import os\n\n    calc = _prepare_input(inp, potential, structure, mode='fe', reference_phase='solid')\n    #os.chdir()\n    simfolder = calc.create_folders()\n    job = Solid(calculation=calc, simfolder=simfolder)\n    job = routine_fe(job)\n    _run_cleanup(simfolder, calc.lattice)\n    free_energy = job.report[\"results\"][\"free_energy\"].tolist()\n    return free_energy\n",
+    "example": "SolidFreeEnergy(store=True)"
+  },
+  {
+    "name": "LiquidFreeEnergy",
+    "module": "atomistic.calculator.calphy",
+    "description": "Calculate the free energy of a liquid phase.\n\nParameters:\n-----------\ninp: InputClass\n    Input parameters for calphy calculations.\nstructure: Atoms\n    Atomic structure.\npotential: str\n    Potential name.\n\nReturns:\n--------\nfloat\n    Free energy in eV/atom",
+    "inputs": [
+      {
+        "name": "inp",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "potential",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "float"
+      }
+    ],
+    "output_labels": [
+      "free_energy"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef LiquidFreeEnergy(inp, structure: Atoms, potential: str, store: bool = True) -> float:\n    \"\"\"\n    Calculate the free energy of a liquid phase.\n\n    Parameters:\n    -----------\n    inp: InputClass\n        Input parameters for calphy calculations.\n    structure: Atoms\n        Atomic structure.\n    potential: str\n        Potential name.\n    \n    Returns:\n    --------\n    float\n        Free energy in eV/atom\n    \"\"\"\n    from calphy.liquid import Liquid\n    from calphy.routines import routine_fe\n    \n    calc = _prepare_input(inp, potential, structure, mode='fe', reference_phase='liquid')\n    simfolder = calc.create_folders()\n    job = Liquid(calculation=calc, simfolder=simfolder)\n    job = routine_fe(job)\n    #run calculation\n    _run_cleanup(simfolder, calc.lattice)\n    free_energy = job.report[\"results\"][\"free_energy\"].tolist()\n    return free_energy\n",
+    "example": "LiquidFreeEnergy(store=True)"
+  },
+  {
+    "name": "SolidFreeEnergyWithTemp",
+    "module": "atomistic.calculator.calphy",
+    "description": "Calculate the free energy of a solid phase as a function of temperature.\n\nParameters:\n-----------\ninp: InputClass\n    Input parameters for calphy calculations.\nstructure: Atoms\n    Atomic structure.\npotential: str\n    Potential name.\n\nReturns:\n--------\nTuple[np.ndarray, np.ndarray]\n    Temperature and free energy in K and eV/atom, respectively.",
+    "inputs": [
+      {
+        "name": "inp",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "potential",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "temperature",
+      "free_energy"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef SolidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True):\n    \"\"\"\n    Calculate the free energy of a solid phase as a function of temperature.\n\n    Parameters:\n    -----------\n    inp: InputClass\n        Input parameters for calphy calculations.\n    structure: Atoms\n        Atomic structure.\n    potential: str\n        Potential name.\n\n    Returns:\n    --------\n    Tuple[np.ndarray, np.ndarray]\n        Temperature and free energy in K and eV/atom, respectively.\n    \"\"\"\n    from calphy.solid import Solid\n    from calphy.routines import routine_ts\n    \n    calc = _prepare_input(inp, potential, structure, mode='ts', reference_phase='solid')\n    simfolder = calc.create_folders()\n    job = Solid(calculation=calc, simfolder=simfolder)\n    job = routine_ts(job)\n    #run calculation\n\n    #grab the results\n    datafile = os.path.join(os.getcwd(), simfolder, 'temperature_sweep.dat')\n    temperature_array, free_energy_array = np.loadtxt(datafile, unpack=True, usecols=(0,1))\n    temperature = temperature_array.tolist()\n    free_energy = free_energy_array.tolist()\n\n    _run_cleanup(simfolder, calc.lattice)\n    return temperature, free_energy\n",
+    "example": "SolidFreeEnergyWithTemp(store=True)"
+  },
+  {
+    "name": "LiquidFreeEnergyWithTemp",
+    "module": "atomistic.calculator.calphy",
+    "description": "Calculate the free energy of a liquid phase as a function of temperature.\n\nParameters:\n-----------\ninp: InputClass\n    Input parameters for calphy calculations.\nstructure: Atoms\n    Atomic structure.\npotential: str\n    Potential name.\n\nReturns:\n--------\nTuple[np.ndarray, np.ndarray]\n    Temperature and free energy in K and eV/atom, respectively.",
+    "inputs": [
+      {
+        "name": "inp",
+        "type": "Any",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "structure",
+        "type": "Atoms",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "potential",
+        "type": "str",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "store",
+        "type": "bool",
+        "default": true,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "temperature",
+      "free_energy"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef LiquidFreeEnergyWithTemp(inp, structure: Atoms, potential: str, store: bool = True):\n    \"\"\"\n    Calculate the free energy of a liquid phase as a function of temperature.\n\n    Parameters:\n    -----------\n    inp: InputClass\n        Input parameters for calphy calculations.\n    structure: Atoms\n        Atomic structure.\n    potential: str\n        Potential name.\n\n    Returns:\n    --------\n    Tuple[np.ndarray, np.ndarray]\n        Temperature and free energy in K and eV/atom, respectively.\n    \"\"\"\n    from calphy.liquid import Liquid\n    from calphy.routines import routine_ts\n    \n    calc = _prepare_input(inp, potential, structure, mode='ts', reference_phase='liquid')\n    simfolder = calc.create_folders()\n    job = Liquid(calculation=calc, simfolder=simfolder)\n    job = routine_ts(job)\n    \n    #grab the results\n    datafile = os.path.join(os.getcwd(), simfolder, 'temperature_sweep.dat')\n    temperature_array, free_energy_array = np.loadtxt(datafile, unpack=True, usecols=(0,1))\n    temperature = temperature_array.tolist()\n    free_energy = free_energy_array.tolist()\n\n    _run_cleanup(simfolder, calc.lattice)\n    return temperature, free_energy\n",
+    "example": "LiquidFreeEnergyWithTemp(store=True)"
+  },
+  {
+    "name": "PlotFreeEnergy",
+    "module": "atomistic.calculator.calphy",
+    "description": "",
+    "inputs": [
+      {
+        "name": "temperature",
+        "type": "ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "free_energy",
+        "type": "ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"fig\")\ndef PlotFreeEnergy(temperature: np.ndarray, free_energy: np.ndarray):\n    import matplotlib.pyplot as plt\n    fig, ax = plt.subplots()\n    ax.plot(temperature, free_energy, label='free energy')\n    ax.set_ylabel('Free energy (eV/atom)')\n    ax.set_xlabel('Temperature (K)')\n    plt.legend(frameon=False)\n    return fig\n",
+    "example": "PlotFreeEnergy()"
+  },
+  {
+    "name": "CalcPhaseTransformationTemp",
+    "module": "atomistic.calculator.calphy",
+    "description": "Calculate the phase transformation temperature from free energy data.\n\nParameters:\n-----------\ntemp_A: np.ndarray\n    Temperature array for phase 1.\nfe_A: np.ndarray\n    Free energy array for phase 1.\ntemp_B: np.ndarray\n    Temperature array for phase 2.\nfe_B: np.ndarray\n    Free energy array for phase 2.\nfit_order: int\n    Order of the polynomial fit.\n\nReturns:\n--------\nfloat\n    Phase transformation temperature",
+    "inputs": [
+      {
+        "name": "temp_A",
+        "type": "ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "fe_A",
+        "type": "ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "temp_B",
+        "type": "ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "fe_B",
+        "type": "ndarray",
+        "default": null,
+        "optional": false,
+        "choices": null
+      },
+      {
+        "name": "fit_order",
+        "type": "int",
+        "default": 4,
+        "optional": true,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "fig"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef CalcPhaseTransformationTemp(temp_A: np.ndarray, fe_A: np.ndarray, temp_B: np.ndarray, fe_B: np.ndarray, fit_order: int = 4):\n    \"\"\"\n    Calculate the phase transformation temperature from free energy data.\n\n    Parameters:\n    -----------\n    temp_A: np.ndarray\n        Temperature array for phase 1.\n    fe_A: np.ndarray\n        Free energy array for phase 1.\n    temp_B: np.ndarray\n        Temperature array for phase 2.\n    fe_B: np.ndarray\n        Free energy array for phase 2.\n    fit_order: int\n        Order of the polynomial fit.\n    \n    Returns:\n    --------\n    float\n        Phase transformation temperature\n    \"\"\"\n    import matplotlib.pyplot as plt\n    import warnings\n\n    #do some fitting to determine temps\n    t1min = np.min(temp_A)\n    t2min = np.min(temp_B)\n    t1max = np.max(temp_A)\n    t2max = np.max(temp_B)\n\n    tmin = np.min([t1min, t2min])\n    tmax = np.max([t1max, t2max])\n\n    #warn about extrapolation\n    if not t1min == t2min:\n        warnings.warn(f'free energy is being extrapolated!')\n    if not t1max == t2max:\n        warnings.warn(f'free energy is being extrapolated!')\n\n    #now fit\n    f1fit = np.polyfit(temp_A, fe_A, fit_order)\n    f2fit = np.polyfit(temp_B, fe_B, fit_order)\n\n    #reevaluate over the new range\n    fit_t = np.arange(tmin, tmax+1, 1)\n    fit_f1 = np.polyval(f1fit, fit_t)\n    fit_f2 = np.polyval(f2fit, fit_t)\n\n    #now evaluate the intersection temp\n    arg = np.argsort(np.abs(fit_f1-fit_f2))[0]\n    phase_transition_temperature = fit_t[arg]\n\n    #warn if the temperature is shady\n    if np.abs(phase_transition_temperature-tmin) < 1E-3:\n        warnings.warn('It is likely there is no intersection of free energies')\n    elif np.abs(phase_transition_temperature-tmax) < 1E-3:\n        warnings.warn('It is likely there is no intersection of free energies')\n\n    #plot\n    c1lo = '#ef9a9a'\n    c1hi = '#b71c1c'\n    c2lo = '#90caf9'\n    c2hi = '#0d47a1'\n\n    fig, ax = plt.subplots()\n    ax.plot(fit_t, fit_f1, color=c1lo, label=f'phase A fit')\n    ax.plot(fit_t, fit_f2, color=c2lo, label=f'phase B fit')\n    ax.plot(temp_A, fe_A, color=c1hi, label='phase A', ls='dashed')\n    ax.plot(temp_B, fe_B, color=c2hi, label='phase B', ls='dashed')\n    ax.axvline(phase_transition_temperature, ls='dashed', c='#37474f')\n    ax.set_ylabel('Free energy (eV/atom)')\n    ax.set_xlabel('Temperature (K)')\n    ax.legend(frameon=False)\n\n    return fig\n",
+    "example": "CalcPhaseTransformationTemp(fit_order=4)"
+  },
+  {
+    "name": "CollectResults",
+    "module": "atomistic.calculator.calphy",
+    "description": "",
+    "inputs": [],
+    "outputs": [
+      {
+        "type": "DataFrame"
+      }
+    ],
+    "output_labels": [
+      "results"
+    ],
+    "tags": [],
+    "source": "@as_function_node\ndef CollectResults() -> pd.DataFrame:\n    from calphy.postprocessing import gather_results\n    results = gather_results('.')\n    return results\n",
+    "example": "CollectResults()"
+  },
+  {
+    "name": "PlotEVcurve",
+    "module": "atomistic.calculator.evcurve",
+    "description": "",
+    "inputs": [
+      {
+        "name": "df",
+        "type": "DataFrame",
+        "default": null,
+        "optional": false,
+        "choices": null
+      }
+    ],
+    "outputs": [
+      {
+        "type": "Any"
+      }
+    ],
+    "output_labels": [
+      "plot"
+    ],
+    "tags": [],
+    "source": "@as_function_node(\"plot\")\ndef PlotEVcurve(df: pd.DataFrame):\n    import matplotlib.pyplot as plt\n\n    fig, ax = plt.subplots()\n    ax.plot(df[\"volume\"], df[\"energy\"])\n    ax.set_ylabel(\"Count\")\n    ax.set_xlabel(\"Energy per atom (meV/atom)\")\n    return fig\n",
+    "example": "PlotEVcurve()"
+  }
+]

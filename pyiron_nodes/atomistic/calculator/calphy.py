@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict
-from pyiron_core import as_inp_dataclass_node, as_function_node
+from core import as_inp_dataclass_node, as_function_node
 import random
 import string
 from typing import Optional, Tuple

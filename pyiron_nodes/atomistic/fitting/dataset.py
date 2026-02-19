@@ -1,4 +1,4 @@
-from pyiron_core import as_function_node
+from core import as_function_node
 from typing import Optional
 import pandas as pd
 import numpy as np

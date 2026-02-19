@@ -1,6 +1,6 @@
 from dataclasses import asdict, dataclass, field
 from typing import Optional
-from pyiron_core import as_function_node
+from core import as_function_node
 import numpy as np
 import pandas as pd
 

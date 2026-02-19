@@ -1,4 +1,4 @@
-from pyiron_core import as_function_node
+from core import as_function_node
 from ase.build import bulk
 from typing import Optional, Literal
 from ase.atoms import Atoms
