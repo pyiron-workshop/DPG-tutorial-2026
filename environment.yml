@@ -39,7 +39,7 @@ dependencies:
 - scikit-learn =1.6.1
 - scipy =1.15.2
 - seaborn =0.13.2
-- structuretoolkit = 0.0.39
+- structuretoolkit =0.0.39
 - flux-core =0.64.0
 - pysqa =0.3.4
 - h5py =3.15.1
