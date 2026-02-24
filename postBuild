@@ -24,18 +24,3 @@ rm kernel_flux.json kernel_pyiron.json
 
 # Clean up 
 rm postBuild README.md environment.yml _config.yml _toc.yml CITATION.cff 
-
-
-_config.yml			img
-_toc.yml			kernel_flux.json
-01_introduction.ipynb		kernel_pyiron.json
-02_assyst.ipynb			kernel.json
-02_pythoninterface.ipynb	node_store.py
-03_fitting.ipynb		postBuild
-03_quantumespresso.ipynb	potentials
-04_validation.ipynb		pyiron_aiflow-ci.tar.gz
-05_thermodynamics.ipynb		pyiron_core_data
-CITATION.cff			pyiron_node_catalog.json
-data				pyiron_nodes
-environment.yml			qe_xml_parser
-espresso			README.md
