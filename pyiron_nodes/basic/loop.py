@@ -37,9 +37,28 @@ def _iterate_node(
                 print(f"iterating over {input_label} = {value}, out={out}")
                 print("out list: ", [id(o) for o in out_lst])
     else:
+        def get_inputs(node, input_label, value):
+            inputs = {}
+            for name, port in node.inputs.ports.items():
+                if not port.ready and port.default is None:
+                    raise ValueError(f"Input '{name}' is not ready and has no default")
+                is_node_type = isinstance(port.type, type) and issubclass(port.type, Node)          
+                # print("execute: ", self.label, port.type, type(port.type), is_node_type)
+                if is_node_type:
+                    if hasattr(port.value, "copy"):
+                        val = port.value.copy()
+                    else:
+                        val = copy.copy(port.value)
+                    # print("node copy: ", id(val), id(port.value))
+                else:
+                    val = port.value    
+                inputs[name] = val if port.ready else port.default
+            inputs[input_label] = value
+            return inputs
+
         # Parallel execution
         futures = {
-            executor.submit(node, **{input_label: value}): (idx, value)
+            executor.submit(node.func, **get_inputs(node=node, input_label=input_label, value=value)): (idx, value)
             for idx, value in enumerate(values)
         }
         # Placeholder, to restore original order after as_completed
@@ -123,7 +142,7 @@ def IterToDataFrame(
     # ------------------------------------------------------------------
     # 2.1 Input column – avoid name clash with node outputs
     # ------------------------------------------------------------------
-    output_labels = list(node.outputs.keys())
+    output_labels = [label for label in node.outputs.keys() if label != "self"]
     if input_label in output_labels:
         data_dict[f"input_{input_label}"] = inp_lst
     else:
@@ -197,3 +216,4 @@ def IterToDataFrame(
         df = pd.DataFrame.from_dict(data_dict, orient="columns")
 
     return df
+

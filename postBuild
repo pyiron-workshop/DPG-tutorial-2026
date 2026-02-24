@@ -1,27 +1,26 @@
 #!/bin/bash
-# git clone https://github.com/pyiron/pyiron_core.git pyiron_core2
-# cd pyiron_core2
-# npm install
-# npm run build
-# cd ..
-mkdir -p pyiron_core2/pyiron_core/static
-mv widget.css pyiron_core2/pyiron_core/static
-mv widget.js pyiron_core2/pyiron_core/static
+# Install pyiron_aiflow 
+tar -xzf pyiron_aiflow-ci.tar.gz
+cd pyiron_aiflow-ci
+pip install ./pyiron_ai ./pyiron_core ./pyiron_database ./pyiron_nodes ./pyironflow --no-deps --no-build-isolation
+cd ..
+rm -rf pyiron_aiflow-ci pyiron_aiflow-ci.tar.gz 
 
-tar -xzf pyiron_aiflow-main.tar.gz 
-tar -xzf pyiron_database-main.tar.gz 
-# tar -xzf pyiron_nodes-main.tar.gz 
-mv pyiron_aiflow-main pyiron_aiflow
-# mv pyiron_nodes-main pyiron_nodes
-mv pyiron_database-main pyiron_database
-rm pyiron_aiflow-main.tar.gz
-rm pyiron_database-main.tar.gz
+# Fix LLM Interface 
+mv node_store.py /srv/conda/envs/notebook/lib/python3.12/site-packages/pyiron_ai
 
-mv node_store.py pyiron_aiflow/src/pyiron_ai
-mv pyiron_node_catalog.json pyiron_aiflow/notebooks
-
+# Install Quantum Espresso Parser
 cd qe_xml_parser
 pip install . --no-deps --no-build-isolation
 cd ..
+rm -rf qe_xml_parser
+
+# Install Jupyter Kernels 
 mkdir -p /home/jovyan/.local/share/jupyter/kernels/flux
-cp kernel.json /home/jovyan/.local/share/jupyter/kernels/flux
+cp kernel_flux.json /home/jovyan/.local/share/jupyter/kernels/flux/kernel.json
+mkdir -p /home/jovyan/.local/share/jupyter/kernels/pyiron
+cp kernel_pyiron.json /home/jovyan/.local/share/jupyter/kernels/pyiron/kernel.json
+rm kernel_flux.json kernel_pyiron.json 
+
+# Clean up 
+rm postBuild README.md environment.yml _config.yml _toc.yml CITATION.cff 
