@@ -1,0 +1,17 @@
+{
+ "argv": [
+  "/srv/conda/envs/notebook/bin/python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "pyiron",
+ "language": "python",
+ "metadata": {
+  "debugger": true
+ },
+ "env": {
+  "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION": "python"
+ }
+}

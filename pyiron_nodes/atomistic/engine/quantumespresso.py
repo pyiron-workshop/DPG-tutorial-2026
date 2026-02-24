@@ -3,7 +3,7 @@ import subprocess
 from ase.build import bulk
 from ase.io import write
 from qe_xml_parser.parsers import parse_pw
-from core import as_function_node, Node
+from core import as_function_node, Node, Port
 
 
 def _write_input(input_dict, working_directory="."):
@@ -36,7 +36,7 @@ def _collect_output(working_directory="."):
 
 @as_function_node
 def calculate_qe(working_directory, pseudopotentials, structure, encut, kpts=(3, 3, 3), store: bool=True):
-    if structure is None:
+    if structure is None or isinstance(structure, Port):
         structure = bulk(name="Al", a=4.04, cubic=False)
     element = structure.get_chemical_symbols()[-1]
     input_dict = {
@@ -76,3 +76,4 @@ def converge_energy_cutoff(dft_function: Node, limit: float = 0.0001, max_steps:
             break
 
     return energy_lst
+
