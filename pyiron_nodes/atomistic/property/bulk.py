@@ -49,7 +49,7 @@ def CalculateEVCurve(
         scaled_structure = structure.copy()
         scaled_structure.set_cell(structure.cell * factor, scale_atoms=True)
         calculator.inputs.use_symmetry = False
-        scaled_structure.calc = calculator.pull()
+        scaled_structure.calc = calculator.run()
 
         if opt is not None:
             opt = BFGS(scaled_structure)
