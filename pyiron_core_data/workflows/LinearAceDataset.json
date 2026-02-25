@@ -1,159 +1,133 @@
 {
-    "label": "LinearAceDataset",
-    "nodes": {
-        "load_dataset": {
-            "id": "load_dataset",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.fitting.dataset.ReadPickledDatasetAsDataframe",
-            "label": "load_dataset",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "load_dataset",
-                "function": "pyiron_core.pyiron_nodes.atomistic.fitting.dataset.ReadPickledDatasetAsDataframe",
-                "inputs": {
-                    "file_path": "data/mgca.pckl.tgz"
-                }
-            }
+  "label": "LinearAceDataset",
+  "nodes": {
+    "load_dataset": {
+      "type": "pyiron_nodes.atomistic.fitting.dataset.ReadPickledDatasetAsDataframe",
+      "label": "load_dataset",
+      "parent": null,
+      "inputs": {
+        "file_path": {
+          "value": "data/mgca.pckl.tgz"
         },
-        "split_dataset": {
-            "id": "split_dataset",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.fitting.dataset.SplitTrainingAndTesting",
-            "label": "split_dataset",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "split_dataset",
-                "function": "pyiron_core.pyiron_nodes.atomistic.fitting.dataset.SplitTrainingAndTesting",
-                "inputs": {}
-            }
-        },
-        "parameterize_potential": {
-            "id": "parameterize_potential",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.ParameterizePotentialConfig",
-            "label": "parameterize_potential",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "parameterize_potential",
-                "function": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.ParameterizePotentialConfig",
-                "inputs": {
-                    "rcut": 6.0
-                }
-            }
-        },
-        "run_linear_fit": {
-            "id": "run_linear_fit",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.RunLinearFit",
-            "label": "run_linear_fit",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "run_linear_fit",
-                "function": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.RunLinearFit",
-                "inputs": {}
-            }
-        },
-        "save_potential": {
-            "id": "save_potential",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.SavePotential",
-            "label": "save_potential",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "save_potential",
-                "function": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.SavePotential",
-                "inputs": {}
-            }
-        },
-        "predict_energies_forces": {
-            "id": "predict_energies_forces",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.PredictEnergiesAndForces",
-            "label": "predict_energies_forces",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "predict_energies_forces",
-                "function": "pyiron_core.pyiron_nodes.atomistic.fitting.ace.PredictEnergiesAndForces",
-                "inputs": {}
-            }
-        },
-        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+        "compression": {
+          "value": null
+        }
+      },
+      "expanded": false
     },
-    "edges": {
-        "values": [
-            {
-                "source": "load_dataset",
-                "target": "split_dataset",
-                "sourceHandle": "df",
-                "targetHandle": "data_df"
-            },
-            {
-                "source": "parameterize_potential",
-                "target": "run_linear_fit",
-                "sourceHandle": "potential_config",
-                "targetHandle": "potential_config"
-            },
-            {
-                "source": "split_dataset",
-                "target": "run_linear_fit",
-                "sourceHandle": "df_training",
-                "targetHandle": "df_train"
-            },
-            {
-                "source": "split_dataset",
-                "target": "run_linear_fit",
-                "sourceHandle": "df_testing",
-                "targetHandle": "df_test"
-            },
-            {
-                "source": "run_linear_fit",
-                "target": "save_potential",
-                "sourceHandle": "basis",
-                "targetHandle": "basis"
-            },
-            {
-                "source": "run_linear_fit",
-                "target": "predict_energies_forces",
-                "sourceHandle": "basis",
-                "targetHandle": "basis"
-            },
-            {
-                "source": "split_dataset",
-                "target": "predict_energies_forces",
-                "sourceHandle": "df_training",
-                "targetHandle": "df_train"
-            },
-            {
-                "source": "split_dataset",
-                "target": "predict_energies_forces",
-                "sourceHandle": "df_testing",
-                "targetHandle": "df_test"
-            }
-        ],
-        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    "split_dataset": {
+      "type": "pyiron_nodes.atomistic.fitting.dataset.SplitTrainingAndTesting",
+      "label": "split_dataset",
+      "parent": null,
+      "inputs": {
+        "training_frac": {
+          "value": 0.5
+        },
+        "random_state": {
+          "value": 42
+        }
+      },
+      "expanded": false
+    },
+    "parameterize_potential": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.ParameterizePotentialConfig",
+      "label": "parameterize_potential",
+      "parent": null,
+      "inputs": {
+        "number_of_functions_per_element": {
+          "value": 10
+        },
+        "rcut": {
+          "value": 6.0
+        }
+      },
+      "expanded": false
+    },
+    "run_linear_fit": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.RunLinearFit",
+      "label": "run_linear_fit",
+      "parent": null,
+      "inputs": {
+        "verbose": {
+          "value": false
+        },
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "save_potential": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.SavePotential",
+      "label": "save_potential",
+      "parent": null,
+      "inputs": {
+        "filename": {
+          "value": ""
+        }
+      },
+      "expanded": false
+    },
+    "predict_energies_forces": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.PredictEnergiesAndForces",
+      "label": "predict_energies_forces",
+      "parent": null,
+      "inputs": {
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
     }
+  },
+  "edges": [
+    {
+      "source": "load_dataset",
+      "sourceHandle": "df",
+      "target": "split_dataset",
+      "targetHandle": "data_df"
+    },
+    {
+      "source": "parameterize_potential",
+      "sourceHandle": "potential_config",
+      "target": "run_linear_fit",
+      "targetHandle": "potential_config"
+    },
+    {
+      "source": "split_dataset",
+      "sourceHandle": "df_training",
+      "target": "run_linear_fit",
+      "targetHandle": "df_train"
+    },
+    {
+      "source": "split_dataset",
+      "sourceHandle": "df_testing",
+      "target": "run_linear_fit",
+      "targetHandle": "df_test"
+    },
+    {
+      "source": "run_linear_fit",
+      "sourceHandle": "basis",
+      "target": "save_potential",
+      "targetHandle": "basis"
+    },
+    {
+      "source": "run_linear_fit",
+      "sourceHandle": "basis",
+      "target": "predict_energies_forces",
+      "targetHandle": "basis"
+    },
+    {
+      "source": "split_dataset",
+      "sourceHandle": "df_training",
+      "target": "predict_energies_forces",
+      "targetHandle": "df_train"
+    },
+    {
+      "source": "split_dataset",
+      "sourceHandle": "df_testing",
+      "target": "predict_energies_forces",
+      "targetHandle": "df_test"
+    }
+  ]
 }

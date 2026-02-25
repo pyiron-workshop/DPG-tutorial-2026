@@ -1,0 +1,129 @@
+{
+  "label": "landau_MgCa",
+  "nodes": {
+    "ReadDataFrame": {
+      "type": "pyiron_nodes.basic.file.ReadDataFrame",
+      "label": "ReadDataFrame",
+      "parent": null,
+      "inputs": {
+        "filename": {
+          "value": "data/MgCaFreeEnergies.pckl.gz"
+        },
+        "compression": {
+          "value": "gzip"
+        }
+      },
+      "expanded": false
+    },
+    "PhasesFromDataFrame": {
+      "type": "pyiron_nodes.thermodynamics.landau.PhasesFromDataFrame",
+      "label": "PhasesFromDataFrame",
+      "parent": null,
+      "inputs": {
+        "temperature_parameters": {
+          "value": 4
+        },
+        "concentration_parameters": {
+          "value": 1
+        }
+      },
+      "expanded": false
+    },
+    "Linspace": {
+      "type": "pyiron_nodes.basic.math.Linspace",
+      "label": "Linspace",
+      "parent": null,
+      "inputs": {
+        "x_min": {
+          "value": 200
+        },
+        "x_max": {
+          "value": 1200
+        },
+        "num_points": {
+          "value": 50
+        },
+        "endpoint": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "CalcPhaseDiagram": {
+      "type": "pyiron_nodes.thermodynamics.landau.CalcPhaseDiagram",
+      "label": "CalcPhaseDiagram",
+      "parent": null,
+      "inputs": {
+        "chemical_potentials": {
+          "value": 50
+        },
+        "refine": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "PlotConcPhaseDiagram": {
+      "type": "pyiron_nodes.thermodynamics.landau.PlotConcPhaseDiagram",
+      "label": "PlotConcPhaseDiagram",
+      "parent": null,
+      "inputs": {
+        "plot_samples": {
+          "value": false
+        },
+        "plot_isolines": {
+          "value": false
+        },
+        "plot_tielines": {
+          "value": true
+        },
+        "linephase_width": {
+          "value": 0.01
+        },
+        "concavity": {
+          "value": null
+        }
+      },
+      "expanded": false
+    },
+    "PlotMuPhaseDiagram": {
+      "type": "pyiron_nodes.thermodynamics.landau.PlotMuPhaseDiagram",
+      "label": "PlotMuPhaseDiagram",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "ReadDataFrame",
+      "sourceHandle": "df",
+      "target": "PhasesFromDataFrame",
+      "targetHandle": "dataframe"
+    },
+    {
+      "source": "PhasesFromDataFrame",
+      "sourceHandle": "phase_list",
+      "target": "CalcPhaseDiagram",
+      "targetHandle": "phases"
+    },
+    {
+      "source": "Linspace",
+      "sourceHandle": "linspace",
+      "target": "CalcPhaseDiagram",
+      "targetHandle": "temperatures"
+    },
+    {
+      "source": "CalcPhaseDiagram",
+      "sourceHandle": "phase_data",
+      "target": "PlotConcPhaseDiagram",
+      "targetHandle": "phase_data"
+    },
+    {
+      "source": "CalcPhaseDiagram",
+      "sourceHandle": "phase_data",
+      "target": "PlotMuPhaseDiagram",
+      "targetHandle": "phase_data"
+    }
+  ]
+}

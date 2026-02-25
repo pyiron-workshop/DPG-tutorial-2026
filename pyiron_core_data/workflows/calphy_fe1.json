@@ -1,0 +1,151 @@
+{
+  "label": "calphy_fe1",
+  "nodes": {
+    "Bulk": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "Bulk",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Al"
+        },
+        "crystalstructure": {
+          "value": null
+        },
+        "a": {
+          "value": null
+        },
+        "c": {
+          "value": null
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "Repeat": {
+      "type": "pyiron_nodes.atomistic.structure.transform.Repeat",
+      "label": "Repeat",
+      "parent": null,
+      "inputs": {
+        "repeat_scalar": {
+          "value": 3
+        }
+      },
+      "expanded": false
+    },
+    "InputClass": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.InputClass",
+      "label": "InputClass",
+      "parent": null,
+      "inputs": {
+        "md": {
+          "value": null
+        },
+        "tolerance": {
+          "value": null
+        },
+        "nose_hoover": {
+          "value": null
+        },
+        "berendsen": {
+          "value": null
+        },
+        "pressure": {
+          "value": 0
+        },
+        "temperature": {
+          "value": 300
+        },
+        "temperature_stop": {
+          "value": 600
+        },
+        "npt": {
+          "value": true
+        },
+        "n_equilibration_steps": {
+          "value": 2500
+        },
+        "n_switching_steps": {
+          "value": 2500
+        },
+        "n_print_steps": {
+          "value": 1000
+        },
+        "n_iterations": {
+          "value": 1
+        },
+        "equilibration_control": {
+          "value": "nose-hoover"
+        },
+        "melting_cycle": {
+          "value": false
+        },
+        "cores": {
+          "value": 1
+        }
+      },
+      "expanded": false
+    },
+    "SolidFreeEnergyWithTemp": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.SolidFreeEnergyWithTemp",
+      "label": "SolidFreeEnergyWithTemp",
+      "parent": null,
+      "inputs": {
+        "potential": {
+          "value": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
+        },
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "PlotFreeEnergy": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.PlotFreeEnergy",
+      "label": "PlotFreeEnergy",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "Bulk",
+      "sourceHandle": "structure",
+      "target": "Repeat",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "InputClass",
+      "sourceHandle": "output",
+      "target": "SolidFreeEnergyWithTemp",
+      "targetHandle": "inp"
+    },
+    {
+      "source": "Repeat",
+      "sourceHandle": "structure",
+      "target": "SolidFreeEnergyWithTemp",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "SolidFreeEnergyWithTemp",
+      "sourceHandle": "temperature",
+      "target": "PlotFreeEnergy",
+      "targetHandle": "temperature"
+    },
+    {
+      "source": "SolidFreeEnergyWithTemp",
+      "sourceHandle": "free_energy",
+      "target": "PlotFreeEnergy",
+      "targetHandle": "free_energy"
+    }
+  ]
+}

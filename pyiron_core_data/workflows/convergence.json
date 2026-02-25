@@ -1,0 +1,82 @@
+{
+  "label": "convergence",
+  "nodes": {
+    "structure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "structure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Al"
+        },
+        "crystalstructure": {
+          "value": null
+        },
+        "a": {
+          "value": 4.04
+        },
+        "c": {
+          "value": null
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "quantum_espresso": {
+      "type": "pyiron_nodes.atomistic.engine.quantumespresso.calculate_qe",
+      "label": "quantum_espresso",
+      "parent": null,
+      "inputs": {
+        "working_directory": {
+          "value": "test"
+        },
+        "pseudopotentials": {
+          "value": "Al.pbe-n-kjpaw_psl.1.0.0.UPF"
+        },
+        "encut": {
+          "value": 20
+        },
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "convergence": {
+      "type": "pyiron_nodes.atomistic.engine.quantumespresso.converge_energy_cutoff",
+      "label": "convergence",
+      "parent": null,
+      "inputs": {
+        "limit": {
+          "value": 0.0001
+        },
+        "max_steps": {
+          "value": 10
+        }
+      },
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "structure",
+      "sourceHandle": "structure",
+      "target": "quantum_espresso",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "quantum_espresso",
+      "sourceHandle": "self",
+      "target": "convergence",
+      "targetHandle": "dft_function"
+    }
+  ]
+}

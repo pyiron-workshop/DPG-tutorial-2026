@@ -1,0 +1,217 @@
+{
+  "label": "landau_toy",
+  "nodes": {
+    "LinePhase0": {
+      "type": "pyiron_nodes.thermodynamics.landau.LinePhase",
+      "label": "LinePhase0",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "SolidA"
+        },
+        "concentration": {
+          "value": 0
+        },
+        "energy": {
+          "value": 2.45
+        },
+        "entropy": {
+          "value": 1e-05
+        }
+      },
+      "expanded": false
+    },
+    "LinePhase1": {
+      "type": "pyiron_nodes.thermodynamics.landau.LinePhase",
+      "label": "LinePhase1",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "SolidB"
+        },
+        "concentration": {
+          "value": 1
+        },
+        "energy": {
+          "value": 2.95
+        },
+        "entropy": {
+          "value": 1e-05
+        }
+      },
+      "expanded": false
+    },
+    "LinePhase2": {
+      "type": "pyiron_nodes.thermodynamics.landau.LinePhase",
+      "label": "LinePhase2",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "LiquidA"
+        },
+        "concentration": {
+          "value": 0
+        },
+        "energy": {
+          "value": 2.5
+        },
+        "entropy": {
+          "value": 0.0001
+        }
+      },
+      "expanded": false
+    },
+    "LinePhase3": {
+      "type": "pyiron_nodes.thermodynamics.landau.LinePhase",
+      "label": "LinePhase3",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "LiquidB"
+        },
+        "concentration": {
+          "value": 1
+        },
+        "energy": {
+          "value": 3.1
+        },
+        "entropy": {
+          "value": 0.0002
+        }
+      },
+      "expanded": false
+    },
+    "IdealSolution": {
+      "type": "pyiron_nodes.thermodynamics.landau.IdealSolution",
+      "label": "IdealSolution",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "liquid"
+        }
+      },
+      "expanded": false
+    },
+    "Linspace": {
+      "type": "pyiron_nodes.basic.math.Linspace",
+      "label": "Linspace",
+      "parent": null,
+      "inputs": {
+        "x_min": {
+          "value": 250
+        },
+        "x_max": {
+          "value": 1000
+        },
+        "num_points": {
+          "value": 25
+        },
+        "endpoint": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "List5": {
+      "type": "pyiron_nodes.basic.list.List5",
+      "label": "List5",
+      "parent": null,
+      "inputs": {
+        "x4": {
+          "value": null
+        },
+        "x5": {
+          "value": null
+        }
+      },
+      "expanded": false
+    },
+    "CalcPhaseDiagram": {
+      "type": "pyiron_nodes.thermodynamics.landau.CalcPhaseDiagram",
+      "label": "CalcPhaseDiagram",
+      "parent": null,
+      "inputs": {
+        "chemical_potentials": {
+          "value": 50
+        },
+        "refine": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "PlotConcPhaseDiagram": {
+      "type": "pyiron_nodes.thermodynamics.landau.PlotConcPhaseDiagram",
+      "label": "PlotConcPhaseDiagram",
+      "parent": null,
+      "inputs": {
+        "plot_samples": {
+          "value": false
+        },
+        "plot_isolines": {
+          "value": false
+        },
+        "plot_tielines": {
+          "value": true
+        },
+        "linephase_width": {
+          "value": 0.01
+        },
+        "concavity": {
+          "value": null
+        }
+      },
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "LinePhase2",
+      "sourceHandle": "phase",
+      "target": "IdealSolution",
+      "targetHandle": "phase1"
+    },
+    {
+      "source": "LinePhase3",
+      "sourceHandle": "phase",
+      "target": "IdealSolution",
+      "targetHandle": "phase2"
+    },
+    {
+      "source": "LinePhase0",
+      "sourceHandle": "phase",
+      "target": "List5",
+      "targetHandle": "x1"
+    },
+    {
+      "source": "LinePhase1",
+      "sourceHandle": "phase",
+      "target": "List5",
+      "targetHandle": "x2"
+    },
+    {
+      "source": "IdealSolution",
+      "sourceHandle": "phase",
+      "target": "List5",
+      "targetHandle": "x3"
+    },
+    {
+      "source": "List5",
+      "sourceHandle": "list_out",
+      "target": "CalcPhaseDiagram",
+      "targetHandle": "phases"
+    },
+    {
+      "source": "Linspace",
+      "sourceHandle": "linspace",
+      "target": "CalcPhaseDiagram",
+      "targetHandle": "temperatures"
+    },
+    {
+      "source": "CalcPhaseDiagram",
+      "sourceHandle": "phase_data",
+      "target": "PlotConcPhaseDiagram",
+      "targetHandle": "phase_data"
+    }
+  ]
+}
