@@ -1,52 +1,125 @@
-from dataclasses import replace
-import numpy as np
-from core import as_function_node
-import landau
+# from __future__ import annotations
 
+from typing import Iterable, Optional, Tuple
+
+import landau
+from landau.phases import Phase, LinePhase, TemperatureDependentLinePhase
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from core import as_function_node
 
 @as_function_node
-def TemperatureLinePhase(
-        name: str,
-        concentration: float,
-        temperatures: np.ndarray | list[float],
-        free_energies: np.ndarray | list[float],
-        num_parameters: int | None = 3
-):
-    phase = landau.phases.TemperatureDependentLinePhase(
-            name, concentration, temperatures, free_energies,
-            landau.interpolate.SGTE(num_parameters)
+def LinePhase(
+    name: str, 
+    fixed_concentration: float, 
+    line_energy: float, 
+    line_entropy: float
+) -> LinePhase:
+    """Create a line phase with given energy and entropy, that does not depend on temperature.
+
+    Wrapper over the LinePhase class in landau. 
+    See https://github.com/eisenforschung/landau/blob/main/landau/phases.py#L115
+
+    Args:
+        name (str): name of the phase
+        fixed_concentration (float): concentration of the phase; should be between 0 and 1
+        line_energy (float): energy of the phase
+        line_entropy (float): entropy of the phase
+        
+    Returns:
+        LinePhase: the created line phase
+    """
+    from landau.phases import LinePhase
+
+    phase = LinePhase(
+        name=name,
+        fixed_concentration=fixed_concentration, 
+        line_energy=line_energy, 
+        line_entropy=line_entropy
     )
+    
     return phase
 
+@as_function_node
+def TemperatureDependentLinePhase(
+    name: str,
+    fixed_concentration: float,
+    temperatures: np.ndarray | list[float],
+    free_energies: np.ndarray | list[float],
+    num_parameters: int | None = 3
+) -> TemperatureDependentLinePhase:
+    """Create a temperature dependent line phase.
+
+    Wrapper over the TemperatureDependentLinePhase class in landau.
+    See https://github.com/eisenforschung/landau/blob/main/landau/phases.py#L137
+    
+    Args:
+        name (str): name of the phase
+        fixed_concentration (float): concentration of the phase; should be between 0 and 1
+        temperatures (array-like): temperatures at which free energies were sampled
+        free_energies (array-like): free energies corresponding to the temperatures
+        num_parameters (int, optional): how many parameters to use when interpolating free energies in temperature
+
+    Returns:
+        TemperatureDependentLinePhase: the created phase at a single concentration with temperature dependent free energy
+    """
+    import numpy as np
+    from landau.interpolate import SGTE
+    from landau.phases import TemperatureDependentLinePhase
+    
+    interpolator=SGTE(num_parameters)
+
+    phase = TemperatureDependentLinePhase(
+        name=name, 
+        fixed_concentration=fixed_concentration, 
+        temperatures=temperatures, 
+        free_energies=free_energies,
+        interpolator=interpolator
+    )
+    
+    return phase
 
 @as_function_node
 def TransitionTemperature(
-        phase1, phase2,
-        Tmin: int | float,
-        Tmax: int | float,
-) -> float:
+    phase1: Phase, 
+    phase2: Phase,
+    Tmin: float,
+    Tmax: float,
+) -> plt.Figure:
     """Plot free energies of two phases and find their intersection, i.e. the transition temperature.
 
-    Assumes that both phases are of the same concentration, otherwise the results will be off, as it takes the chemical
-    potential difference to be zero.
+    Assumes that both phases are of the same concentration, otherwise the results will be off, 
+    as it takes the chemical potential difference to be zero.
 
     Args:
-        phase1, phase2 (landau.phases.Phase): the two phases to plot
+        phase1, phase2 (Phase): the two phases to plot
         Tmin (float): minimum temperature
         Tmax (float): maximum temperature
 
     Returns:
         float: transition temperature if found, else NaN
     """
-    import seaborn as sns
+    from landau.phases import Phase
+    from landau.calculate import calc_phase_diagram
     import matplotlib.pyplot as plt
     import numpy as np
-    df = landau.calculate.calc_phase_diagram([phase1, phase2], np.linspace(Tmin, Tmax), mu=0.0, keep_unstable=True)
+    import seaborn as sns
+
+    df = calc_phase_diagram(
+        phases=[phase1, phase2], 
+        Ts=np.linspace(Tmin, Tmax), 
+        mu=0.0,
+        refine=True,
+        keep_unstable=True
+    )
+
     try:
         fm, Tm = df.query('border and T!=@Tmin and T!=@Tmax')[['f','T']].iloc[0].tolist()
     except IndexError:
         print("Transition Point not found!")
         fm, Tm = np.nan, np.nan
+
     fig, ax = plt.subplots()
     sns.lineplot(
         data=df,
@@ -63,39 +136,43 @@ def TransitionTemperature(
     ax.text(Tm + .05 * dft, fm + dfa * .1, rf"$T_m = {Tm:.0f}\,\mathrm{{K}}$", rotation='vertical', ha='center')
     ax.set_xlabel("Temperature [K]")
     ax.set_ylabel("Free Energy [eV/atom]")
+
     return fig
 
-
 @as_function_node
-def LinePhase(name: str, concentration: float, energy: float, entropy: float) -> landau.phases.LinePhase:
-    import landau
-    phase = landau.phases.LinePhase(name, concentration, energy, entropy)
-    return phase
+def IdealSolution(
+    name: str, 
+    phase1: Phase, 
+    phase2: Phase
+) -> Phase:
+    """Create an ideal solution phase from two given phases.
 
+    Wrapper over the IdealSolution class in landau.
+    See https://github.com/eisenforschung/landau/blob/64efae5bc1ba17b54c5ff3e6e34af93af3560900/landau/phases.py#L216
 
-@as_function_node
-def TemperatureLinePhase(
-        name: str,
-        concentration: float,
-        temperatures: np.ndarray | list[float],
-        free_energies: np.ndarray | list[float],
-        num_parameters: int | None = 3
-):
-    phase = landau.phases.TemperatureDependentLinePhase(
-            name, concentration, temperatures, free_energies,
-            landau.interpolate.SGTE(num_parameters)
+    Args:
+        name (str): name of the phase
+        phase1, phase2 (Phase): the two phases to create an ideal solution from
+
+    Returns:
+        IdealSolution: the created ideal solution phase
+    """
+    
+    from landau.phases import IdealSolution
+
+    solution_phase = IdealSolution(
+        name=name, 
+        phase1=phase1, 
+        phase2=phase2
     )
-    return phase
 
+    return solution_phase
 
-@as_function_node
-def IdealSolution(name: str, phase1: landau.phases.Phase, phase2: landau.phases.Phase) -> landau.phases.Phase:
-    import landau
-    phase = landau.phases.IdealSolution(name, phase1, phase2)
-    return phase
-
-
-def guess_mu_range(phases, Tmax, samples):
+def guess_mu_range(
+    phases: Iterable[Phase], 
+    T: float, 
+    samples: int
+) -> np.ndarray:
     """Guess chemical potential window from the ideal solution.
 
     Searches numerically for chemical potentials which stabilize
@@ -106,23 +183,22 @@ def guess_mu_range(phases, Tmax, samples):
 
     Args:
         phases: list of phases to consider
-        Tmax: temperature at which to estimate 
+        T: temperature at which to estimate chemical potential range
         samples: how many mu samples to return
 
     Returns:
         array of chemical potentials that likely cover the whole concentration space
     """
 
-    import scipy.optimize as so
     import scipy.interpolate as si
     import numpy as np
     # semigrand canonical "average" concentration
     # use this to avoid discontinuities and be phase agnostic
     def c(mu):
-        phis = np.array([p.semigrand_potential(Tmax, mu) for p in phases])
-        conc = np.array([p.concentration(Tmax, mu) for p in phases])
+        phis = np.array([p.semigrand_potential(T, mu) for p in phases])
+        conc = np.array([p.concentration(T, mu) for p in phases])
         phis -= phis.min()
-        beta = 1/(Tmax*8.6e-5)
+        beta = 1/(T*8.6e-5)
         prob = np.exp(-beta*phis)
         prob /= prob.sum()
         return (prob * conc).sum()
@@ -141,16 +217,16 @@ def guess_mu_range(phases, Tmax, samples):
     I = cc.argsort()
     cc = cc[I]
     mm = mm[I]
-    return si.interp1d(cc, mm)(np.linspace(min(cc), max(cc), samples))
 
+    return si.interp1d(cc, mm)(np.linspace(min(cc), max(cc), samples))
 
 @as_function_node
 def CalcPhaseDiagram(
-        phases: list,
-        temperatures: list[float] | np.ndarray,
-        chemical_potentials: list[float] | np.ndarray | int = 100,
-        refine: bool = True
-):
+    phases: list,
+    temperatures: list[float] | np.ndarray,
+    chemical_potentials: list[float] | np.ndarray | int = 100,
+    refine: bool = True
+) -> pd.DataFrame:
     """Calculate thermodynamic potentials and respective stable phases in a range of temperatures.
 
     The chemical potential range is chosen automatically to cover the full concentration space.
@@ -158,35 +234,44 @@ def CalcPhaseDiagram(
     Args:
         phases: list of phases to consider
         temperatures: temperature samples
-        mu_samples: number of samples in chemical potential space
+        chemical_potentials: chemical potential samples or number of samples in chemical potential space
         refine (bool): add additional sampling points along exact phase transitions
 
     Returns:
-        dataframe with phase data
+        pd.DataFrame
+            dataframe with phase data
     """
-    import matplotlib.pyplot as plt
-    import landau
+
+    from landau.calculate import calc_phase_diagram
 
     if isinstance(chemical_potentials, int):
-        mus = guess_mu_range(phases, max(temperatures), chemical_potentials)
+        mus = guess_mu_range(
+            phases=phases, 
+            T=max(temperatures),
+            samples=chemical_potentials
+        )
     else:
         mus = chemical_potentials
-    phase_data = landau.calculate.calc_phase_diagram(
-            phases, np.asarray(temperatures), mus,
-            refine=refine, keep_unstable=False
-    )
-    return phase_data
 
+    phase_data = calc_phase_diagram(
+        phases=phases, 
+        Ts=np.asarray(temperatures), 
+        mu=mus,
+        refine=refine, 
+        keep_unstable=False
+    )
+
+    return phase_data
 
 @as_function_node
 def PlotConcPhaseDiagram(
-        phase_data,
-        plot_samples: bool = False,
-        plot_isolines: bool = False,
-        plot_tielines: bool = True,
-        linephase_width: float = 0.01,
-        concavity: float | None = None,
-):
+    phase_data,
+    plot_samples: bool = False,
+    plot_isolines: bool = False,
+    plot_tielines: bool = True,
+    linephase_width: float = 0.01,
+    concavity: float | None = None,
+) -> plt.Figure:
     """Plot a concentration-temperature phase diagram.
 
     phase_data should originate from CalcPhaseDiagram.
@@ -235,11 +320,11 @@ def PlotConcPhaseDiagram(
             plt.plot(dd.c, [T]*3, c='k', alpha=.5, zorder=-10)
     plt.xlabel("Concentration")
     plt.ylabel("Temperature [K]")
+    
     return fig
 
-
 @as_function_node
-def PlotMuPhaseDiagram(phase_data):
+def PlotMuPhaseDiagram(phase_data) -> plt.Figure:
     """Plot a chemical potential-temperature phase diagram.
 
     phase_data should originate from CalcPhaseDiagram.
@@ -273,14 +358,14 @@ def PlotMuPhaseDiagram(phase_data):
     ax.set_ylabel("Temperature [K]")
     return fig
 
-
 @as_function_node
 def PhasesFromDataFrame(
-        dataframe,
-        temperature_parameters: int | None = 4,
-        concentration_parameters: int | None = 1,
+    dataframe: pd.DataFrame,
+    temperature_parameters: int | None = 4,
+    concentration_parameters: int | None = 1,
 ):
-    """Convert a dataframe of free energies to list of phase objects.
+    """
+    Convert a dataframe of free energies to list of phase objects.
 
     Prints the names of all found phases.
 
@@ -314,7 +399,13 @@ def PhasesFromDataFrame(
     return phase_list, phase_dict
 
 
-def make_phase(dd, temperature_parameters, concentration_parameters):
+def make_phase(
+    dd: pd.DataFrame, 
+    temperature_parameters, 
+    concentration_parameters
+):  
+    from dataclasses import replace
+
     name = dd.phase.iloc[0]
     # minus 2 for terminals
     # minus 1 to be not exactly interpolating

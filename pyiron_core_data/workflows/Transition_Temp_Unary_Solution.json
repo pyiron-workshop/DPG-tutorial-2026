@@ -1,0 +1,268 @@
+{
+  "label": "Transition_Temp_Unary_Solution",
+  "nodes": {
+    "BulkStructure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "BulkStructure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Mg"
+        },
+        "crystalstructure": {
+          "value": "hcp"
+        },
+        "a": {
+          "value": 3.21
+        },
+        "c": {
+          "value": 5.21
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "RepeatStructure": {
+      "type": "pyiron_nodes.atomistic.structure.transform.Repeat",
+      "label": "RepeatStructure",
+      "parent": null,
+      "inputs": {
+        "repeat_scalar": {
+          "value": 3
+        }
+      },
+      "expanded": false
+    },
+    "RattleStructure": {
+      "type": "pyiron_nodes.atomistic.structure.transform.Rattle",
+      "label": "RattleStructure",
+      "parent": null,
+      "inputs": {
+        "seed": {
+          "value": 42
+        },
+        "stdev": {
+          "value": 0.6
+        }
+      },
+      "expanded": false
+    },
+    "CalphyInputClass": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.InputClass",
+      "label": "CalphyInputClass",
+      "parent": null,
+      "inputs": {
+        "md": {
+          "value": null
+        },
+        "tolerance": {
+          "value": null
+        },
+        "nose_hoover": {
+          "value": null
+        },
+        "berendsen": {
+          "value": null
+        },
+        "pressure": {
+          "value": 0
+        },
+        "temperature": {
+          "value": 900
+        },
+        "temperature_stop": {
+          "value": 1100
+        },
+        "npt": {
+          "value": true
+        },
+        "n_equilibration_steps": {
+          "value": 2500
+        },
+        "n_switching_steps": {
+          "value": 2500
+        },
+        "n_print_steps": {
+          "value": 1000
+        },
+        "n_iterations": {
+          "value": 1
+        },
+        "equilibration_control": {
+          "value": "nose-hoover"
+        },
+        "melting_cycle": {
+          "value": false
+        },
+        "cores": {
+          "value": 1
+        }
+      },
+      "expanded": false
+    },
+    "SolidFreeEnergyWithTemp": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.SolidFreeEnergyWithTemp",
+      "label": "SolidFreeEnergyWithTemp",
+      "parent": null,
+      "inputs": {
+        "potential": {
+          "value": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
+        },
+        "delete_folder": {
+          "value": false
+        },
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "LiquidFreeEnergyWithTemp": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.LiquidFreeEnergyWithTemp",
+      "label": "LiquidFreeEnergyWithTemp",
+      "parent": null,
+      "inputs": {
+        "potential": {
+          "value": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
+        },
+        "delete_folder": {
+          "value": false
+        },
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "SolidLinePhase": {
+      "type": "pyiron_nodes.thermodynamics.landau.TemperatureDependentLinePhase",
+      "label": "SolidLinePhase",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "MgSolid"
+        },
+        "fixed_concentration": {
+          "value": 0
+        },
+        "num_parameters": {
+          "value": 3
+        }
+      },
+      "expanded": false
+    },
+    "LiquidLinePhase": {
+      "type": "pyiron_nodes.thermodynamics.landau.TemperatureDependentLinePhase",
+      "label": "LiquidLinePhase",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "MgLiquid"
+        },
+        "fixed_concentration": {
+          "value": 0
+        },
+        "num_parameters": {
+          "value": 3
+        }
+      },
+      "expanded": false
+    },
+    "TransitionTemperature": {
+      "type": "pyiron_nodes.thermodynamics.landau.TransitionTemperature",
+      "label": "TransitionTemperature",
+      "parent": null,
+      "inputs": {
+        "Tmin": {
+          "value": 800
+        },
+        "Tmax": {
+          "value": 1100
+        }
+      },
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "BulkStructure",
+      "sourceHandle": "structure",
+      "target": "RepeatStructure",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "RepeatStructure",
+      "sourceHandle": "structure",
+      "target": "RattleStructure",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "CalphyInputClass",
+      "sourceHandle": "output",
+      "target": "SolidFreeEnergyWithTemp",
+      "targetHandle": "input_class"
+    },
+    {
+      "source": "RepeatStructure",
+      "sourceHandle": "structure",
+      "target": "SolidFreeEnergyWithTemp",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "CalphyInputClass",
+      "sourceHandle": "output",
+      "target": "LiquidFreeEnergyWithTemp",
+      "targetHandle": "input_class"
+    },
+    {
+      "source": "RattleStructure",
+      "sourceHandle": "structure",
+      "target": "LiquidFreeEnergyWithTemp",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "SolidFreeEnergyWithTemp",
+      "sourceHandle": "temperature",
+      "target": "SolidLinePhase",
+      "targetHandle": "temperatures"
+    },
+    {
+      "source": "SolidFreeEnergyWithTemp",
+      "sourceHandle": "free_energy",
+      "target": "SolidLinePhase",
+      "targetHandle": "free_energies"
+    },
+    {
+      "source": "LiquidFreeEnergyWithTemp",
+      "sourceHandle": "temperature",
+      "target": "LiquidLinePhase",
+      "targetHandle": "temperatures"
+    },
+    {
+      "source": "LiquidFreeEnergyWithTemp",
+      "sourceHandle": "free_energy",
+      "target": "LiquidLinePhase",
+      "targetHandle": "free_energies"
+    },
+    {
+      "source": "SolidLinePhase",
+      "sourceHandle": "phase",
+      "target": "TransitionTemperature",
+      "targetHandle": "phase1"
+    },
+    {
+      "source": "LiquidLinePhase",
+      "sourceHandle": "phase",
+      "target": "TransitionTemperature",
+      "targetHandle": "phase2"
+    }
+  ]
+}
