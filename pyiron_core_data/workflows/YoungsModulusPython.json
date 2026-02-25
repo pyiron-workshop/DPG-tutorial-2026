@@ -1,9 +1,9 @@
 {
-  "label": "youngs_modulus",
+  "label": "YoungsModulusPython",
   "nodes": {
-    "ReadCSV": {
+    "ReadDataset": {
       "type": "pyiron_nodes.basic.file.ReadCSV",
-      "label": "ReadCSV",
+      "label": "ReadDataset",
       "parent": null,
       "inputs": {
         "filename": {
@@ -18,6 +18,17 @@
       },
       "expanded": false
     },
+    "ConvertLoadToStress": {
+      "type": "pyiron_nodes.experiment.youngs_modulus.ConvertLoadToStress",
+      "label": "ConvertLoadToStress",
+      "parent": null,
+      "inputs": {
+        "area": {
+          "value": 120
+        }
+      },
+      "expanded": false
+    },
     "CalculateYoungsModulus": {
       "type": "pyiron_nodes.experiment.youngs_modulus.CalculateYoungsModulus",
       "label": "CalculateYoungsModulus",
@@ -25,17 +36,6 @@
       "inputs": {
         "strain_cutoff": {
           "value": 0.2
-        }
-      },
-      "expanded": false
-    },
-    "ConvertLoadToStress": {
-      "type": "pyiron_nodes.experiment.youngs_modulus.ConvertLoadToStress",
-      "label": "ConvertLoadToStress",
-      "parent": null,
-      "inputs": {
-        "area": {
-          "value": "120"
         }
       },
       "expanded": false
@@ -54,7 +54,7 @@
   },
   "edges": [
     {
-      "source": "ReadCSV",
+      "source": "ReadDataset",
       "sourceHandle": "csv",
       "target": "ConvertLoadToStress",
       "targetHandle": "df"

@@ -1,175 +1,164 @@
 {
-    "label": "Ca_workflow1",
-    "nodes": {
-        "build_structure": {
-            "id": "build_structure",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.structure.build.Bulk",
-            "label": "build_structure",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "build_structure",
-                "function": "pyiron_core.pyiron_nodes.atomistic.structure.build.Bulk",
-                "inputs": {
-                    "name": "Ca"
-                }
-            }
+  "label": "Ca_workflow1",
+  "nodes": {
+    "build_structure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "build_structure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Ca"
         },
-        "Calculator": {
-            "id": "Calculator",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.engine.ace.Ace",
-            "label": "Calculator",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "Calculator",
-                "function": "pyiron_core.pyiron_nodes.atomistic.engine.ace.Ace",
-                "inputs": {
-                    "potential_file": "potentials/Ca_Mg_linear_potential.yace"
-                }
-            }
+        "crystalstructure": {
+          "value": null
         },
-        "optimize_settings": {
-            "id": "optimize_settings",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.GenericOptimizerSettings",
-            "label": "optimize_settings",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "optimize_settings",
-                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.GenericOptimizerSettings",
-                "inputs": {
-                    "max_steps": 500
-                }
-            }
+        "a": {
+          "value": null
         },
-        "optimize_structure": {
-            "id": "optimize_structure",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.Relax",
-            "label": "optimize_structure",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "optimize_structure",
-                "function": "pyiron_core.pyiron_nodes.atomistic.calculator.optimize.Relax",
-                "inputs": {
-                    "mode": "full"
-                }
-            }
+        "c": {
+          "value": null
         },
-        "calculate_ev_curve": {
-            "id": "calculate_ev_curve",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.property.bulk.CalculateEVCurve",
-            "label": "calculate_ev_curve",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "calculate_ev_curve",
-                "function": "pyiron_core.pyiron_nodes.atomistic.property.bulk.CalculateEVCurve",
-                "inputs": {
-                    "vol_range": 0.1
-                }
-            }
+        "u": {
+          "value": null
         },
-        "fit_eos": {
-            "id": "fit_eos",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.property.bulk.FitBirchMurnaghanEOS",
-            "label": "fit_eos",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "fit_eos",
-                "function": "pyiron_core.pyiron_nodes.atomistic.property.bulk.FitBirchMurnaghanEOS",
-                "inputs": {}
-            }
+        "orthorhombic": {
+          "value": false
         },
-        "plot_ev_curve": {
-            "id": "plot_ev_curve",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.property.bulk.PlotEVCurve",
-            "label": "plot_ev_curve",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "plot_ev_curve",
-                "function": "pyiron_core.pyiron_nodes.atomistic.property.bulk.PlotEVCurve",
-                "inputs": {}
-            }
-        },
-        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+        "cubic": {
+          "value": false
+        }
+      },
+      "expanded": false
     },
-    "edges": {
-        "values": [
-            {
-                "source": "Calculator",
-                "target": "optimize_structure",
-                "sourceHandle": "self",
-                "targetHandle": "calculator"
-            },
-            {
-                "source": "optimize_settings",
-                "target": "optimize_structure",
-                "sourceHandle": "self",
-                "targetHandle": "opt"
-            },
-            {
-                "source": "build_structure",
-                "target": "optimize_structure",
-                "sourceHandle": "structure",
-                "targetHandle": "structure"
-            },
-            {
-                "source": "optimize_structure",
-                "target": "calculate_ev_curve",
-                "sourceHandle": "relaxed_structure",
-                "targetHandle": "structure"
-            },
-            {
-                "source": "Calculator",
-                "target": "calculate_ev_curve",
-                "sourceHandle": "self",
-                "targetHandle": "calculator"
-            },
-            {
-                "source": "calculate_ev_curve",
-                "target": "fit_eos",
-                "sourceHandle": "df",
-                "targetHandle": "ev_curve_df"
-            },
-            {
-                "source": "calculate_ev_curve",
-                "target": "plot_ev_curve",
-                "sourceHandle": "df",
-                "targetHandle": "ev_curve_df"
-            }
-        ],
-        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    "Calculator": {
+      "type": "pyiron_nodes.atomistic.engine.ace.Ace",
+      "label": "Calculator",
+      "parent": null,
+      "inputs": {
+        "potential_file": {
+          "value": "potentials/Ca_Mg_linear_potential.yace"
+        },
+        "use_symmetry": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "optimize_settings": {
+      "type": "pyiron_nodes.atomistic.calculator.optimize.GenericOptimizerSettings",
+      "label": "optimize_settings",
+      "parent": null,
+      "inputs": {
+        "max_steps": {
+          "value": 500
+        },
+        "force_tolerance": {
+          "value": 0.01
+        }
+      },
+      "expanded": false
+    },
+    "optimize_structure": {
+      "type": "pyiron_nodes.atomistic.calculator.optimize.Relax",
+      "label": "optimize_structure",
+      "parent": null,
+      "inputs": {
+        "mode": {
+          "value": "full"
+        }
+      },
+      "expanded": false
+    },
+    "calculate_ev_curve": {
+      "type": "pyiron_nodes.atomistic.property.bulk.CalculateEVCurve",
+      "label": "calculate_ev_curve",
+      "parent": null,
+      "inputs": {
+        "num_of_points": {
+          "value": 7
+        },
+        "vol_range": {
+          "value": 0.1
+        },
+        "per_atom": {
+          "value": true
+        },
+        "opt": {
+          "value": null
+        }
+      },
+      "expanded": false
+    },
+    "fit_eos": {
+      "type": "pyiron_nodes.atomistic.property.bulk.FitBirchMurnaghanEOS",
+      "label": "fit_eos",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    },
+    "plot_ev_curve": {
+      "type": "pyiron_nodes.atomistic.property.bulk.PlotEVCurve",
+      "label": "plot_ev_curve",
+      "parent": null,
+      "inputs": {
+        "xlabel": {
+          "value": "Volume (\u00c5\u00b3)"
+        },
+        "ylabel": {
+          "value": "Energy (eV)"
+        },
+        "title": {
+          "value": "Energy vs Volume Curve"
+        },
+        "fontsize": {
+          "value": 12
+        }
+      },
+      "expanded": false
     }
+  },
+  "edges": [
+    {
+      "source": "Calculator",
+      "sourceHandle": "self",
+      "target": "optimize_structure",
+      "targetHandle": "calculator"
+    },
+    {
+      "source": "optimize_settings",
+      "sourceHandle": "self",
+      "target": "optimize_structure",
+      "targetHandle": "opt"
+    },
+    {
+      "source": "build_structure",
+      "sourceHandle": "structure",
+      "target": "optimize_structure",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "optimize_structure",
+      "sourceHandle": "relaxed_structure",
+      "target": "calculate_ev_curve",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "Calculator",
+      "sourceHandle": "self",
+      "target": "calculate_ev_curve",
+      "targetHandle": "calculator"
+    },
+    {
+      "source": "calculate_ev_curve",
+      "sourceHandle": "df",
+      "target": "fit_eos",
+      "targetHandle": "ev_curve_df"
+    },
+    {
+      "source": "calculate_ev_curve",
+      "sourceHandle": "df",
+      "target": "plot_ev_curve",
+      "targetHandle": "ev_curve_df"
+    }
+  ]
 }

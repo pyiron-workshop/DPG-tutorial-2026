@@ -1,51 +1,40 @@
 {
-    "label": "ASSYST_Elements_Unary",
-    "nodes": {
-        "Element": {
-            "id": "Element",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
-            "label": "Element",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "Element",
-                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
-                "inputs": {
-                    "element": "Mg"
-                }
-            }
+  "label": "ASSYST_Elements_Unary",
+  "nodes": {
+    "Element": {
+      "type": "pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+      "label": "Element",
+      "parent": null,
+      "inputs": {
+        "element": {
+          "value": "Mg"
         },
-        "ElementsTable": {
-            "id": "ElementsTable",
-            "import_path": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
-            "label": "ElementsTable",
-            "parent_id": null,
-            "level": 0,
-            "graph": null,
-            "node_type": "node",
-            "widget_type": "customNode",
-            "expanded": false,
-            "node": {
-                "label": "ElementsTable",
-                "function": "pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
-                "inputs": {}
-            }
+        "min_ion": {
+          "value": 1
         },
-        "_obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphNode"
+        "max_ion": {
+          "value": 10
+        },
+        "step_ion": {
+          "value": 1
+        }
+      },
+      "expanded": false
     },
-    "edges": {
-        "values": [
-            {
-                "source": "Element",
-                "target": "ElementsTable",
-                "sourceHandle": "stoichiometry",
-                "targetHandle": "stoichiometry"
-            }
-        ],
-        "obj_type": "pyiron_core.pyiron_workflow.api.serial.GraphEdge"
+    "ElementsTable": {
+      "type": "pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
+      "label": "ElementsTable",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
     }
+  },
+  "edges": [
+    {
+      "source": "Element",
+      "sourceHandle": "stoichiometry",
+      "target": "ElementsTable",
+      "targetHandle": "stoichiometry"
+    }
+  ]
 }
