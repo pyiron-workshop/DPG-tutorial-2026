@@ -1,5 +1,5 @@
 {
-  "label": "calphy-fe1",
+  "label": "calphy_fe1",
   "nodes": {
     "Bulk": {
       "type": "pyiron_nodes.atomistic.structure.build.Bulk",

@@ -1,5 +1,5 @@
 {
-  "label": "calphy-tm1",
+  "label": "calphy_tm1",
   "nodes": {
     "Bulk": {
       "type": "pyiron_nodes.atomistic.structure.build.Bulk",

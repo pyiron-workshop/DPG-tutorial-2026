@@ -1,5 +1,5 @@
 {
-  "label": "landau-MgCa",
+  "label": "landau_MgCa",
   "nodes": {
     "ReadDataFrame": {
       "type": "pyiron_nodes.basic.file.ReadDataFrame",

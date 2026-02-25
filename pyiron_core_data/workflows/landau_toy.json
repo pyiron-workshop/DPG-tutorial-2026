@@ -1,5 +1,5 @@
 {
-  "label": "landau-toy",
+  "label": "landau_toy",
   "nodes": {
     "LinePhase0": {
       "type": "pyiron_nodes.thermodynamics.landau.LinePhase",
