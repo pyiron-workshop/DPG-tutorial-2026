@@ -61,7 +61,7 @@ def RattleLoop(
 ) -> list[Atoms]:
     rattled_structures = []
     for structure in structures:
-        rattled_structures += RattleAndStrech(structure, sigma, samples).pull()
+        rattled_structures += RattleAndStrech(structure, sigma, samples).run()
     return rattled_structures
 
 
@@ -91,7 +91,7 @@ def StretchLoop(
     for structure in structures:
         stretched_structures += Stretch(
                 structure, hydro, shear, samples, hydro_shear_ratio
-        ).pull()
+        ).run()
     return stretched_structures
 
 

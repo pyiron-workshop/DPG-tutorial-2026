@@ -45,7 +45,7 @@ def RelaxLoop(
     relaxed_structures = []
     for structure in tqdm(structures, desc=f"Relax {mode.value}"):
         relaxed_structures.append(
-                Relax(mode, calculator, opt, structure).pull()
+                Relax(mode, calculator, opt, structure).run()
         )
     return relaxed_structures
             
@@ -65,10 +65,10 @@ def Relax(mode: str | RelaxMode, calculator: Node, opt: Node, structure: Atoms) 
     match mode:
         case RelaxMode.VOLUME:
             calculator.inputs.use_symmetry = True
-            structure.calc = calculator.pull()
+            structure.calc = calculator.run()
         case RelaxMode.FULL | RelaxLoop.INTERNAL:
             calculator.inputs.use_symmetry = False
-            structure.calc = calculator.pull()
+            structure.calc = calculator.run()
         case _:
             assert False
 
