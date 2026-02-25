@@ -1,5 +1,6 @@
 import os
 import subprocess
+from ase.atoms import Atoms
 from ase.build import bulk
 from ase.io import write
 from qe_xml_parser.parsers import parse_pw
@@ -35,9 +36,9 @@ def _collect_output(working_directory="."):
 
 
 @as_function_node
-def calculate_qe(working_directory, pseudopotentials, structure, encut, kpts=(3, 3, 3), store: bool=True):
-    if structure is None or isinstance(structure, Port):
-        structure = bulk(name="Al", a=4.04, cubic=False)
+def calculate_qe(working_directory: str, pseudopotentials: dict, structure: Atoms, encut: float, kpts=(3, 3, 3), store: bool=True):
+    # if structure is None or isinstance(structure, Port):
+    #     structure = bulk(name="Al", a=4.04, cubic=False)
     element = structure.get_chemical_symbols()[-1]
     input_dict = {
         "structure": structure,
@@ -64,16 +65,13 @@ def calculate_qe(working_directory, pseudopotentials, structure, encut, kpts=(3,
 @as_function_node
 def converge_energy_cutoff(dft_function: Node, limit: float = 0.0001, max_steps: int = 10):
     import numpy as np
-    
-    encut = dft_function.inputs.encut.value
-    energy_lst = [dft_function()[0]]
+    energy_lst = []
     for i in range(max_steps):
-        dft_function.inputs.encut.value += 1
-        energy_lst.append(dft_function()[0])
-        print("loop: ", dft_function.inputs.encut.value, energy_lst)
+        energy_lst.append(list(dft_function.pull().values())[0])
 
-        if np.abs(energy_lst[-2] - energy_lst[-1]) < limit:
+        if len(energy_lst) > 2 and np.abs(energy_lst[-2] - energy_lst[-1]) < limit:
             break
 
+        dft_function.inputs.encut.value += 1
     return energy_lst
 
