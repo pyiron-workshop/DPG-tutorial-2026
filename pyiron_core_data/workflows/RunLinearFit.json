@@ -1,0 +1,81 @@
+{
+  "label": "RunLinearFit",
+  "nodes": {
+    "LoadDataset": {
+      "type": "pyiron_nodes.atomistic.fitting.dataset.ReadPickledDatasetAsDataframe",
+      "label": "LoadDataset",
+      "parent": null,
+      "inputs": {
+        "file_path": {
+          "value": "data/mgca.pckl.tgz"
+        },
+        "compression": {
+          "value": null
+        }
+      },
+      "expanded": false
+    },
+    "SplitDataset": {
+      "type": "pyiron_nodes.atomistic.fitting.dataset.SplitTrainingAndTesting",
+      "label": "SplitDataset",
+      "parent": null,
+      "inputs": {
+        "training_frac": {
+          "value": 0.5
+        },
+        "random_state": {
+          "value": 42
+        }
+      },
+      "expanded": false
+    },
+    "PlotEnergyHistogram": {
+      "type": "pyiron_nodes.atomistic.fitting.plot.PlotEnergyHistogram",
+      "label": "PlotEnergyHistogram",
+      "parent": null,
+      "inputs": {
+        "bins": {
+          "value": 100
+        },
+        "log_scale": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "PlotForcesHistogram": {
+      "type": "pyiron_nodes.atomistic.fitting.plot.PlotForcesHistogram",
+      "label": "PlotForcesHistogram",
+      "parent": null,
+      "inputs": {
+        "bins": {
+          "value": 100
+        },
+        "log_scale": {
+          "value": true
+        }
+      },
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "LoadDataset",
+      "sourceHandle": "df",
+      "target": "SplitDataset",
+      "targetHandle": "data_df"
+    },
+    {
+      "source": "LoadDataset",
+      "sourceHandle": "df",
+      "target": "PlotEnergyHistogram",
+      "targetHandle": "df"
+    },
+    {
+      "source": "LoadDataset",
+      "sourceHandle": "df",
+      "target": "PlotForcesHistogram",
+      "targetHandle": "df"
+    }
+  ]
+}

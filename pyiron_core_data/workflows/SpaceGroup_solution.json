@@ -1,17 +1,6 @@
 {
-  "label": "ASSYST",
+  "label": "SpaceGroup_solution",
   "nodes": {
-    "GraceEngine": {
-      "type": "pyiron_nodes.atomistic.engine.grace.GRACE",
-      "label": "GraceEngine",
-      "parent": null,
-      "inputs": {
-        "model": {
-          "value": "GRACE-FS-OAM"
-        }
-      },
-      "expanded": false
-    },
     "Element_1": {
       "type": "pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
       "label": "Element_1",
@@ -73,6 +62,9 @@
         "max_structures": {
           "value": 10
         },
+        "engine": {
+          "value": null
+        },
         "store": {
           "value": false
         }
@@ -96,46 +88,25 @@
       },
       "expanded": false
     },
-    "OptimizerSettings": {
-      "type": "pyiron_nodes.atomistic.calculator.optimize.GenericOptimizerSettings",
-      "label": "OptimizerSettings",
+    "PlotEnergyVolumeData": {
+      "type": "pyiron_nodes.atomistic.assyst.plot.PlotEnergyVolumeHistogram",
+      "label": "PlotEnergyVolumeData",
       "parent": null,
       "inputs": {
-        "max_steps": {
-          "value": 10
+        "gridsize": {
+          "value": 100
         },
-        "force_tolerance": {
-          "value": 0.01
-        }
-      },
-      "expanded": false
-    },
-    "VolumeRelax": {
-      "type": "pyiron_nodes.atomistic.calculator.optimize.RelaxLoop",
-      "label": "VolumeRelax",
-      "parent": null,
-      "inputs": {
-        "mode": {
-          "value": "volume"
-        },
-        "store": {
+        "shift_convex": {
           "value": false
         }
       },
       "expanded": false
     },
-    "FullRelax": {
-      "type": "pyiron_nodes.atomistic.calculator.optimize.RelaxLoop",
-      "label": "FullRelax",
+    "StoichiometryTable": {
+      "type": "pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
+      "label": "StoichiometryTable",
       "parent": null,
-      "inputs": {
-        "mode": {
-          "value": "full"
-        },
-        "store": {
-          "value": false
-        }
-      },
+      "inputs": {},
       "expanded": false
     }
   },
@@ -159,52 +130,22 @@
       "targetHandle": "elements"
     },
     {
-      "source": "GraceEngine",
-      "sourceHandle": "engine",
-      "target": "SpaceGroupSampling",
-      "targetHandle": "engine"
-    },
-    {
       "source": "SpaceGroupSampling",
       "sourceHandle": "df_structures",
       "target": "PlotSPG",
       "targetHandle": "df_structures"
     },
     {
-      "source": "OptimizerSettings",
-      "sourceHandle": "self",
-      "target": "VolumeRelax",
-      "targetHandle": "opt"
-    },
-    {
       "source": "SpaceGroupSampling",
       "sourceHandle": "df_structures",
-      "target": "VolumeRelax",
+      "target": "PlotEnergyVolumeData",
       "targetHandle": "df_structures"
     },
     {
-      "source": "GraceEngine",
-      "sourceHandle": "engine",
-      "target": "VolumeRelax",
-      "targetHandle": "engine"
-    },
-    {
-      "source": "OptimizerSettings",
-      "sourceHandle": "self",
-      "target": "FullRelax",
-      "targetHandle": "opt"
-    },
-    {
-      "source": "VolumeRelax",
-      "sourceHandle": "df_relaxed",
-      "target": "FullRelax",
-      "targetHandle": "df_structures"
-    },
-    {
-      "source": "GraceEngine",
-      "sourceHandle": "engine",
-      "target": "FullRelax",
-      "targetHandle": "engine"
+      "source": "Multiply_1_2",
+      "sourceHandle": "product",
+      "target": "StoichiometryTable",
+      "targetHandle": "stoichiometry"
     }
   ]
 }

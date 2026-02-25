@@ -1,0 +1,148 @@
+{
+  "label": "RunLinearFit_solution",
+  "nodes": {
+    "LoadDataset": {
+      "type": "pyiron_nodes.atomistic.fitting.dataset.ReadPickledDatasetAsDataframe",
+      "label": "LoadDataset",
+      "parent": null,
+      "inputs": {
+        "file_path": {
+          "value": "data/mgca.pckl.tgz"
+        },
+        "compression": {
+          "value": null
+        }
+      },
+      "expanded": false
+    },
+    "SplitDataset": {
+      "type": "pyiron_nodes.atomistic.fitting.dataset.SplitTrainingAndTesting",
+      "label": "SplitDataset",
+      "parent": null,
+      "inputs": {
+        "training_frac": {
+          "value": 0.5
+        },
+        "random_state": {
+          "value": 42
+        }
+      },
+      "expanded": false
+    },
+    "ParameterizePotentialConfig": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.ParameterizePotentialConfig",
+      "label": "ParameterizePotentialConfig",
+      "parent": null,
+      "inputs": {
+        "nrad_max": {
+          "value": "NonPrimitive"
+        },
+        "number_of_functions_per_element": {
+          "value": 10
+        },
+        "rcut": {
+          "value": 6.0
+        }
+      },
+      "expanded": false
+    },
+    "RunLinearFit": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.RunLinearFit",
+      "label": "RunLinearFit",
+      "parent": null,
+      "inputs": {
+        "verbose": {
+          "value": false
+        },
+        "filename": {
+          "value": ""
+        },
+        "store": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "PredictEnergiesAndForces": {
+      "type": "pyiron_nodes.atomistic.fitting.ace.PredictEnergiesAndForces",
+      "label": "PredictEnergiesAndForces",
+      "parent": null,
+      "inputs": {
+        "store": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "PlotEnergyFittingCurve": {
+      "type": "pyiron_nodes.atomistic.fitting.plot.PlotEnergyFittingCurve",
+      "label": "PlotEnergyFittingCurve",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    },
+    "PlotForcesFittingCurve": {
+      "type": "pyiron_nodes.atomistic.fitting.plot.PlotForcesFittingCurve",
+      "label": "PlotForcesFittingCurve",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "LoadDataset",
+      "sourceHandle": "df",
+      "target": "SplitDataset",
+      "targetHandle": "data_df"
+    },
+    {
+      "source": "ParameterizePotentialConfig",
+      "sourceHandle": "potential_config",
+      "target": "RunLinearFit",
+      "targetHandle": "potential_config"
+    },
+    {
+      "source": "SplitDataset",
+      "sourceHandle": "df_training",
+      "target": "RunLinearFit",
+      "targetHandle": "df_train"
+    },
+    {
+      "source": "SplitDataset",
+      "sourceHandle": "df_testing",
+      "target": "RunLinearFit",
+      "targetHandle": "df_test"
+    },
+    {
+      "source": "RunLinearFit",
+      "sourceHandle": "potential_file_path",
+      "target": "PredictEnergiesAndForces",
+      "targetHandle": "potential_file_path"
+    },
+    {
+      "source": "SplitDataset",
+      "sourceHandle": "df_training",
+      "target": "PredictEnergiesAndForces",
+      "targetHandle": "df_train"
+    },
+    {
+      "source": "SplitDataset",
+      "sourceHandle": "df_testing",
+      "target": "PredictEnergiesAndForces",
+      "targetHandle": "df_test"
+    },
+    {
+      "source": "PredictEnergiesAndForces",
+      "sourceHandle": "data_dict",
+      "target": "PlotEnergyFittingCurve",
+      "targetHandle": "data_dict"
+    },
+    {
+      "source": "PredictEnergiesAndForces",
+      "sourceHandle": "data_dict",
+      "target": "PlotForcesFittingCurve",
+      "targetHandle": "data_dict"
+    }
+  ]
+}

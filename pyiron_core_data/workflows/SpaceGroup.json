@@ -1,0 +1,79 @@
+{
+  "label": "SpaceGroup",
+  "nodes": {
+    "Element_1": {
+      "type": "pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+      "label": "Element_1",
+      "parent": null,
+      "inputs": {
+        "element": {
+          "value": "Mg"
+        },
+        "min_atoms": {
+          "value": 1
+        },
+        "max_atoms": {
+          "value": 10
+        },
+        "step_atoms": {
+          "value": 1
+        }
+      },
+      "expanded": false
+    },
+    "Element_2": {
+      "type": "pyiron_nodes.atomistic.assyst.stoichiometry.ElementInput",
+      "label": "Element_2",
+      "parent": null,
+      "inputs": {
+        "element": {
+          "value": "Ca"
+        },
+        "min_atoms": {
+          "value": 1
+        },
+        "max_atoms": {
+          "value": 10
+        },
+        "step_atoms": {
+          "value": 1
+        }
+      },
+      "expanded": false
+    },
+    "Multiply_1_2": {
+      "type": "pyiron_nodes.basic.math.Multiply",
+      "label": "Multiply_1_2",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    },
+    "StoichiometryTable": {
+      "type": "pyiron_nodes.atomistic.assyst.stoichiometry.StoichiometryTable",
+      "label": "StoichiometryTable",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "Element_1",
+      "sourceHandle": "stoichiometry",
+      "target": "Multiply_1_2",
+      "targetHandle": "x"
+    },
+    {
+      "source": "Element_2",
+      "sourceHandle": "stoichiometry",
+      "target": "Multiply_1_2",
+      "targetHandle": "y"
+    },
+    {
+      "source": "Multiply_1_2",
+      "sourceHandle": "product",
+      "target": "StoichiometryTable",
+      "targetHandle": "stoichiometry"
+    }
+  ]
+}
