@@ -1,0 +1,819 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Advanced Features &#8212; DPG tutorial 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '03_quantumespresso';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Python Interface" href="02_pythoninterface.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DPG tutorial 2026</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Advanced Features</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/03_quantumespresso.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/03_quantumespresso.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Advanced Features</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caching">Caching</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-programming">Functional Programming</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-scale-workflows">Up-scale Workflows</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="advanced-features">
+<h1>Advanced Features<a class="headerlink" href="#advanced-features" title="Link to this heading">#</a></h1>
+<p>After the first notebook introduced the visual programming interface of pyiron and the second notebook introduced the corresponding Python interface, this third notebook introduces advanced features to help with the development of materials science workflows. In the following, the caching of workflows, functional programming and the up-scaling of workflows are briefly introduced each with an example using the visual programming environment followed by a reduced example using the Python interface to demonstrate the technical details.</p>
+<p>All examples us the electronic structure code <a class="reference external" href="https://www.quantum-espresso.org">quantum espresso</a> to highlight the impact of these features for electronic structure calculation. Still no prior knowledge of electronic structure simulation is required for the understanding of these examples and the primary focus is the introduction of the technical functionality.</p>
+<section id="caching">
+<h2>Caching<a class="headerlink" href="#caching" title="Link to this heading">#</a></h2>
+<p>In contrast to simple Python functions typical materials science simulation require substantial computational resources. So one essential advantage workflow frameworks is the ability to cache intermediate results. When the same calculation with the same input parameters is repeated at a later point, then the previous result is reloaded from the cache and returned to the user.</p>
+<p>Starting with an electronic structure calculation for Aluminium. For this purpose the <code class="docutils literal notranslate"><span class="pre">Bulk()</span></code> node is imported to create an Aluminium bulk structure in addition to the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node for computing the volume and energy using the quantum espresso electronic structure simulation code. The <code class="docutils literal notranslate"><span class="pre">Bulk()</span></code> node takes an element as input, for Aluminium <code class="docutils literal notranslate"><span class="pre">Al</span></code>, in addition to the lattice constant <code class="docutils literal notranslate"><span class="pre">a=4.04</span></code>. Followed by the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node which in addition to the atomistic structure from the <code class="docutils literal notranslate"><span class="pre">Bulk()</span></code> node receives a working directory to write temporary input and output files a pseudo potential which provides an approximation for the electronic interaction, for Aluminium <code class="docutils literal notranslate"><span class="pre">&quot;Al.pbe-n-kjpaw_psl.1.0.0.UPF&quot;</span></code> the plane wave energy cutoff in Rydberg <code class="docutils literal notranslate"><span class="pre">encut=20</span></code> and the kpoint mesh for sampling the wave function in reciprocal space <code class="docutils literal notranslate"><span class="pre">kpts=(3,</span> <span class="pre">3,</span> <span class="pre">3)</span></code>.</p>
+<p>The important option for caching the results is the <code class="docutils literal notranslate"><span class="pre">store=True</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node. Setting <code class="docutils literal notranslate"><span class="pre">store=True</span></code> enables the cache. The results are stored in <code class="docutils literal notranslate"><span class="pre">~/pyiron_core_data/.storage</span></code>, so when the calculation is executed a second time the results are reloaded from the cache.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">as_function_node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.quantumespresso</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_qe</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;qe&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.04</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">quantum_espresso</span> <span class="o">=</span> <span class="n">calculate_qe</span><span class="p">(</span>
+    <span class="n">working_directory</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> 
+    <span class="n">pseudopotentials</span><span class="o">=</span><span class="s2">&quot;Al.pbe-n-kjpaw_psl.1.0.0.UPF&quot;</span><span class="p">,</span> 
+    <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> 
+    <span class="n">encut</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+    <span class="n">kpts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> 
+    <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">PyironFlow</span><span class="p">(</span><span class="n">wf_list</span><span class="o">=</span><span class="p">[</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "b1f614cb3aa942dcba684f76127bcfa8"}</script></div>
+</div>
+<p><img alt="quantumespresso" src="_images/quantum_espresso.png" /></p>
+<p>To understand the caching functionality of pyiron a <code class="docutils literal notranslate"><span class="pre">long_running_function()</span></code> node is introduced. The function simply returns the input after sleeping for ten seconds. This delay helps us to differentiate reloading from cache compared to evaluating the function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">long_running_function</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">time</span> 
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For testing a simple workflow with just the <code class="docutils literal notranslate"><span class="pre">long_running_function()</span></code> node is constructed and by calling <code class="docutils literal notranslate"><span class="pre">pull()</span></code> on the <code class="docutils literal notranslate"><span class="pre">long_running_function()</span></code> node the workflow is evaluated and the result <code class="docutils literal notranslate"><span class="pre">1</span></code> for <code class="docutils literal notranslate"><span class="pre">i=1</span></code> is returned. So far this is exactly the same behaviour we would get by using a standard Python function without a workflow management system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;long&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span> <span class="o">=</span> <span class="n">long_running_function</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;i&#39;: 1}
+</pre></div>
+</div>
+</div>
+</div>
+<p>In particular, when the same workflow is executed again the computation again takes 10 seconds.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;long&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span> <span class="o">=</span> <span class="n">long_running_function</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;i&#39;: 1}
+</pre></div>
+</div>
+</div>
+</div>
+<p>To activate the caching in pyiron the only required modification is adding the <code class="docutils literal notranslate"><span class="pre">store</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">long_running_function()</span></code> node definition. The parameter is not used inside the function, it is handled by the <code class="docutils literal notranslate"><span class="pre">&#64;as_function_node</span></code> decorator.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">long_running_function</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">time</span> 
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Copying the previous workflow during the first execution the cache is generated. pyiron internally generates a hash based on the node in combination with the input parameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;long&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span> <span class="o">=</span> <span class="n">long_running_function</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Restoring node outputs  512b3417988c0ef3d41f5368dac68a79f7a7c4181f24fcde7166641cd4670280 sleep False
+No stored data found for node:  sleep
+serialization not needed
+stored node output
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;i&#39;: 1}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on the hash the result can be reloaded when the same workflow is executed again. When the inputs or the function changes the hash is changed as well so a separate cache file is generated.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;long&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span> <span class="o">=</span> <span class="n">long_running_function</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Restoring node outputs  512b3417988c0ef3d41f5368dac68a79f7a7c4181f24fcde7166641cd4670280 sleep True
+None::
+restored node True
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;i&#39;: 1}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="functional-programming">
+<h2>Functional Programming<a class="headerlink" href="#functional-programming" title="Link to this heading">#</a></h2>
+<p>The previous workflows were all based on directed acyclic graphs (DAGs). This covers a large number of workflows still there are some more complex logical structures which are commonly used in materials science. One is the convergence of a basis set. This convergence can be represented by a <strong>while</strong> loop, basically increae the basis set size until the difference between two fulling basis sets is below a given limit.</p>
+<p>For the example of the electronic structure calculation with the quantum espresso simulation code is the convergence of the energy with increasing plane wave energy cut-off. The <code class="docutils literal notranslate"><span class="pre">converge_energy_cutoff()</span></code> node is implementing this functionality. It takes a electronic structure calculation node like the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node as an input in addition to a convergence level given in electron volts <code class="docutils literal notranslate"><span class="pre">limit=0.0001</span></code> as well as a maximum number of convergence steps <code class="docutils literal notranslate"><span class="pre">max_steps=10</span></code>.</p>
+<p>The functional programming implementation of the <strong>while</strong> loop is represented by the <code class="docutils literal notranslate"><span class="pre">converge_energy_cutoff()</span></code> node because it takes the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node as an input and then internally executes the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node multiple times until the convergence goal is reached. In an abstract way the <code class="docutils literal notranslate"><span class="pre">converge_energy_cutoff()</span></code> node is a functional programming node applied on the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.quantumespresso</span><span class="w"> </span><span class="kn">import</span> <span class="n">converge_energy_cutoff</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;convergence&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.04</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">quantum_espresso</span> <span class="o">=</span> <span class="n">calculate_qe</span><span class="p">(</span>
+    <span class="n">working_directory</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> 
+    <span class="n">pseudopotentials</span><span class="o">=</span><span class="s2">&quot;Al.pbe-n-kjpaw_psl.1.0.0.UPF&quot;</span><span class="p">,</span> 
+    <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> 
+    <span class="n">encut</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+    <span class="n">kpts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> 
+    <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">convergence</span> <span class="o">=</span> <span class="n">converge_energy_cutoff</span><span class="p">(</span><span class="n">dft_function</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">quantum_espresso</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">PyironFlow</span><span class="p">(</span><span class="n">wf_list</span><span class="o">=</span><span class="p">[</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c580b4048dae4c96aaf5b4470bba2191"}</script></div>
+</div>
+<p><img alt="convergence" src="_images/convergence.png" /></p>
+<p>In analogy to the first example for introducing the cache functionality, the functional programming is also introduced in the following based on a simplified example. The first node is a <code class="docutils literal notranslate"><span class="pre">recursive()</span></code> node which takes the previous value of <code class="docutils literal notranslate"><span class="pre">x</span></code> as an input and then returns the next <code class="docutils literal notranslate"><span class="pre">x+1</span></code> value as well as a break condition which is <strong>False</strong> until the convergence is achievd. In this case the break condition simply validates the number of iterations is below the <code class="docutils literal notranslate"><span class="pre">stop_at</span></code> parameter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">recursive</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stop_at</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Toy example for a recursive function.&quot;&quot;&quot;</span>
+    <span class="n">x_new</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">break_condition</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">x_new</span> <span class="o">&gt;</span> <span class="n">stop_at</span><span class="p">:</span>
+        <span class="n">break_condition</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">break_condition</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The second node is the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node, which takes the <code class="docutils literal notranslate"><span class="pre">recursive()</span></code> node as an input. This is again the functional programming approach for implementing the <strong>while</strong> loop by applying the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node on <code class="docutils literal notranslate"><span class="pre">recursive()</span></code> node. Internally the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node iterates over the number of <code class="docutils literal notranslate"><span class="pre">max_steps=10</span></code> and in every iteration evaluates the <code class="docutils literal notranslate"><span class="pre">recursive()</span></code> node to receive a next value of <code class="docutils literal notranslate"><span class="pre">x</span></code> and the updated break condition. If the break condition is <code class="docutils literal notranslate"><span class="pre">True</span></code> then the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node stops the execution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loop_until</span><span class="p">(</span><span class="n">recursive_function</span><span class="p">:</span> <span class="n">Node</span><span class="p">,</span> <span class="n">max_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">recursive_function</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_steps</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">break_condition</span> <span class="o">=</span> <span class="n">recursive_function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;loop: &quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">break_condition</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">break_condition</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">recursive()</span></code> node and the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node are combined in an example workflow. By setting the <code class="docutils literal notranslate"><span class="pre">stop_at</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">recursive()</span></code> node to <code class="docutils literal notranslate"><span class="pre">10</span></code> and the <code class="docutils literal notranslate"><span class="pre">x</span></code> parameter of the same node to <code class="docutils literal notranslate"><span class="pre">0</span></code> as well as the <code class="docutils literal notranslate"><span class="pre">max_steps</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node to <code class="docutils literal notranslate"><span class="pre">20</span></code> the workflow iterates from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">11</span></code> until the execution is stopped. In particular, the maximum number of steps in the <code class="docutils literal notranslate"><span class="pre">loop_until()</span></code> node of <code class="docutils literal notranslate"><span class="pre">20</span></code> is not reached.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;whileloop&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">recursive_node</span> <span class="o">=</span> <span class="n">recursive</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop_at</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop_until</span><span class="p">(</span><span class="n">recursive_function</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">recursive_node</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>loop:  0 1 False
+loop:  1 2 False
+loop:  2 3 False
+loop:  3 4 False
+loop:  4 5 False
+loop:  5 6 False
+loop:  6 7 False
+loop:  7 8 False
+loop:  8 9 False
+loop:  9 10 False
+loop:  10 11 True
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;x&#39;: 11}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="up-scale-workflows">
+<h2>Up-scale Workflows<a class="headerlink" href="#up-scale-workflows" title="Link to this heading">#</a></h2>
+<p>The third advanced feature introduced in this notebook is the interface to the <a class="reference external" href="https://executorlib.readthedocs.io">executorlib</a> library for up-scaling Python functions for high performance computing (HPC). Executorlib is integrated in pyiron as central interface for HPC resources by enabling the submission of pyiron nodes to executorlib executors.</p>
+<p>In the context of electronic structure calculations with quantum espresso a typical example is the calculation of the energy at various lattice constants to determine the equilibrium volume, the energy at the equilibrium volume and the bulk modulus as derivative of the change in energy over the change in volume. All these calculations are independent from each other so they can be evaluated in parallel and consequenty benefit from access to HPC resources.</p>
+<p>As the resources in this demonstration environment are limited the <code class="docutils literal notranslate"><span class="pre">SingleNodeExecutor</span></code> is used, still following the executor interface of the Python standard library all executorlib executors are compatilble to pyiron. Learn more about executorlib: <a class="reference external" href="https://executorlib.readthedocs.io">Documentation</a>, <a class="reference external" href="https://github.com/pyiron/executorlib">Repository</a> and <a class="reference external" href="https://doi.org/10.21105/joss.07782">Publication</a></p>
+<p>The previously simplistic workflow for the electronic structure calculations with quantum espresso consisting of three nodes is now replaced by a more complex workflow with a total of seven nodes. Again starting with the <code class="docutils literal notranslate"><span class="pre">Bulk()</span></code> node and the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node. For calculating the different supercells with different lattice constants, a list of strains is generated using the <code class="docutils literal notranslate"><span class="pre">Linspace()</span></code> node to apply compressions and elongations ranging from -10% to +10%. The <code class="docutils literal notranslate"><span class="pre">generate_structures()</span></code> node takes the atomic bulk structure in addition to the list of strains as an input to generate a list of strained structures. These lists of structures are then provided to the <code class="docutils literal notranslate"><span class="pre">IterToDataFrame()</span></code> node in combination with the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node and the <code class="docutils literal notranslate"><span class="pre">SingleNodeExecutor()</span></code> node. Again the <code class="docutils literal notranslate"><span class="pre">IterToDataFrame()</span></code> node is a functional programming node as it applies the <code class="docutils literal notranslate"><span class="pre">IterToDataFrame()</span></code> node on the <code class="docutils literal notranslate"><span class="pre">calculate_qe()</span></code> node by iterating over the structures provided from the <code class="docutils literal notranslate"><span class="pre">generate_structures()</span></code> node and gathering the results in a pandas Dataframe. The <code class="docutils literal notranslate"><span class="pre">SingleNodeExecutor()</span></code> node in this context enables the parallel execution. Finally, the resulting pandas Dataframe is provided as an input to the <code class="docutils literal notranslate"><span class="pre">PlotEVcurve()</span></code> node for visualising the energy volume curve.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.executor</span><span class="w"> </span><span class="kn">import</span> <span class="n">FluxClusterExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_structures</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.calculator.evcurve</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotEVcurve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linspace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.loop</span><span class="w"> </span><span class="kn">import</span> <span class="n">IterToDataFrame</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;evcurve&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">4.04</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">quantum_espresso</span> <span class="o">=</span> <span class="n">calculate_qe</span><span class="p">(</span>
+    <span class="n">working_directory</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> 
+    <span class="n">pseudopotentials</span><span class="o">=</span><span class="s2">&quot;Al.pbe-n-kjpaw_psl.1.0.0.UPF&quot;</span><span class="p">,</span> 
+    <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> 
+    <span class="n">encut</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+    <span class="n">kpts</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> 
+    <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">strains</span> <span class="o">=</span> <span class="n">Linspace</span><span class="p">(</span><span class="n">x_min</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">structure_lst</span> <span class="o">=</span> <span class="n">generate_structures</span><span class="p">(</span><span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> <span class="n">strain_lst</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">strains</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">exe</span> <span class="o">=</span> <span class="n">FluxClusterExecutor</span><span class="p">()</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">IterToDataFrame</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">quantum_espresso</span><span class="p">,</span> <span class="n">input_label</span><span class="o">=</span><span class="s2">&quot;structure&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">structure_lst</span><span class="p">,</span> <span class="n">executor</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">exe</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">plot</span> <span class="o">=</span> <span class="n">PlotEVcurve</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<span class="n">PyironFlow</span><span class="p">(</span><span class="n">wf_list</span><span class="o">=</span><span class="p">[</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "4287ffbaf2b64ed08f5c41a187fd1551"}</script></div>
+</div>
+<p><img alt="evcurve" src="_images/evcurve.png" /></p>
+<p>In analogy to the functional programming section above also the parallel execution of the <code class="docutils literal notranslate"><span class="pre">IterToDataFrame()</span></code> node can be illustrated with a simple example to highlight the universal applicability of this node. Starting with a <code class="docutils literal notranslate"><span class="pre">Range()</span></code> node to generate a range of numbers using the <code class="docutils literal notranslate"><span class="pre">range()</span></code> Python function and then applying the <code class="docutils literal notranslate"><span class="pre">get_product()</span></code> node on all the results of the <code class="docutils literal notranslate"><span class="pre">Range()</span></code> node. This is similar to the vector orientied programming in <code class="docutils literal notranslate"><span class="pre">numpy</span></code> or could also be achieved using the <code class="docutils literal notranslate"><span class="pre">map()</span></code> function in Python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">*</span> <span class="n">i</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="go">[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</span>
+</pre></div>
+</div>
+<p>The important part of the <code class="docutils literal notranslate"><span class="pre">IterToDataFrame()</span></code> node is the selection of the <code class="docutils literal notranslate"><span class="pre">input_label</span></code> parameter which has to match on of the input parameters of the provided function, in this case the <code class="docutils literal notranslate"><span class="pre">get_product()</span></code> node. The Important part is that whil the <code class="docutils literal notranslate"><span class="pre">get_product()</span></code> node currently only has one input parameter, it is also possible to define multiple inputs when the <code class="docutils literal notranslate"><span class="pre">get_product()</span></code> node is initially assigned to the workflow. In computer science this concept of combining a function with its inputs without evaluating it directly is commonly referred to a closure, which is again a fundamental building block of functional programming.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Range</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_product</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">i</span>
+    <span class="k">return</span> <span class="n">product</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;parallel&quot;</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">range_of_int</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">get_product</span> <span class="o">=</span> <span class="n">get_product</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">IterToDataFrame</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">get_product</span><span class="p">,</span> <span class="n">input_label</span><span class="o">=</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">range_of_int</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;df&#39;:    i  product
+ 0  1        1
+ 1  2        4
+ 2  3        9
+ 3  4       16
+ 4  5       25
+ 5  6       36
+ 6  7       49
+ 7  8       64
+ 8  9       81}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>These examples highlight the technical capabilities of the pyiron framework and how the concepts of functional programming are used to enable complex logical structures like while or for loops in directed acyclic graphs (DAGs).</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "flux"
+        },
+        kernelOptions: {
+            name: "flux",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'flux'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_pythoninterface.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Python Interface</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caching">Caching</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functional-programming">Functional Programming</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#up-scale-workflows">Up-scale Workflows</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sarath Menon
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

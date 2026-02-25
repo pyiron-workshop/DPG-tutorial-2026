@@ -62,8 +62,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '04_validation';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Calculation of phase diagrams" href="05_thermodynamics.html" />
-    <link rel="prev" title="Parametrising a Machine Learning Interatomic Potential" href="03_fitting.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -126,6 +124,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -175,12 +175,10 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
 </ul>
 
     </div>
@@ -400,12 +398,12 @@ Tilmann Hickel </br>
 <p>This validation step corresponds to Level 2 validation from the schematic, and is essential to confirm that the potentials capture the underlying physics accurately and can be confidently used for further simulations and analysis.</p>
 <img src="img/validation_schematic.png" alt="Validation schematic" width="700"/><div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.calculator.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericOptimizerSettings</span><span class="p">,</span> <span class="n">Relax</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.property.bulk</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalculateEVCurve</span><span class="p">,</span> <span class="n">FitBirchMurnaghanEOS</span><span class="p">,</span> <span class="n">PlotEVCurve</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.engine.grace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grace</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.engine.ace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ace</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.calculator.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericOptimizerSettings</span><span class="p">,</span> <span class="n">Relax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.property.bulk</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalculateEVCurve</span><span class="p">,</span> <span class="n">FitBirchMurnaghanEOS</span><span class="p">,</span> <span class="n">PlotEVCurve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.grace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.ace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
 </pre></div>
 </div>
 </div>
@@ -466,7 +464,7 @@ Tilmann Hickel </br>
 <span class="n">potential_path</span> <span class="o">=</span> <span class="s2">&quot;potentials/Better_potential.yace&quot;</span>
 <span class="n">potential_path</span> <span class="o">=</span> <span class="s2">&quot;potentials/Ca_Mg_linear_potential.yace&quot;</span>
 
-
+<span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;fitting&quot;</span><span class="p">)</span>
 <span class="n">ace</span> <span class="o">=</span> <span class="n">Ace</span><span class="p">(</span><span class="n">potential_path</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -490,18 +488,13 @@ Tilmann Hickel </br>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set one of ace or grace calcs as the default calculator for further calculations</span>
 
-<span class="c1"># calc = grace_calc</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">ace</span>
+<span class="c1"># wf.calc = grace_calc</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">ace</span>
 </pre></div>
 </div>
 </div>
@@ -535,14 +528,14 @@ These parameters are essential for comparing the ACE potential predictions with 
 <p>Execute <code class="docutils literal notranslate"><span class="pre">Bulk?</span></code> for more details</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bulk_struc</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="s2">&quot;Ca&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">bulk_struc</span> <span class="o">=</span> <span class="n">bulk_struc</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">bulk_struc</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="s2">&quot;Ca&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">bulk_struc</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">bulk_struc</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
 <span class="n">bulk_struc</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Atoms(symbols=&#39;Ca4&#39;, pbc=True, cell=[5.58, 5.58, 5.58])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;structure&#39;: Atoms(symbols=&#39;Ca4&#39;, pbc=True, cell=[5.58, 5.58, 5.58])}
 </pre></div>
 </div>
 </div>
@@ -554,29 +547,25 @@ These parameters are essential for comparing the ACE potential predictions with 
 <p>We use a predefined <code class="docutils literal notranslate"><span class="pre">OptimizeStructure</span></code> function to relax both the atomic positions and cell vectors.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt</span> <span class="o">=</span> <span class="n">GenericOptimizerSettings</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="n">GenericOptimizerSettings</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opt_struc</span> <span class="o">=</span> <span class="n">Relax</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">calc</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">GenericOptimizerSettings</span><span class="p">(),</span> <span class="n">structure</span><span class="o">=</span><span class="n">bulk_struc</span><span class="p">)</span>
-<span class="n">opt_struc</span> <span class="o">=</span> <span class="n">opt_struc</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">opt_struc</span> <span class="o">=</span> <span class="n">Relax</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">calc</span><span class="p">,</span> <span class="n">opt</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">opt</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">bulk_struc</span><span class="p">)</span>
+<span class="n">opt_struc</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">opt_struc</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
 <span class="n">opt_struc</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Ace e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-copy node:  GenericOptimizerSettings 33f098c13934db28702c465a50795bcf3ec743a8993c3cef4575a0c03b6885de
-</pre></div>
-</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/srv/conda/envs/notebook/lib/python3.12/site-packages/pyace/multispecies_basisextension.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools&lt;81.
   import pkg_resources
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Atoms(symbols=&#39;Ca4&#39;, pbc=True, cell=[[5.200658582129403, -1.2514612726041388e-19, -1.0495296469710593e-19], [-7.857763205965819e-19, 5.200658582129404, 5.128805197638612e-16], [-6.584539374922735e-19, -1.2983738001208546e-16, 5.200658582129403]], calculator=SinglePointCalculator(...))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;relaxed_structure&#39;: Atoms(symbols=&#39;Ca4&#39;, pbc=True, cell=[[5.200658582129403, -1.2514612726041388e-19, -1.0495296469710593e-19], [-7.857763205965819e-19, 5.200658582129404, 5.128805197638612e-16], [-6.584539374922735e-19, -1.2983738001208546e-16, 5.200658582129403]], calculator=SinglePointCalculator(...))}
 </pre></div>
 </div>
 </div>
@@ -656,32 +645,6 @@ copy node:  GenericOptimizerSettings 33f098c13934db28702c465a50795bcf3ec743a8993
         <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
         <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span>
     <span class="p">)</span>
-
-    <span class="c1"># Input mapping: Now the workflow-level inputs are numerical parameters and the element string.</span>
-    <span class="c1"># (Assuming Bulk expects an input key &quot;element_str&quot;; adjust if necessary.)</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">inputs_map</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;build_structure__element_str&#39;</span><span class="p">:</span> <span class="s1">&#39;element_str&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;optimize_settings__fmax&#39;</span><span class="p">:</span> <span class="s1">&#39;fmax&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;optimize_settings__max_steps&#39;</span><span class="p">:</span> <span class="s1">&#39;max_steps&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;calculate_ev_curve__num_of_points&#39;</span><span class="p">:</span> <span class="s1">&#39;num_of_points&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;calculate_ev_curve__vol_range&#39;</span><span class="p">:</span> <span class="s1">&#39;vol_range&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;calculate_ev_curve__per_atom&#39;</span><span class="p">:</span> <span class="s1">&#39;per_atom&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;calculate_ev_curve__optimize&#39;</span><span class="p">:</span> <span class="s1">&#39;optimize&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;plot_ev_curve__xlabel&#39;</span><span class="p">:</span> <span class="s1">&#39;xlabel&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;plot_ev_curve__ylabel&#39;</span><span class="p">:</span> <span class="s1">&#39;ylabel&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;plot_ev_curve__title&#39;</span><span class="p">:</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;plot_ev_curve__fontsize&#39;</span><span class="p">:</span> <span class="s1">&#39;fontsize&#39;</span>
-    <span class="p">}</span>
-
-    <span class="c1"># Outputs mapping: Here, we assume FitBirchMurnaghanEOS returns a tuple (E0, V0, B0)</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">outputs_map</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;fit_eos__0&#39;</span><span class="p">:</span> <span class="s1">&#39;E0&#39;</span><span class="p">,</span>  <span class="c1"># first element of the tuple</span>
-        <span class="s1">&#39;fit_eos__1&#39;</span><span class="p">:</span> <span class="s1">&#39;V0&#39;</span><span class="p">,</span>  <span class="c1"># second element</span>
-        <span class="s1">&#39;fit_eos__2&#39;</span><span class="p">:</span> <span class="s1">&#39;B0&#39;</span><span class="p">,</span>  <span class="c1"># third element</span>
-        <span class="s1">&#39;plot_ev_curve__fig&#39;</span><span class="p">:</span> <span class="s1">&#39;fig&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;plot_ev_curve__ax&#39;</span><span class="p">:</span> <span class="s1">&#39;ax&#39;</span>
-    <span class="p">}</span>
-
     <span class="k">return</span> <span class="n">wf</span>
 </pre></div>
 </div>
@@ -689,20 +652,21 @@ copy node:  GenericOptimizerSettings 33f098c13934db28702c465a50795bcf3ec743a8993
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ev_curve_df</span> <span class="o">=</span> <span class="n">CalculateEVCurve</span><span class="p">(</span>
-                                <span class="n">structure</span><span class="o">=</span><span class="n">opt_struc</span><span class="p">,</span> 
-                                <span class="n">calculator</span><span class="o">=</span><span class="n">calc</span><span class="p">,</span> 
-                                <span class="n">vol_range</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-                                <span class="n">num_of_points</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span>
-                            <span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">ev_curve_df</span> <span class="o">=</span> <span class="n">CalculateEVCurve</span><span class="p">(</span>
+    <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">opt_struc</span><span class="p">,</span> 
+    <span class="n">calculator</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">calc</span><span class="p">,</span> 
+    <span class="n">vol_range</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">num_of_points</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="n">ev_curve_df</span> <span class="o">=</span> <span class="n">ev_curve_df</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
-<span class="n">ev_curve_df</span>
+<span class="n">ev_curve_df</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">ev_curve_df</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+<span class="n">ev_curve_df</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Ace e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:opt_struc/relaxed_structure -&gt; ev_curve_df/structure
+INFO:root:calc/self -&gt; ev_curve_df/calculator
 </pre></div>
 </div>
 <div class="output text_html"><div>
@@ -805,12 +769,15 @@ copy node:  GenericOptimizerSettings 33f098c13934db28702c465a50795bcf3ec743a8993
 <p>The node<code class="docutils literal notranslate"><span class="pre">PlotEVCurve</span></code> allows us to plot the dataframe obtained in the previous step. Visualizing the EV curves provides an indication of the smoothness of the predicted potential energy surface.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ev_plot</span> <span class="o">=</span> <span class="n">PlotEVCurve</span><span class="p">(</span><span class="n">ev_curve_df</span> <span class="o">=</span> <span class="n">ev_curve_df</span><span class="p">)</span>
-<span class="n">ev_plot</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">ev_plot</span> <span class="o">=</span> <span class="n">PlotEVCurve</span><span class="p">(</span><span class="n">ev_curve_df</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">ev_curve_df</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">ev_plot</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:ev_curve_df/df -&gt; ev_plot/ev_curve_df
+</pre></div>
+</div>
 <img alt="_images/5ff7e9421e984dfa273fb9106584f0d2764759b16513cdd1630380b553a67e37.png" src="_images/5ff7e9421e984dfa273fb9106584f0d2764759b16513cdd1630380b553a67e37.png" />
 </div>
 </div>
@@ -822,14 +789,17 @@ copy node:  GenericOptimizerSettings 33f098c13934db28702c465a50795bcf3ec743a8993
 <p>By fitting the EV data to this equation, we can extract the key parameters: the equilibrium energy <span class="math notranslate nohighlight">\(E_0\)</span>, equilibrium volume <span class="math notranslate nohighlight">\(V_0\)</span>, bulk modulus <span class="math notranslate nohighlight">\(B_0\)</span>, and its pressure derivative <span class="math notranslate nohighlight">\(B_0'\)</span>. This is achieved by invoking the node <code class="docutils literal notranslate"><span class="pre">FitBirchMurnaghanEOS</span></code> and supplying the EV data as input.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit</span> <span class="o">=</span> <span class="n">FitBirchMurnaghanEOS</span><span class="p">(</span><span class="n">ev_curve_df</span><span class="p">)</span>
-<span class="n">E0</span><span class="p">,</span> <span class="n">V0</span><span class="p">,</span> <span class="n">B0</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">fit</span> <span class="o">=</span> <span class="n">FitBirchMurnaghanEOS</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">ev_curve_df</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+<span class="n">E0</span><span class="p">,</span> <span class="n">V0</span><span class="p">,</span> <span class="n">B0</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">fit</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;E0=</span><span class="si">{</span><span class="n">E0</span><span class="si">}</span><span class="s2">, V0=</span><span class="si">{</span><span class="n">V0</span><span class="si">}</span><span class="s2">, B0=</span><span class="si">{</span><span class="n">B0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:ev_curve_df/df -&gt; fit/ev_curve_df
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>E0=-2.060297089869077, V0=35.142247719229104, B0=33.93771966047118
 </pre></div>
 </div>
@@ -869,18 +839,14 @@ INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-Equilibrium Energy (E0): -2.060296858625812
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Equilibrium Energy (E0): -2.060296858625812
 Equilibrium Volume (V0): 35.14225706440639
 Bulk Modulus (B0): 33.936594849432176
-copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
 </pre></div>
 </div>
-<img alt="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" src="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;fig&#39;: &lt;Figure size 640x480 with 1 Axes&gt;}
+</pre></div>
+</div>
 <img alt="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" src="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" />
 <img alt="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" src="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" />
 </div>
@@ -891,19 +857,9 @@ copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03c
 <p>A powerful feature of <code class="docutils literal notranslate"><span class="pre">pyiron_workflow</span></code> is its interactive GUI, which lets you visualize the entire workflow. Through this interface, you can easily inspect the individual nodes and their connections, as well as modify them—either one node at a time or adjust how they interact with each other.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
 
-<span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>implement connect to self
-implement connect to self
-implement connect to self
-connected to node (self)
-connected to node (self)
-connected to node (self)
+<span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -915,7 +871,7 @@ connected to node (self)
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "aa6e885418ec4fd687687698e565ec3c"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "b94b8b2ff9ac4db0afb37c21e69bf8da"}</script></div>
 </div>
 </section>
 <section id="generate-multiple-workflows-to-compare-different-potentials-over-multiple-structures">
@@ -976,39 +932,6 @@ INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structur
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
-INFO:root:optimize_settings/self -&gt; optimize_structure/opt
-INFO:root:build_structure/structure -&gt; optimize_structure/structure
-INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
-INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
-INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
-INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-Downloading GRACE model
-Downloading from &#39;https://ruhr-uni-bochum.sciebo.de/s/gFAv8pX2DJbk1kb/download&#39;
-Unpacking model from &#39;https://ruhr-uni-bochum.sciebo.de/s/gFAv8pX2DJbk1kb/download&#39;
-GRACE model downloaded to /home/jovyan/.cache/grace/GRACE-1L-OAM
-Model license: Academic Software License
-copy node:  Calculator e6002bc34e53c9eb5ccd4ce7f4464471c14cbccaad52e83b2516e10bb5640be9
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-Using cached GRACE model from /home/jovyan/.cache/grace/GRACE-1L-OAM
-Model license: Academic Software License
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1770111270.611897     391 service.cc:146] XLA service 0x556bdd4677e0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-I0000 00:00:1770111270.611974     391 service.cc:154]   StreamExecutor device (0): Host, Default Version
-I0000 00:00:1770111272.254291     391 device_compiler.h:188] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
 INFO:root:Calculator/self -&gt; optimize_structure/calculator
 INFO:root:optimize_settings/self -&gt; optimize_structure/opt
 INFO:root:build_structure/structure -&gt; optimize_structure/structure
@@ -1018,19 +941,35 @@ INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e6002bc34e53c9eb5ccd4ce7f4464471c14cbccaad52e83b2516e10bb5640be9
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-Downloading GRACE model
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading GRACE model
+Downloading from &#39;https://ruhr-uni-bochum.sciebo.de/s/gFAv8pX2DJbk1kb/download&#39;
+Unpacking model from &#39;https://ruhr-uni-bochum.sciebo.de/s/gFAv8pX2DJbk1kb/download&#39;
+GRACE model downloaded to /home/jovyan/.cache/grace/GRACE-1L-OAM
+Model license: Academic Software License
+Using cached GRACE model from /home/jovyan/.cache/grace/GRACE-1L-OAM
+Model license: Academic Software License
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1772007452.624575    1175 service.cc:146] XLA service 0x557b965efd70 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1772007452.624616    1175 service.cc:154]   StreamExecutor device (0): Host, Default Version
+I0000 00:00:1772007455.218407    1175 device_compiler.h:188] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+INFO:root:Calculator/self -&gt; optimize_structure/calculator
+INFO:root:optimize_settings/self -&gt; optimize_structure/opt
+INFO:root:build_structure/structure -&gt; optimize_structure/structure
+INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
+INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
+INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
+INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading GRACE model
 Downloading from &#39;https://ruhr-uni-bochum.sciebo.de/s/4zVTfzxornWfS4T/download&#39;
 Unpacking model from &#39;https://ruhr-uni-bochum.sciebo.de/s/4zVTfzxornWfS4T/download&#39;
 GRACE model downloaded to /home/jovyan/.cache/grace/GRACE-2L-OAM
 Model license: Academic Software License
-copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8a8f23a5
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
 Using cached GRACE model from /home/jovyan/.cache/grace/GRACE-2L-OAM
 Model license: Academic Software License
-copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8a8f23a5
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
@@ -1039,87 +978,39 @@ INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structur
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
+INFO:root:Calculator/self -&gt; optimize_structure/calculator
 INFO:root:optimize_settings/self -&gt; optimize_structure/opt
 INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-copy node:  Calculator e6002bc34e53c9eb5ccd4ce7f4464471c14cbccaad52e83b2516e10bb5640be9
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
+INFO:root:Calculator/self -&gt; optimize_structure/calculator
 INFO:root:optimize_settings/self -&gt; optimize_structure/opt
 INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e6002bc34e53c9eb5ccd4ce7f4464471c14cbccaad52e83b2516e10bb5640be9
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8a8f23a5
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8a8f23a5
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
+INFO:root:Calculator/self -&gt; optimize_structure/calculator
 INFO:root:optimize_settings/self -&gt; optimize_structure/opt
 INFO:root:build_structure/structure -&gt; optimize_structure/structure
 INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator e52526a32bd7d3aa6aad95efd2ba2ef58bcf62a3980a081100acbd03cc46a5fe
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
+INFO:root:Calculator/self -&gt; optimize_structure/calculator
 INFO:root:optimize_settings/self -&gt; optimize_structure/opt
 INFO:root:build_structure/structure -&gt; optimize_structure/structure
 INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-copy node:  Calculator e6002bc34e53c9eb5ccd4ce7f4464471c14cbccaad52e83b2516e10bb5640be9
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator e6002bc34e53c9eb5ccd4ce7f4464471c14cbccaad52e83b2516e10bb5640be9
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:Calculator/self -&gt; optimize_structure/calculator
+INFO:root:Calculator/self -&gt; optimize_structure/calculator
 INFO:root:optimize_settings/self -&gt; optimize_structure/opt
 INFO:root:build_structure/structure -&gt; optimize_structure/structure
 INFO:root:optimize_structure/relaxed_structure -&gt; calculate_ev_curve/structure
 INFO:root:Calculator/self -&gt; calculate_ev_curve/calculator
 INFO:root:calculate_ev_curve/df -&gt; fit_eos/ev_curve_df
 INFO:root:calculate_ev_curve/df -&gt; plot_ev_curve/ev_curve_df
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-wrapped:  &lt;function Grace at 0x7fcb89d393a0&gt;
-copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8a8f23a5
-copy node:  optimize_settings ef151f5c4360049a0cc4e48e2f40fd045c563ee5fde043ccba779bcfafb9ff71
-copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8a8f23a5
 </pre></div>
 </div>
 <img alt="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" src="_images/493576fc432ada8dec81c59587c7aa8aef210b5e0a22de4886bbcb113aed6f1a.png" />
@@ -1127,7 +1018,7 @@ copy node:  Calculator 84daa527428a0a0652c5b88cf8d9aae802f7373c3db8cb32a2a2ffee8
 <img alt="_images/f334110908c47af16cba926b5a6969c0ad52b579ed50a91a738c4bc1323bdea6.png" src="_images/f334110908c47af16cba926b5a6969c0ad52b579ed50a91a738c4bc1323bdea6.png" />
 <img alt="_images/0eb1151ec199bf36649fd5ddda94e8bedd8755f51e4eb70ded649dbcc76e328f.png" src="_images/0eb1151ec199bf36649fd5ddda94e8bedd8755f51e4eb70ded649dbcc76e328f.png" />
 <img alt="_images/6a9b11ac0edf16182733a5b3a8a057728daee6d4e4c7ad1d8b501c04ceb6318c.png" src="_images/6a9b11ac0edf16182733a5b3a8a057728daee6d4e4c7ad1d8b501c04ceb6318c.png" />
-<img alt="_images/559afe12bedb086f3eaa842e6062fd34e225d132ba39b1afd50f444ba1799ee2.png" src="_images/559afe12bedb086f3eaa842e6062fd34e225d132ba39b1afd50f444ba1799ee2.png" />
+<img alt="_images/a5a95e496c8124964dba18ae861617a35aade937dd9a6b1c41471eafcc7a6b09.png" src="_images/a5a95e496c8124964dba18ae861617a35aade937dd9a6b1c41471eafcc7a6b09.png" />
 <img alt="_images/2adf73eec0f7dcb92de5b053521f5032c1b5ac7cfd80de0a8d829711e5b73f7d.png" src="_images/2adf73eec0f7dcb92de5b053521f5032c1b5ac7cfd80de0a8d829711e5b73f7d.png" />
 <img alt="_images/3d2bedb852b7245e80f658258d08e6d6db7cb588791012cf3c7438c38c11a01a.png" src="_images/3d2bedb852b7245e80f658258d08e6d6db7cb588791012cf3c7438c38c11a01a.png" />
 <img alt="_images/8d38cf263c6360a775b3d35198d2d99018d6e904c814d30e43d45d01610a85ed.png" src="_images/8d38cf263c6360a775b3d35198d2d99018d6e904c814d30e43d45d01610a85ed.png" />
@@ -1210,7 +1101,7 @@ Mg_GRACE_1L_OAM
 Mg_GRACE_2L_OAM
 </pre></div>
 </div>
-<img alt="_images/1d074f351df7ffc11b0b3828d2b4aedd438e6b123b23f2ef4a6a6ef38e36f33e.png" src="_images/1d074f351df7ffc11b0b3828d2b4aedd438e6b123b23f2ef4a6a6ef38e36f33e.png" />
+<img alt="_images/da417ed554831f89d0ef1d674599a3d48df134af0fdd911806c6536c4d5deaf2.png" src="_images/da417ed554831f89d0ef1d674599a3d48df134af0fdd911806c6536c4d5deaf2.png" />
 </div>
 </div>
 <p>Thus we can neatly compare the different potentials with DFT references. For the above plots, the DFT references are taken from <a class="reference external" href="https://doi.org/10.1103/PhysRevB.107.104103">Poul et. al.</a></p>
@@ -1287,7 +1178,7 @@ Mg_GRACE_2L_OAM
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9657f518902530e1b24787c211d2bb82da1350f9a1ea299f346b3fa938981676.png" src="_images/9657f518902530e1b24787c211d2bb82da1350f9a1ea299f346b3fa938981676.png" />
+<img alt="_images/d0988241b4f06ba338022a63806d1c45c4e1638aa1e4ce740d760b3b678c5727.png" src="_images/d0988241b4f06ba338022a63806d1c45c4e1638aa1e4ce740d760b3b678c5727.png" />
 </div>
 </div>
 <p>DFT references are taken from <a class="reference external" href="https://doi.org/10.1103/PhysRevB.107.104103">Poul et. al.</a></p>
@@ -1303,16 +1194,16 @@ Mg_GRACE_2L_OAM
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "pyiron"
         },
         kernelOptions: {
-            name: "python3",
+            name: "pyiron",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'pyiron'</script>
 
                 </article>
               
@@ -1324,24 +1215,6 @@ Mg_GRACE_2L_OAM
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="03_fitting.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="05_thermodynamics.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

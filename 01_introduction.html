@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to Workflows &#8212; DPG tutorial 2026</title>
+    <title>Introduction &#8212; DPG tutorial 2026</title>
   
   
   
@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '01_introduction';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method" href="02_assyst.html" />
+    <link rel="next" title="Python Interface" href="02_pythoninterface.html" />
     <link rel="prev" title="Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations" href="README.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,11 +174,9 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
 </ul>
 
     </div>
@@ -348,7 +346,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></h1>
+    <h1>Introduction</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -358,16 +356,15 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-crash-course"><font style="font-family:roboto;color:#455e6c"> Jupyter Crash Course </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-in-the-experimental-results"><font style="font-family:roboto;color:#455e6c"> Reading in the experimental results </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-young-s-modulus"><font style="font-family:roboto;color:#455e6c"> Calculate Young’s modulus </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-the-results"><font style="font-family:roboto;color:#455e6c"> Plotting the results </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-workflow"><font style="font-family:roboto;color:#455e6c"> Creating a workflow </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-graphical-user-interface-for-running-workflows"><font style="font-family:roboto;color:#455e6c"> A graphical user interface for running workflows </font></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-used-in-this-notebook"><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-interface">User Interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-node">First Node</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-workflow">First Workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#young-s-modulus">Young’s Modulus</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-and-loading-workflows">Saving and Loading Workflows</a></li>
 </ul>
             </nav>
         </div>
@@ -379,206 +376,126 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-workflows">
-<h1><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font><a class="headerlink" href="#introduction-to-workflows" title="Link to this heading">#</a></h1>
-<div class="admonition note" name="html-admonition" style="background:#e3f2fd; padding: 10px">
-<font style="font-family:roboto;color:#455e6c"> <b> DPG Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations </b> </font> </br>
-<font style="font-family:roboto;color:#455e6c"> 8 March 2026 </font> </br> </br>
-Sriram Anand, Prabhath Chilakalapudi, Haitham Gaafer, Marvin Poul, Jan Janssen, Jörg Neugebauer </br>
-<i> Max Planck Institute for Sustainable Materials </i></br>
-</br>
-Sarath Menon, Minaam Qamar, Ralf Drautz </br>
-<i> Ruhr-Universität Bochum </i></br>
-</br>
-Tilmann Hickel </br>
-<i> Bundesanstalt für Materialforschung und -prüfung </i></br>
-</div><p>We will use <a class="reference external" href="https://github.com/pyiron/pyiron_workflow">pyiron_workflow</a>, a framework for constructing workflows as computational graphs from simple python functions, to create a simple workflow for data analysis. Coverting your script to a workflow that you can use a number of powerful features that pyiron provides, such as data management, job management, at the same time ensuring that they are fully reproducible.</p>
-<p>In this example, we will use a very common use case in Materials Science, which is to use data from a <a class="reference external" href="https://en.wikipedia.org/wiki/Tensile_testing">tensile test</a> to calculate the <a class="reference external" href="https://en.wikipedia.org/wiki/Young%27s_modulus">Young’s modulus</a>.</p>
-<p>We start from a datafile in csv format. The file containes data from a tensile test of typical S355 (material number: 1.0577) structural steel (designation of steel according to DIN EN 10025-2:2019). The data were generated in the <a class="reference external" href="https://zenodo.org/communities/bam">Bundesanstalt für Materialforschung und -prüfung (BAM)</a> in the framework of the digitization project <a class="reference external" href="https://www.materialdigital.de/">Innovationplatform MaterialDigital (PMD)</a> which, amongst other activities, aims to store data in a semantically and machine understandable way.</p>
-<section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Schilling, M., Glaubitz, S., Matzak, K., Rehmer, B., &amp; Skrotzki, B. (2022). Full dataset of several mechanical tests on an S355 steel sheet as reference data for digital representations (1.0.0) <a class="reference external" href="https://doi.org/10.5281/zenodo.6778336">Data set</a></p></li>
-</ul>
-<p>Let’s start with the visualisation of how such a workflow would look like:</p>
-<img src="img/workflow-dpg.png" width="700"><p>In the tensile test experiment, the force (load) and elongation values are recorded, and saved in a csv file which forms the dataset. We would like to read in this dataset, and convert the load and elongation to stress and strain. Then we plot the results, and calculate a the Young’s modulus, which is the slope of the linear, elastic part of the stress-strain curve. Your calculation could depend on the value of this strain-cutoff that is used, which is something we will explore.</p>
-<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
-<p class="title"><b>Note</b></p>
-Note that the stress and strain used in this notebook are actually <a href="https://en.wikipedia.org/wiki/Stress%E2%80%93strain_curve">engineering stress and strain</a>
-</div><p>To create such a workflow, we start by defining some functions which does each of this step. We will use ‘pyiron_workflow’ to compose them into a workflow, which can then be easily visualised and executed.</p>
-<p>Before we move on to the actual workflow, a crash course on Jupyter notebooks.</p>
-</section>
-<section id="jupyter-crash-course">
-<h2><font style="font-family:roboto;color:#455e6c"> Jupyter Crash Course </font><a class="headerlink" href="#jupyter-crash-course" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Select cells by clicking on them.</p></li>
-<li><p>Navigate through with <code class="docutils literal notranslate"><span class="pre">up</span></code> and <code class="docutils literal notranslate"><span class="pre">down</span></code> keys (or <code class="docutils literal notranslate"><span class="pre">k</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> for you vimmers).</p></li>
-<li><p>Press Enter to edit a cell.</p></li>
-<li><p>Press Shift-Enter to execute it.</p></li>
-<li><p>Create new cells above or below the current one with <code class="docutils literal notranslate"><span class="pre">a</span></code> or <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p></li>
-<li><p>Copy, cut and paste them with <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">v</span></code>.</p></li>
-<li><p>Press <code class="docutils literal notranslate"><span class="pre">m</span></code> to turn a cell into a markdown cell.</p></li>
-<li><p>See the <code class="docutils literal notranslate"><span class="pre">Help</span></code> in the toolbar for more.</p></li>
-</ol>
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>The initial version of <a class="reference external" href="https://doi.org/10.1016/j.commatsci.2018.07.043">pyiron</a> was developed as integrated development environment (IDE) for computational materials science. It combined a Jupyterlab based user interface, with HDF5 based data storage and an interface to high performance computing (HPC) clusters. While this combination was very successful for high-throughput screening on the atomistic scale, it still required the users to learn Python programming. To address this challenge the second version of pyiron introduces a visual programming interface in addition to the Python interface to accelerate the collaboration between expert users and application specialists.</p>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>The goal of this tutorial is to familiarize yourself with the visual programming interface for pyiron. To start the visual programming interface we import <code class="docutils literal notranslate"><span class="pre">pyiron_core</span></code> and then initialize the <code class="docutils literal notranslate"><span class="pre">PyironFlow</span></code> class with the and start the graphical interface by adding the extension <code class="docutils literal notranslate"><span class="pre">.gui</span></code>. The jupyter notebook cells are executed by pressing <strong>Shift</strong> and <strong>Enter</strong> at the same time.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">as_function_node</span><span class="p">,</span> <span class="n">Workflow</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
+<span class="n">PyironFlow</span><span class="p">(</span><span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">,</span> <span class="n">workflow_path</span><span class="o">=</span><span class="s2">&quot;pyiron_core_data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">gui</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "fa73fc866b694ae9a7ebbcd5166e4cdb"}</script></div>
 </div>
 </section>
-<section id="reading-in-the-experimental-results">
-<h2><font style="font-family:roboto;color:#455e6c"> Reading in the experimental results </font><a class="headerlink" href="#reading-in-the-experimental-results" title="Link to this heading">#</a></h2>
-<p>This function reads in the csv file:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>
+<section id="user-interface">
+<h2>User Interface<a class="headerlink" href="#user-interface" title="Link to this heading">#</a></h2>
+<p><img alt="screenshot" src="_images/vpinterface.png" /></p>
+<p>On the left side of the user interface is a drop-down menu with three categories, namely:</p>
+<ul class="simple">
+<li><p><strong>Node Library</strong>: The node library contains a list of pre-defined nodes which are the building blocks to develop workflows in pyiron. In the most simple terms a node is a Python function which takes one or more arguments as an input and returns one or more outputs. You can select a node from the node library and by clicking on it it appears on the canvas on the right side.</p></li>
+<li><p><strong>Output</strong>: After evaluation of a node the output of this node is visualized in the output section of the menu on the left side.</p></li>
+<li><p><strong>Logging Info</strong>: In addition, to the output also the log is visible in the left side menu, this is espeically helpful for debugging.</p></li>
+</ul>
+<p>On the right side of the user interface you see a large canvas to construct your workflow.</p>
+<ul class="simple">
+<li><p>The canvas is provides multiple tabs to work on multiple workflows at the same time. You can add additional tabs by clicking on the plus sign on the top left of the canvas. Still, for the purpose of this tutorial we just use the first tab.</p></li>
+<li><p>Below the controls for adding new tabs are a first set of floating controls, with the following functionality:</p>
+<ul>
+<li><p>The <strong>+</strong> button to zoom in and enlarge the nodes on the workflow canvas.</p></li>
+<li><p>The <strong>-</strong> button to zoom out.</p></li>
+<li><p>The <strong>focus</strong> button with the four corners which returns the user to the existing workflow. This does not work as long as no node is located on the canvas, but once the first node was placed on the canvas this button adjusts the focus to return to the workflow.</p></li>
+<li><p>The <strong>lock</strong> button to lock and unlock the workflow. Once a workflow is locked it can no longer be modified.</p></li>
+<li><p>The <strong>refresh</strong> button to reload the workflow. For loading large workflows the canvas might need to be refreshed to visualize all nodes immediately.</p></li>
+<li><p>The <strong>save</strong> button with the outgoing arrow to store the workflow on disk.</p></li>
+<li><p>The <strong>load</strong> button to reload the workflow from disk. If the workflow was not saved previously this removes all existing nodes from your canvas.</p></li>
+<li><p>The <strong>X</strong> button to delete the current workflow from the canvas.</p></li>
+<li><p>The <strong>group</strong> button illustrated by a dashed square for grouping nodes.</p></li>
+</ul>
+</li>
+<li><p>In the top right corner of the canvas you can name your workflow. Renaming the workflow changes the name of the tab as well as the file the workflow is stored in.</p></li>
+<li><p>In the bottom right corner there is a mini map of the whole canvas to help navigating the workflow.</p></li>
+</ul>
+<p>Furthermore, once you placed a node on the canvas, there is a node menu on top of the node:</p>
+<ul class="simple">
+<li><p>The <strong>Run</strong> button evaluates the node and returns output to the <strong>Output</strong> section of the left menu.</p></li>
+<li><p>The <strong>Source</strong> button shows the Python source code of the node in the <strong>Output</strong> section of the left menu.</p></li>
+</ul>
+<p>Finally, at the very bottom towards the left side, there is a white circle indicating a slider. Using this slider you can change the ratio of the left menu and the canvas, corresponding to your screensize.</p>
+<p>All components are introduced in more detail in the following.</p>
+</section>
+<section id="first-node">
+<h2>First Node<a class="headerlink" href="#first-node" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>To construct your first workflow place the <strong>ReadCSV</strong> node on the canvas. It is located in the <strong>Node Library</strong> under <strong>basic</strong> and <strong>file</strong>.</p></li>
+<li><p>In the mandatory field for <strong>filename</strong>, which is highlighted with a red frame around it, you can enter <code class="docutils literal notranslate"><span class="pre">data/dataset_1.csv</span></code> to load the column separated value (CSV) file named <code class="docutils literal notranslate"><span class="pre">dataset_1.csv</span></code> located in the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder.</p></li>
+<li><p>Afterwards you can evaluated the node by clicking the <strong>Run</strong> button in the node menu directly on top of the node. As a result you see the output being visualized on the left side in the <strong>Output</strong> section of the left side menu.</p></li>
+<li><p>Furthermore, you can rename the node by clicking on the name <strong>ReadCSV</strong> and change it to <strong>ReadDataset</strong>. After renaming the node you can confirm the renaming by pressing enter.</p></li>
+<li><p>Finally, you can remove an existing node, either by deleting the whole workflow using the <strong>X</strong> button on the top left corner of the canvas. Or by selecting the node by clicking on it and then pressing the <strong>Backspace</strong> key on your keyboard.</p></li>
+</ul>
+<p><img alt="ReadCSV" src="_images/ReadCSV.png" /></p>
+<p>For advanced users, you can take a look at the Python source code of the <strong>ReadCSV</strong> node by clicking on the <strong>Source</strong> button of the node menu on top of the <strong>ReadCSV</strong> node. The source code is then printed to the <strong>Output</strong> section of the left side menu.</p>
+<p>The source code for the <strong>ReadCSV</strong> node is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">ReadCSV</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">header</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">decimal</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="p">):</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">decimal</span><span class="o">=</span><span class="n">decimal</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p>Then a function to convert the load to stress:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">ConvertLoadToStress</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">area</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Read in csv file, convert load to stress</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kN_to_N</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># convert kiloNewton to Newton</span>
-    <span class="n">mm2_to_m2</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># convert square millimeters to square meters</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Stress&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Load&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">kN_to_N</span> <span class="o">/</span> <span class="p">(</span><span class="n">area</span> <span class="o">*</span> <span class="n">mm2_to_m2</span><span class="p">)</span>
-    <span class="c1">#although it says extensometer elongation, the values are in percent! </span>
-    <span class="n">strain</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Extensometer elongation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="c1">#subtract the offset from the dataset</span>
-    <span class="n">strain</span> <span class="o">=</span> <span class="n">strain</span> <span class="o">-</span> <span class="n">strain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">stress</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Stress&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">stress</span><span class="p">,</span> <span class="n">strain</span>
-</pre></div>
-</div>
-</div>
-</div>
+<p>As you can see it is primarily a Python function with the <code class="docutils literal notranslate"><span class="pre">&#64;as_function_node</span></code> decorator from the <code class="docutils literal notranslate"><span class="pre">pyiron_core</span></code> package. In addition, the import statement for the <code class="docutils literal notranslate"><span class="pre">pandas</span></code> package is placed inside the function to separate the namespace and minimize conflicts.</p>
 </section>
-<section id="calculate-young-s-modulus">
-<h2><font style="font-family:roboto;color:#455e6c"> Calculate Young’s modulus </font><a class="headerlink" href="#calculate-young-s-modulus" title="Link to this heading">#</a></h2>
-<p>The stress and strain values, which are outputs of the previous function is used for a linear fit in this function, and the slope is calculated. The slope is the Young’s modulus. The calculated value of Young’s modulus will depend on the <code class="docutils literal notranslate"><span class="pre">strain_cutoff</span></code> parameter.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">CalculateYoungsModulus</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">strain</span><span class="p">,</span> <span class="n">strain_cutoff</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-    <span class="n">percent_to_fraction</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># convert</span>
-    <span class="n">MPa_to_GPa</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert MPa to GPa</span>
-    <span class="n">arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">strain</span><span class="p">)</span> <span class="o">-</span> <span class="n">strain_cutoff</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">strain</span><span class="p">[:</span><span class="n">arg</span><span class="p">],</span> <span class="n">stress</span><span class="p">[:</span><span class="n">arg</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">youngs_modulus</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">percent_to_fraction</span> <span class="o">*</span> <span class="n">MPa_to_GPa</span>
-    <span class="k">return</span> <span class="n">youngs_modulus</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="plotting-the-results">
-<h2><font style="font-family:roboto;color:#455e6c"> Plotting the results </font><a class="headerlink" href="#plotting-the-results" title="Link to this heading">#</a></h2>
-<p>This function plots the stress and strain.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@as_function_node</span><span class="p">(</span><span class="s2">&quot;fig&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">Plot</span><span class="p">(</span><span class="n">stress</span><span class="p">,</span> <span class="n">strain</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">strain</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Strain [%]&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Stress [MPa]&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">fig</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="creating-a-workflow">
-<h2><font style="font-family:roboto;color:#455e6c"> Creating a workflow </font><a class="headerlink" href="#creating-a-workflow" title="Link to this heading">#</a></h2>
-<p>Now we can combine all the functions together to compose a workflow. Each function corresponds to a step in the workflow and their inputs and outputs are linked.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;youngs_modulus&quot;</span><span class="p">)</span>
-<span class="n">wf</span><span class="o">.</span><span class="n">read_csv</span> <span class="o">=</span> <span class="n">ReadCSV</span><span class="p">(</span><span class="s1">&#39;data/dataset_1.csv&#39;</span><span class="p">)</span>
-<span class="n">wf</span><span class="o">.</span><span class="n">stresses</span> <span class="o">=</span> <span class="n">ConvertLoadToStress</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">read_csv</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
-
-<span class="n">wf</span><span class="o">.</span><span class="n">youngs_modulus</span> <span class="o">=</span> <span class="n">CalculateYoungsModulus</span><span class="p">(</span>
-    <span class="n">stress</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">stress</span><span class="p">,</span>
-    <span class="n">strain</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">strain</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">wf</span><span class="o">.</span><span class="n">plot</span> <span class="o">=</span> <span class="n">Plot</span><span class="p">(</span>
-    <span class="n">stress</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">stress</span><span class="p">,</span>
-    <span class="n">strain</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">stresses</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">strain</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Now we execute the workflow</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" src="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" />
-<img alt="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" src="_images/3eaa34bb75024c96808dcb19a7282e1952ea08bd5f738ce1d6fb1947f5e0ca07.png" />
-</div>
-</div>
-</section>
-<section id="a-graphical-user-interface-for-running-workflows">
-<h2><font style="font-family:roboto;color:#455e6c"> A graphical user interface for running workflows </font><a class="headerlink" href="#a-graphical-user-interface-for-running-workflows" title="Link to this heading">#</a></h2>
-<p>We can use use the tool <a class="reference external" href="https://github.com/pyiron/pyironflow">pyironflow</a> to visually compose and execute the workflow.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Library</span></code> tab on the left side of the GUI provides the necessary nodes to compose the workflow. You can add them to our workflow by clicking on it. The different nodes can be connected together by clicking on the input and outputs. Finally, a Node, or a connection can be deleted by using the <code class="docutils literal notranslate"><span class="pre">Backspace</span></code> key.</p>
-<p>The following nodes would be useful to compose the workflow:</p>
+<section id="first-workflow">
+<h2>First Workflow<a class="headerlink" href="#first-workflow" title="Link to this heading">#</a></h2>
+<p>In the previous step you executed one workflow node, now the next step is combining two workflow nodes to build the first workflow.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">utilities</span> <span class="pre">-&gt;</span> <span class="pre">ReadCSV</span></code> to read csv file</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">experimental</span> <span class="pre">-&gt;</span> <span class="pre">tensile_test</span> <span class="pre">-&gt;</span> <span class="pre">ConvertLoadToStress</span></code> and <code class="docutils literal notranslate"><span class="pre">experimental</span> <span class="pre">-&gt;</span> <span class="pre">tensile_test</span> <span class="pre">-&gt;</span> <span class="pre">CalculateYoungsModulus</span></code> nodes for converting the data, and for calculating the Youngs Modulus</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plotting</span> <span class="pre">-&gt;</span> <span class="pre">Plot</span></code> for creating the plot.</p></li>
+<li><p>Select the <strong>ConvertLoadToStress</strong> node from the left side menu under <strong>Node Library</strong> in the module <strong>experiment</strong> and the sub module <strong>youngs_modulus</strong>. It is placed right under the <strong>ReadCSV</strong> node you created previously.</p></li>
+<li><p>Move the new <strong>ConvertLoadToStress</strong> node to the right side of the <strong>ReadCSV</strong> node, leaving a bit of room between them to connect them.</p></li>
+<li><p>Click on the <strong>black dot</strong> on the right side of the <strong>ReadCSV</strong> node next to the letters <strong>csv</strong> which represents the output channel of this node. By clicking on it the black dot is highlighted in light blue and you can start drawing a connection line from the black dot next to <strong>csv</strong> on the <strong>ReadCSV</strong> node to the black dot <strong>df</strong> on the left side of the <strong>ConvertLoadToStress</strong> node.</p></li>
+<li><p>In case you made a wrong connection, then you can click on the <strong>black line</strong> indicating the connection between two nodes and again delete it by clicking the <strong>Backspace</strong> key.</p></li>
+<li><p>For the second mandatory input named <strong>area</strong> of the <strong>ConvertLoadToStress</strong> node enter <strong>120</strong>.</p></li>
+<li><p>After both inputs <strong>df</strong> and <strong>area</strong> of the <strong>ConvertLoadToStress</strong> node are successfully connected or filled with manual entries, you can call <strong>Run</strong> on the <strong>ConvertLoadToStress</strong> node. This evaluates both the <strong>ReadCSV</strong> node and the <strong>ConvertLoadToStress</strong> node and returns the output in the <strong>output</strong> section of the left side menu.</p></li>
 </ul>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">(</span><span class="n">wf_list</span><span class="o">=</span><span class="p">[</span><span class="n">wf</span><span class="p">])</span>
-<span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "01b26014530d4eb3898faf0795793bcd"}</script></div>
-</div>
+<p><img alt="ConvertLoadToStress" src="_images/convertloadtostress.png" /></p>
+</section>
+<section id="young-s-modulus">
+<h2>Young’s Modulus<a class="headerlink" href="#young-s-modulus" title="Link to this heading">#</a></h2>
+<p>In this example, we will use a very common use case in Materials Science, which is to use data from a <a class="reference external" href="https://en.wikipedia.org/wiki/Tensile_testing">tensile test</a> to calculate the <a class="reference external" href="https://en.wikipedia.org/wiki/Young%27s_modulus">Young’s modulus</a>.</p>
+<p>We start from a datafile in csv format. The file containes data from a tensile test of typical S355 (material number: 1.0577) structural steel (designation of steel according to DIN EN 10025-2:2019). The data were generated in the <a class="reference external" href="https://zenodo.org/communities/bam">Bundesanstalt für Materialforschung und -prüfung (BAM)</a> in the framework of the digitization project <a class="reference external" href="https://www.materialdigital.de/">Innovationplatform MaterialDigital (PMD)</a> which, amongst other activities, aims to store data in a semantically and machine understandable way.</p>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Schilling, M., Glaubitz, S., Matzak, K., Rehmer, B., &amp; Skrotzki, B. (2022). Full dataset of several mechanical tests on an S355 steel sheet as reference data for digital representations (1.0.0) <a class="reference external" href="https://doi.org/10.5281/zenodo.6778336">Data set</a></p></li>
+</ul>
+<p>Let’s start with the visualisation of how such a workflow would look like:</p>
+<p><img alt="workflow" src="_images/workflow-dpg.png" /></p>
+<p>In the tensile test experiment, the force (load) and elongation values are recorded, and saved in a csv file which forms the dataset. We would like to read in this dataset, and convert the load and elongation to stress and strain. Then we plot the results, and calculate a the Young’s modulus, which is the slope of the linear, elastic part of the stress-strain curve. Your calculation could depend on the value of this strain-cutoff that is used, which is something we will explore.</p>
 <div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
-<p class="title"><b>Need the solution?</b></p>
-Copy paste the following code into a cell and execute:
-</br>
-</br>
-pf = PyironFlow([Workflow('tensile_example_1')]) </br>
-pf.gui
-</div><div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
 <p class="title"><b>Note</b></p>
-As we have seen, the ranges of stress and strain have to chosen carefully. In practice, this is done by calculating <a href="https://materion.com/-/media/files/alloy/newsletters/technical-tidbits/issue-no-47---yield-strength-and-other-near-elastic-properties.pdf">R<sub>P0,2</sub> yield stress</a>
-</div><section id="software-used-in-this-notebook">
-<h3><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font><a class="headerlink" href="#software-used-in-this-notebook" title="Link to this heading">#</a></h3>
+Note that the stress and strain used in this notebook are actually <a href="https://en.wikipedia.org/wiki/Stress%E2%80%93strain_curve">engineering stress and strain</a>
+</div>
+<p><img alt="calculateYoungModulus" src="_images/calculateYoungModulus.png" /></p>
+<p>The workflow is created by comining four nodes:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://pyiron.org/">pyiron</a></p></li>
-<li><p><a class="reference external" href="https://github.com/pyiron/pyiron_workflow">pyiron_workflow</a></p></li>
+<li><p><strong>ReadCSV</strong> node from the <strong>basic</strong> module in the <strong>Node Library</strong> under the sub module <strong>file</strong> to read a CSV file and convert it to a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> DataFrame. In this example we set the <strong>filename</strong> parameter of the <strong>ReadCSV</strong> node to <code class="docutils literal notranslate"><span class="pre">data/dataset_1.csv</span></code> and leave the rest of the parameters with their default values.</p></li>
+<li><p><strong>ConvertLoadToStress</strong> node from the <strong>experiment</strong> module in the <strong>Node Library</strong> under the sub module <strong>youngs_modulus</strong> to convert the strain to stress. The <strong>ConvertLoadToStress</strong> node has to inputs the <strong>df</strong> input which is connected to the <strong>csv</strong> output of the <strong>ReadCSV</strong> node and the <strong>area</strong> which is set to <code class="docutils literal notranslate"><span class="pre">120</span></code>.</p></li>
+<li><p><strong>CalculateYoungsModulus</strong> node again from the <strong>experiment</strong> module in the <strong>Node Library</strong> under the sub module <strong>youngs_modulus</strong> to calculate the Young’s modulus by fitting the strain and stress. The <strong>strain</strong> input and the <strong>stress</strong> input of the <strong>CalculateYoungsModulus</strong> are both connected to the <strong>strain</strong> output and <strong>stress</strong> output of the <strong>ConvertLoadToStress</strong> node. The remaining input parameter <strong>strain_cutoff</strong> can remain at the default value of <code class="docutils literal notranslate"><span class="pre">0.2</span></code>.</p></li>
+<li><p><strong>Plot</strong> node again from the <strong>experiment</strong> module in the <strong>Node Library</strong> under the sub module <strong>youngs_modulus</strong> to visualize the stress strain dependence in an xy-plot with the x-axis being the strain and the y-axis being the stress. The <strong>strain</strong> input and the <strong>stress</strong> input of the <strong>Plot</strong> node are both connected to the <strong>strain</strong> output and <strong>stress</strong> output of the <strong>ConvertLoadToStress</strong> node. The remaining input parameter <strong>format</strong> can remain at the default value of <code class="docutils literal notranslate"><span class="pre">-</span></code> which refers to a line plot in <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> the underlying library for the <strong>Plot</strong> node.</p></li>
 </ul>
-<img src="img/logo_roll.png" width="1200"></section>
+</section>
+</section>
+<section id="saving-and-loading-workflows">
+<h2>Saving and Loading Workflows<a class="headerlink" href="#saving-and-loading-workflows" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>After the creation of the workflow the workflow can be renamed by typing the name <code class="docutils literal notranslate"><span class="pre">YoungsModulus</span></code> as one word without spaces in the text field in the top right corner of the canvas. The name is confirmed by pressing <strong>Enter</strong>. After renaming the workflow the name of the tab is automatically changed.</p></li>
+<li><p>By pressing the arrow pointing to the top in the menu in the top left corner of the canvas the workflow is saved. The workflow is saved as JSON file in <code class="docutils literal notranslate"><span class="pre">~/pyiron_core_data/workflows</span></code>. This JSON format is compatible to the <a class="reference external" href="https://doi.org/10.1039/D5DD00231A">Python Workflow Definition</a> so the same workflow can be used with other workflow engines.</p></li>
+<li><p>After saving the workflow you can clear the canvas by pressing the <strong>X</strong> button in the menu in the top left corner of the canvas.</p></li>
+<li><p>To reload the workflow you can now use the button with the arrow pointing downwards. The workflow is reloaded based on the name of the Workflow. So by entering a different name in the top right corner of the canvas you can load a differnt workflow.</p></li>
+</ul>
 </section>
 </section>
 
@@ -591,16 +508,16 @@ As we have seen, the ranges of stress and strain have to chosen carefully. In pr
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "pyiron"
         },
         kernelOptions: {
-            name: "python3",
+            name: "pyiron",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'pyiron'</script>
 
                 </article>
               
@@ -622,11 +539,11 @@ As we have seen, the ranges of stress and strain have to chosen carefully. In pr
       </div>
     </a>
     <a class="right-next"
-       href="02_assyst.html"
+       href="02_pythoninterface.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></p>
+        <p class="prev-next-title">Python Interface</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -646,16 +563,15 @@ As we have seen, the ranges of stress and strain have to chosen carefully. In pr
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jupyter-crash-course"><font style="font-family:roboto;color:#455e6c"> Jupyter Crash Course </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-in-the-experimental-results"><font style="font-family:roboto;color:#455e6c"> Reading in the experimental results </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-young-s-modulus"><font style="font-family:roboto;color:#455e6c"> Calculate Young’s modulus </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-the-results"><font style="font-family:roboto;color:#455e6c"> Plotting the results </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-workflow"><font style="font-family:roboto;color:#455e6c"> Creating a workflow </font></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-graphical-user-interface-for-running-workflows"><font style="font-family:roboto;color:#455e6c"> A graphical user interface for running workflows </font></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-used-in-this-notebook"><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#user-interface">User Interface</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-node">First Node</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-workflow">First Workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#young-s-modulus">Young’s Modulus</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-and-loading-workflows">Saving and Loading Workflows</a></li>
 </ul>
   </nav></div>
 

@@ -62,7 +62,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '05_thermodynamics';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Validation of interatomic potentials" href="04_validation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -125,6 +124,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -174,12 +175,10 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
 </ul>
 
     </div>
@@ -433,7 +432,8 @@ Please see the end of this notebook, or  <a href="https://journals.aps.org/prmat
 </div><p>Due to our limited time, we will show the calculation of melting temperature, the end point on the phase diagram. We leverage a software tool for calculation of free energies, <a class="reference external" href="https://calphy.org">calphy</a> along with pyiron for efficient and automated free energy calculations. For a detailed tutorial, see <a class="reference external" href="https://workshop.pyiron.org/potentials-workshop-2022/phase_diagram/Intro.html">here</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">PyironFlow</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
 </pre></div>
 </div>
 </div>
@@ -452,17 +452,17 @@ Please see the end of this notebook, or  <a href="https://journals.aps.org/prmat
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.engine.lammps</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListPotentials</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.calculator.calphy</span><span class="w"> </span><span class="kn">import</span> <span class="n">InputClass</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.lammps</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListPotentials</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.calculator.calphy</span><span class="w"> </span><span class="kn">import</span> <span class="n">InputClass</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.calculator.calphy</span><span class="w"> </span><span class="kn">import</span> <span class="n">SolidFreeEnergy</span><span class="p">,</span> <span class="n">SolidFreeEnergyWithTemp</span><span class="p">,</span> <span class="n">LiquidFreeEnergy</span><span class="p">,</span> <span class="n">LiquidFreeEnergyWithTemp</span><span class="p">,</span> <span class="n">PlotFreeEnergy</span><span class="p">,</span> <span class="n">CalcPhaseTransformationTemp</span><span class="p">,</span> <span class="n">CollectResults</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repeat</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.calculator.calphy</span><span class="w"> </span><span class="kn">import</span> <span class="n">SolidFreeEnergy</span><span class="p">,</span> <span class="n">SolidFreeEnergyWithTemp</span><span class="p">,</span> <span class="n">LiquidFreeEnergy</span><span class="p">,</span> <span class="n">LiquidFreeEnergyWithTemp</span><span class="p">,</span> <span class="n">PlotFreeEnergy</span><span class="p">,</span> <span class="n">CalcPhaseTransformationTemp</span><span class="p">,</span> <span class="n">CollectResults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repeat</span>
 </pre></div>
 </div>
 </div>
@@ -487,13 +487,13 @@ Please see the end of this notebook, or  <a href="https://journals.aps.org/prmat
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "909b7c81de7a43169f83a96409716be8"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "43947ffecfa840bdb18a2e65392672f8"}</script></div>
 </div>
 <div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
 <p class="title"><b>Need the solution?</b></p>
@@ -520,8 +520,8 @@ pf.gui
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rattle</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.thermodynamics.landau</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemperatureLinePhase</span><span class="p">,</span> <span class="n">TransitionTemperature</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rattle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.thermodynamics.landau</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemperatureLinePhase</span><span class="p">,</span> <span class="n">TransitionTemperature</span>
 </pre></div>
 </div>
 </div>
@@ -538,7 +538,7 @@ pf.gui
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">Bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">Repeat</span> <span class="o">=</span> <span class="n">Repeat</span><span class="p">(</span><span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Bulk</span><span class="p">,</span> <span class="n">repeat_scalar</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">Rattle</span> <span class="o">=</span> <span class="n">Rattle</span><span class="p">(</span><span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Repeat</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">stdev</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-<span class="n">wf</span><span class="o">.</span><span class="n">InputClass</span> <span class="o">=</span> <span class="n">InputClass</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">temperature_stop</span><span class="o">=</span><span class="mi">1100</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">InputClass</span> <span class="o">=</span> <span class="n">InputClass</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mi">900</span><span class="p">,</span> <span class="n">temperature_stop</span><span class="o">=</span><span class="mi">1100</span><span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">SolidFreeEnergyWithTemp</span> <span class="o">=</span> <span class="n">SolidFreeEnergyWithTemp</span><span class="p">(</span><span class="n">inp</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">InputClass</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Repeat</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="s2">&quot;2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1&quot;</span><span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">LiquidFreeEnergyWithTemp</span> <span class="o">=</span> <span class="n">LiquidFreeEnergyWithTemp</span><span class="p">(</span><span class="n">inp</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">InputClass</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">Rattle</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="s2">&quot;2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1&quot;</span><span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">Solid</span> <span class="o">=</span> <span class="n">TemperatureLinePhase</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;AlSolid&quot;</span><span class="p">,</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">temperatures</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">SolidFreeEnergyWithTemp</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span> <span class="n">free_energies</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">SolidFreeEnergyWithTemp</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">free_energy</span><span class="p">)</span>
@@ -550,7 +550,7 @@ pf.gui
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -562,7 +562,7 @@ pf.gui
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "61ce5a7d37424198b76506942c0b2752"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "717f17644f3d44adaac6b38a9bb90cf3"}</script></div>
 </div>
 <div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
 <p class="title"><b>Need the solution?</b></p>
@@ -577,9 +577,9 @@ pf.gui
 <p>Now that we have seen the thermodynamic functions in Landau, we will make a simple eutectic binary phase diagram with Landau.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.thermodynamics.landau</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinePhase</span><span class="p">,</span> <span class="n">TemperatureLinePhase</span><span class="p">,</span> <span class="n">IdealSolution</span><span class="p">,</span> <span class="n">CalcPhaseDiagram</span><span class="p">,</span> <span class="n">PlotConcPhaseDiagram</span><span class="p">,</span> <span class="n">PlotMuPhaseDiagram</span><span class="p">,</span> <span class="n">PhasesFromDataFrame</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.list</span><span class="w"> </span><span class="kn">import</span> <span class="n">List5</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linspace</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.thermodynamics.landau</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinePhase</span><span class="p">,</span> <span class="n">TemperatureLinePhase</span><span class="p">,</span> <span class="n">IdealSolution</span><span class="p">,</span> <span class="n">CalcPhaseDiagram</span><span class="p">,</span> <span class="n">PlotConcPhaseDiagram</span><span class="p">,</span> <span class="n">PlotMuPhaseDiagram</span><span class="p">,</span> <span class="n">PhasesFromDataFrame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.list</span><span class="w"> </span><span class="kn">import</span> <span class="n">List5</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linspace</span>
 </pre></div>
 </div>
 </div>
@@ -614,7 +614,7 @@ pf.gui
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c6d04720d9e34f3191130d57a22fa12c"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "8c9acc2f47a14f8cba10833d9fd25496"}</script></div>
 </div>
 </section>
 <section id="mgca-phase-diagram">
@@ -622,7 +622,7 @@ pf.gui
 <p>Now we will take the same approach to calculate a phase diagram with real data, in this case the MgCa system. The data can be found <a class="reference external" href="https://github.com/eisenforschung/mgalca-mtp-data">here</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadDataFrame</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadDataFrame</span>
 </pre></div>
 </div>
 </div>
@@ -678,13 +678,13 @@ pf.gui
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "435a953a50684cc4ba858687c86c7517"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "4ba7146b2da04a519cfbe33fc1dab516"}</script></div>
 </div>
 <hr class="docutils" />
 <hr class="docutils" />
@@ -930,15 +930,6 @@ E = - \epsilon \log(1-\exp(-r^2/\sigma^2))
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="04_validation.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></p>
-      </div>
-    </a>
 </div>
                 </footer>
               

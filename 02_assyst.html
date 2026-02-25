@@ -60,8 +60,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '02_assyst';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Parametrising a Machine Learning Interatomic Potential" href="03_fitting.html" />
-    <link rel="prev" title="Introduction to Workflows" href="01_introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,6 +122,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -173,12 +173,10 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
 </ul>
 
     </div>
@@ -399,8 +397,9 @@ Tilmann Hickel </br>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">PyironFlow</span><span class="p">,</span> <span class="n">as_function_node</span><span class="p">,</span> <span class="n">as_inp_dataclass_node</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementInput</span><span class="p">,</span> <span class="n">Stoichiometry</span><span class="p">,</span> <span class="n">StoichiometryTable</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">as_function_node</span><span class="p">,</span> <span class="n">as_inp_dataclass_node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementInput</span><span class="p">,</span> <span class="n">Stoichiometry</span><span class="p">,</span> <span class="n">StoichiometryTable</span>
 </pre></div>
 </div>
 </div>
@@ -518,13 +517,13 @@ and also sample the chemical space more densely.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "3c5a1111323a46ce957a7d7f37e74f0d"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c24837d29ad64f879cf5c8267490e733"}</script></div>
 </div>
 <div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
 <p class="title"><b>Task</b></p>
@@ -542,9 +541,9 @@ and also sample the chemical space more densely.</p>
     Load this workflow for the solution
 </div><div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Or</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">Multiply</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilterSize</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Or</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">Multiply</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilterSize</span>
 </pre></div>
 </div>
 </div>
@@ -565,13 +564,13 @@ and also sample the chemical space more densely.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "b9f0c91be40f4c60b737cf528da8b14e"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "5098212c3f6e4419b1301a8631d51f4b"}</script></div>
 </div>
 </section>
 <section id="full-workflow-for-a-small-structure-set">
@@ -580,12 +579,12 @@ and also sample the chemical space more densely.</p>
 Usually we would run them in low convergence DFT.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotSPG</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceGroupSampling</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.calculator.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">RelaxLoop</span><span class="p">,</span> <span class="n">GenericOptimizerSettings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">RattleLoop</span><span class="p">,</span> <span class="n">StretchLoop</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.engine.grace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grace</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.structure.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">CombineStructures</span><span class="p">,</span> <span class="n">SaveStructures</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.assyst.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotSPG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.assyst.stoichiometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpaceGroupSampling</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.calculator.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">RelaxLoop</span><span class="p">,</span> <span class="n">GenericOptimizerSettings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">RattleLoop</span><span class="p">,</span> <span class="n">StretchLoop</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.grace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">CombineStructures</span><span class="p">,</span> <span class="n">SaveStructures</span>
 </pre></div>
 </div>
 </div>
@@ -602,75 +601,68 @@ Usually we would run them in low convergence DFT.</p>
     <span class="n">element_nodes</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">e1</span><span class="p">,</span> <span class="o">*</span><span class="n">elements</span> <span class="o">=</span> <span class="n">elements</span>
-        <span class="n">stoi</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">min_atoms</span><span class="o">=</span><span class="n">min_atoms</span><span class="p">,</span> <span class="n">max_atoms</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">)</span>
+        <span class="n">stoi</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">e1</span><span class="p">,</span> <span class="n">min_ion</span><span class="o">=</span><span class="n">min_atoms</span><span class="p">,</span> <span class="n">max_ion</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="s1">&#39;Element_1&#39;</span><span class="p">,</span> <span class="n">stoi</span><span class="p">)</span>
         <span class="n">element_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stoi</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
-            <span class="n">en</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">min_atoms</span><span class="o">=</span><span class="n">min_atoms</span><span class="p">,</span> <span class="n">max_atoms</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">)</span>
+            <span class="n">en</span> <span class="o">=</span> <span class="n">ElementInput</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">min_ion</span><span class="o">=</span><span class="n">min_atoms</span><span class="p">,</span> <span class="n">max_ion</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Element_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">en</span><span class="p">)</span>
             <span class="n">element_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">en</span><span class="p">)</span>
-            <span class="n">stoi</span> <span class="o">=</span> <span class="n">Multiply</span><span class="p">(</span><span class="n">stoi</span><span class="p">,</span> <span class="n">en</span><span class="p">)</span>
+            <span class="n">stoi</span> <span class="o">=</span> <span class="n">Multiply</span><span class="p">(</span><span class="n">stoi</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Element_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Multiply_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">stoi</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">wf</span><span class="o">.</span><span class="n">Multiply</span> <span class="o">=</span> <span class="n">stoi</span>
-        <span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
-                <span class="n">elements</span><span class="o">=</span><span class="n">stoi</span><span class="p">,</span>
-                <span class="n">spacegroups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">max_atoms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">element_nodes</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_atoms</span><span class="p">,</span>
-                <span class="n">max_structures</span><span class="o">=</span><span class="n">max_structures</span>
-        <span class="p">)</span>
+            <span class="c1"># wf.Multiply = stoi</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
+                    <span class="n">elements</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Multiply_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span>
+                    <span class="n">spacegroups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">max_atoms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">element_nodes</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_atoms</span><span class="p">,</span>
+                    <span class="n">max_structures</span><span class="o">=</span><span class="n">max_structures</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
+                    <span class="n">elements</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">wf</span><span class="p">,</span> <span class="s1">&#39;Element_1&#39;</span><span class="p">),</span>
+                    <span class="n">spacegroups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">max_atoms</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">element_nodes</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_atoms</span><span class="p">,</span>
+                    <span class="n">max_structures</span><span class="o">=</span><span class="n">max_structures</span>
+            <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
+        <span class="n">wf</span><span class="o">.</span><span class="n">spg</span> <span class="o">=</span> <span class="n">SpaceGroupSampling</span><span class="p">(</span>
                 <span class="n">max_atoms</span><span class="o">=</span><span class="n">max_atoms</span><span class="p">,</span>
                 <span class="n">max_structures</span><span class="o">=</span><span class="n">max_structures</span>
         <span class="p">)</span>
-    <span class="n">plotspg</span> <span class="o">=</span> <span class="n">PlotSPG</span><span class="p">(</span><span class="n">spg</span><span class="p">)</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">plotspg</span> <span class="o">=</span> <span class="n">PlotSPG</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">spg</span><span class="p">)</span>
 
-    <span class="n">calc_config</span> <span class="o">=</span> <span class="n">Grace</span><span class="p">()</span>
-    <span class="n">optimizer_settings</span> <span class="o">=</span> <span class="n">GenericOptimizerSettings</span><span class="p">()</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">calc_config</span> <span class="o">=</span> <span class="n">Grace</span><span class="p">()</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">optimizer_settings</span> <span class="o">=</span> <span class="n">GenericOptimizerSettings</span><span class="p">()</span>
 
-    <span class="n">volume_relax</span> <span class="o">=</span> <span class="n">RelaxLoop</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">calc_config</span><span class="p">,</span>
-                             <span class="n">opt</span><span class="o">=</span><span class="n">optimizer_settings</span><span class="p">,</span> <span class="n">structures</span><span class="o">=</span><span class="n">spg</span><span class="p">)</span>
-    <span class="n">full_relax</span> <span class="o">=</span> <span class="n">RelaxLoop</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">calc_config</span><span class="p">,</span>
-                           <span class="n">opt</span><span class="o">=</span><span class="n">optimizer_settings</span><span class="p">,</span>
-                           <span class="n">structures</span><span class="o">=</span><span class="n">volume_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">)</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">volume_relax</span> <span class="o">=</span> <span class="n">RelaxLoop</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">calc_config</span><span class="p">,</span>
+                             <span class="n">opt</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">optimizer_settings</span><span class="p">,</span> <span class="n">structures</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">spg</span><span class="p">)</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">full_relax</span> <span class="o">=</span> <span class="n">RelaxLoop</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">calculator</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">calc_config</span><span class="p">,</span>
+                           <span class="n">opt</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">optimizer_settings</span><span class="p">,</span>
+                           <span class="n">structures</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">volume_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">)</span>
 
-    <span class="n">rattle</span> <span class="o">=</span> <span class="n">RattleLoop</span><span class="p">(</span>
-            <span class="n">structures</span><span class="o">=</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">Rattle</span> <span class="o">=</span> <span class="n">RattleLoop</span><span class="p">(</span>
+            <span class="n">structures</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
             <span class="n">sigma</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
             <span class="n">samples</span><span class="o">=</span><span class="mi">4</span>
     <span class="p">)</span>
 
-    <span class="n">stretch</span> <span class="o">=</span> <span class="n">StretchLoop</span><span class="p">(</span>
-            <span class="n">structures</span><span class="o">=</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">Stretch</span> <span class="o">=</span> <span class="n">StretchLoop</span><span class="p">(</span>
+            <span class="n">structures</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
             <span class="n">hydro</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
             <span class="n">shear</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
             <span class="n">samples</span><span class="o">=</span><span class="mi">4</span>
     <span class="p">)</span>
 
-    <span class="n">combine_structures</span> <span class="o">=</span> <span class="n">CombineStructures</span><span class="p">(</span>
-            <span class="n">spg</span><span class="p">,</span>
-            <span class="n">volume_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
-            <span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
-            <span class="n">rattle</span><span class="p">,</span>
-            <span class="n">stretch</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">CombineStructures</span> <span class="o">=</span> <span class="n">CombineStructures</span><span class="p">(</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">spg</span><span class="p">,</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">volume_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">full_relax</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">relaxed_structures</span><span class="p">,</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">Rattle</span><span class="p">,</span>
+            <span class="n">wf</span><span class="o">.</span><span class="n">Stretch</span>
     <span class="p">)</span>
 
-    <span class="n">savestructures</span> <span class="o">=</span> <span class="n">SaveStructures</span><span class="p">(</span><span class="n">combine_structures</span><span class="p">,</span> <span class="s2">&quot;data/Structures_Everything&quot;</span><span class="p">)</span>
-
-    <span class="n">wf</span><span class="o">.</span><span class="n">SpaceGroupSampling</span> <span class="o">=</span> <span class="n">spg</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">PlotSPG</span> <span class="o">=</span> <span class="n">plotspg</span>
-
-    <span class="n">wf</span><span class="o">.</span><span class="n">Calculator</span> <span class="o">=</span> <span class="n">calc_config</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">OptimizerSettings</span> <span class="o">=</span> <span class="n">optimizer_settings</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">VolumeRelax</span> <span class="o">=</span> <span class="n">volume_relax</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">FullRelax</span> <span class="o">=</span> <span class="n">full_relax</span>
-
-    <span class="n">wf</span><span class="o">.</span><span class="n">Rattle</span> <span class="o">=</span> <span class="n">rattle</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">Stretch</span> <span class="o">=</span> <span class="n">stretch</span>
-
-    <span class="n">wf</span><span class="o">.</span><span class="n">CombineStructures</span> <span class="o">=</span> <span class="n">combine_structures</span>
-    <span class="n">wf</span><span class="o">.</span><span class="n">SaveStructures</span> <span class="o">=</span> <span class="n">savestructures</span>
+    <span class="n">wf</span><span class="o">.</span><span class="n">SaveStructures</span> <span class="o">=</span> <span class="n">SaveStructures</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">CombineStructures</span><span class="p">,</span> <span class="s2">&quot;data/Structures_Everything&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wf</span>
 </pre></div>
 </div>
@@ -682,27 +674,10 @@ Usually we would run them in low convergence DFT.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7f3fe2a6fa60&gt;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>implement connect to self
-implement connect to self
-implement connect to self
-implement connect to self
-connected to node (self)
-connected to node (self)
-connected to node (self)
-connected to node (self)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -714,7 +689,7 @@ connected to node (self)
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f8912b786efd429fa4967593bf27f06f"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "d5db7a5de6084e93afb0cdeb4ab5263a"}</script></div>
 </div>
 </section>
 <section id="precomputed-full-workflow-with-large-structure-set">
@@ -727,27 +702,10 @@ It contains ~10k structures and you can attach plotting functions at various nod
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>wrapped:  &lt;function Grace at 0x7f3fe2a6fa60&gt;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>implement connect to self
-implement connect to self
-implement connect to self
-implement connect to self
-connected to node (self)
-connected to node (self)
-connected to node (self)
-connected to node (self)
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -759,7 +717,7 @@ connected to node (self)
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "eb8c95a6532b4b0ca80b0713505cd63b"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "3c9fa8e683ff4ee8bbc92102120ebb26"}</script></div>
 </div>
 <img src="img/logo_roll.png" width="1200"></section>
 </section>
@@ -773,16 +731,16 @@ connected to node (self)
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "pyiron"
         },
         kernelOptions: {
-            name: "python3",
+            name: "pyiron",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'pyiron'</script>
 
                 </article>
               
@@ -794,24 +752,6 @@ connected to node (self)
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="01_introduction.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="03_fitting.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

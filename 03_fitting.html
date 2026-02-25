@@ -62,8 +62,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '03_fitting';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Validation of interatomic potentials" href="04_validation.html" />
-    <link rel="prev" title="Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method" href="02_assyst.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -126,6 +124,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -175,12 +175,10 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction to Workflows </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
 </ul>
 
     </div>
@@ -406,17 +404,18 @@ Tilmann Hickel </br>
 <p>In this notebook we fit an <a class="reference external" href="https://doi.org/10.1103/PhysRevB.99.014104">Atomic Cluster Expansion</a> interatomic potential using the <a class="reference external" href="https://www.nature.com/articles/s41524-021-00559-9">pacemaker</a> software.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span><span class="p">,</span> <span class="n">Workflow</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.fitting.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadPickledDatasetAsDataframe</span><span class="p">,</span> <span class="n">SplitTrainingAndTesting</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.fitting.ace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterizePotentialConfig</span><span class="p">,</span> <span class="n">RunLinearFit</span><span class="p">,</span> <span class="n">SavePotential</span><span class="p">,</span> <span class="n">PredictEnergiesAndForces</span><span class="p">,</span> <span class="n">DesignMatrix</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.atomistic.fitting.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotEnergyHistogram</span><span class="p">,</span> <span class="n">PlotForcesHistogram</span><span class="p">,</span> <span class="n">PlotEnergyFittingCurve</span><span class="p">,</span> <span class="n">PlotForcesFittingCurve</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_core.pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">SliceArray</span><span class="p">,</span> <span class="n">GetVector</span><span class="p">,</span> <span class="n">MinMaxIndices</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.fitting.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadPickledDatasetAsDataframe</span><span class="p">,</span> <span class="n">SplitTrainingAndTesting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.fitting.ace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParameterizePotentialConfig</span><span class="p">,</span> <span class="n">RunLinearFit</span><span class="p">,</span> <span class="n">SavePotential</span><span class="p">,</span> <span class="n">PredictEnergiesAndForces</span><span class="p">,</span> <span class="n">DesignMatrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.fitting.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlotEnergyHistogram</span><span class="p">,</span> <span class="n">PlotForcesHistogram</span><span class="p">,</span> <span class="n">PlotEnergyFittingCurve</span><span class="p">,</span> <span class="n">PlotForcesFittingCurve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.math</span><span class="w"> </span><span class="kn">import</span> <span class="n">SliceArray</span><span class="p">,</span> <span class="n">GetVector</span><span class="p">,</span> <span class="n">MinMaxIndices</span>
 </pre></div>
 </div>
 </div>
@@ -486,8 +485,15 @@ Tilmann Hickel </br>
 <img src="img/highlighted_workflow.png" width="50%"><p>As a first step, we load the dataset by specifying the `file_path’. This dataset has been generated for the CaMg system using the ASSYST approach discussed in the previous session <a class="reference internal" href="02_assyst.html"><span class="std std-doc">02_assyst.ipynb</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">load_dataset</span> <span class="o">=</span> <span class="n">ReadPickledDatasetAsDataframe</span><span class="p">(</span><span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;data/mgca.pckl.tgz&quot;</span><span class="p">,</span> <span class="n">compression</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
-<span class="n">load_dataset</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;potential&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">load_dataset</span> <span class="o">=</span> <span class="n">ReadPickledDatasetAsDataframe</span><span class="p">(</span><span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;data/mgca.pckl.tgz&quot;</span><span class="p">,</span> <span class="n">compression</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">load_dataset</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -495,8 +501,8 @@ Tilmann Hickel </br>
 <p>The histogram of the total energies of all atomic structures in the dataset is plotted using the `PlotEnergyHistogram’ node.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist_plot</span> <span class="o">=</span> <span class="n">PlotEnergyHistogram</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">log_scale</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
-<span class="n">hist_plot</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">hist_plot</span> <span class="o">=</span> <span class="n">PlotEnergyHistogram</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">log_scale</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">hist_plot</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -507,8 +513,8 @@ Tilmann Hickel </br>
 <p>Similarly, using the <code class="docutils literal notranslate"><span class="pre">PlotForcesHistogram</span></code> Node, we can plot the forces histogram</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hist_plot</span> <span class="o">=</span> <span class="n">PlotForcesHistogram</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">log_scale</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">hist_plot</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">hist_plot_log</span> <span class="o">=</span> <span class="n">PlotForcesHistogram</span><span class="p">(</span><span class="n">df</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">log_scale</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">hist_plot_log</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -523,8 +529,8 @@ Tilmann Hickel </br>
 <p>This is done by choosing the percentage used for the training dataset through the <code class="docutils literal notranslate"><span class="pre">training_frac</span></code> parameter, where <code class="docutils literal notranslate"><span class="pre">training_frac</span> <span class="pre">=</span> <span class="pre">0.5</span></code> means we use 50% for training and 50% for testing.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">split_dataset</span> <span class="o">=</span> <span class="n">SplitTrainingAndTesting</span><span class="p">(</span><span class="n">data_df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">training_frac</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="n">split_dataset</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">split_dataset</span> <span class="o">=</span> <span class="n">SplitTrainingAndTesting</span><span class="p">(</span><span class="n">data_df</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">training_frac</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">split_dataset</span><span class="o">.</span><span class="n">run</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -603,7 +609,7 @@ $<span class="math notranslate nohighlight">\(E_i = 1.0 * \varphi(1)^1 + 1.0 * \
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameterize_potential</span> <span class="o">=</span> <span class="n">ParameterizePotentialConfig</span><span class="p">(</span><span class="n">number_of_functions</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rcut</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">parameterize_potential</span> <span class="o">=</span> <span class="n">ParameterizePotentialConfig</span><span class="p">(</span><span class="n">number_of_functions_per_element</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">rcut</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -611,21 +617,12 @@ $<span class="math notranslate nohighlight">\(E_i = 1.0 * \varphi(1)^1 + 1.0 * \
 <p>Check the current potential configurations in dictionary format,</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameterize_potential</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">parameterize_potential</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;deltaSplineBins&#39;: 0.001,
- &#39;embeddings&#39;: {&#39;ALL&#39;: {&#39;npot&#39;: &#39;FinnisSinclairShiftedScaled&#39;,
-   &#39;fs_parameters&#39;: [1, 1],
-   &#39;ndensity&#39;: 1}},
- &#39;bonds&#39;: {&#39;ALL&#39;: {&#39;radbase&#39;: &#39;SBessel&#39;,
-   &#39;radparameters&#39;: [5.25],
-   &#39;rcut&#39;: 6.0,
-   &#39;dcut&#39;: 0.01}},
- &#39;functions&#39;: {&#39;number_of_functions_per_element&#39;: 10,
-  &#39;ALL&#39;: {&#39;nradmax_by_orders&#39;: [15, 6, 4, 1], &#39;lmax_by_orders&#39;: [0, 6, 5, 1]}}}
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;potential_config&#39;: PotentialConfig(deltaSplineBins=0.001, elements=None, embeddings=Embeddings(ALL=EmbeddingsALL(npot=&#39;FinnisSinclairShiftedScaled&#39;, fs_parameters=[1, 1], ndensity=1)), bonds=Bonds(ALL=BondsALL(radbase=&#39;SBessel&#39;, radparameters=[5.25], rcut=6.0, dcut=0.01)), functions=Functions(number_of_functions_per_element=10, ALL=FunctionsALL(nradmax_by_orders=[15, 6, 4, 1], lmax_by_orders=[0, 6, 5, 1])))}
 </pre></div>
 </div>
 </div>
@@ -639,11 +636,12 @@ $<span class="math notranslate nohighlight">\(E_i = 1.0 * \varphi(1)^1 + 1.0 * \
 <p><strong>Note:</strong> Setting <code class="docutils literal notranslate"><span class="pre">verbose</span> <span class="pre">=</span> <span class="pre">True</span></code> will show all the details of building the design matrices.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_linear_fit</span> <span class="o">=</span> <span class="n">RunLinearFit</span><span class="p">(</span>
-    <span class="n">potential_config</span> <span class="o">=</span> <span class="n">parameterize_potential</span><span class="p">,</span>
-    <span class="n">df_train</span> <span class="o">=</span> <span class="n">split_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df_training</span><span class="p">,</span>
-    <span class="n">df_test</span><span class="o">=</span> <span class="n">split_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df_testing</span><span class="p">,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">run_linear_fit</span> <span class="o">=</span> <span class="n">RunLinearFit</span><span class="p">(</span>
+    <span class="n">potential_config</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">parameterize_potential</span><span class="p">,</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">split_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df_training</span><span class="p">,</span>
+    <span class="n">df_test</span><span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">split_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df_testing</span><span class="p">,</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -651,15 +649,11 @@ $<span class="math notranslate nohighlight">\(E_i = 1.0 * \varphi(1)^1 + 1.0 * \
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run_linear_fit</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">run_linear_fit</span><span class="o">.</span><span class="n">pull</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Restoring node outputs  59384d344030516be63515999a7e0560c01ce96d3d8d1a133fe0017ecb538ee9 RunLinearFit False
-No stored data found for node:  RunLinearFit
-</pre></div>
-</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/srv/conda/envs/notebook/lib/python3.12/site-packages/pyace/multispecies_basisextension.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools&lt;81.
   import pkg_resources
 </pre></div>
@@ -670,30 +664,40 @@ Training F RMSE: 105.63 meV/A
 ======================= TESTING INFO =======================
 Testing E RMSE: 158.99 meV/atom
 Testing F RMSE: 109.50 meV/A
-serialization not needed
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_potential</span> <span class="o">=</span> <span class="n">SavePotential</span><span class="p">(</span><span class="n">basis</span> <span class="o">=</span> <span class="n">run_linear_fit</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">save_potential</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">save_potential</span> <span class="o">=</span> <span class="n">SavePotential</span><span class="p">(</span><span class="n">basis</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">run_linear_fit</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">basis</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Potentials &quot;Ca_Mg_linear_potential.yaml&quot; and &quot;Ca_Mg_linear_potential.yace&quot; are saved in &quot;/home/jovyan/Linear_ace_potentials&quot;.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO:root:run_linear_fit/basis -&gt; save_potential/basis
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;pyace.basis.ACEBBasisSet at 0x7f1700b959b0&gt;,
- &#39;/home/jovyan/Linear_ace_potentials/Ca_Mg_linear_potential.yace&#39;)
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span><span class="o">.</span><span class="n">save_potential</span><span class="o">.</span><span class="n">pull</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>====================== TRAINING INFO ======================
+Training E RMSE: 160.54 meV/atom
+Training F RMSE: 105.63 meV/A
+======================= TESTING INFO =======================
+Testing E RMSE: 158.99 meV/atom
+Testing F RMSE: 109.50 meV/A
+Potentials &quot;Ca_Mg_linear_potential.yaml&quot; and &quot;Ca_Mg_linear_potential.yace&quot; are saved in &quot;/home/jovyan/Linear_ace_potentials&quot;.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;basis&#39;: &lt;pyace.basis.ACEBBasisSet at 0x7f10f7cb9df0&gt;,
+ &#39;yace_file_path&#39;: &#39;/home/jovyan/Linear_ace_potentials/Ca_Mg_linear_potential.yace&#39;}
 </pre></div>
 </div>
 </div>
@@ -725,7 +729,7 @@ serialization not needed
     <span class="n">data_df</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">load_dataset</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">training_frac</span><span class="o">=</span><span class="n">training_frac</span>
 <span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">parameterize_potential</span> <span class="o">=</span> <span class="n">ParameterizePotentialConfig</span><span class="p">(</span>
-    <span class="n">number_of_functions</span><span class="o">=</span><span class="n">number_of_functions_per_element</span><span class="p">,</span> <span class="n">rcut</span><span class="o">=</span><span class="n">rcut</span>
+    <span class="n">number_of_functions_per_element</span><span class="o">=</span><span class="n">number_of_functions_per_element</span><span class="p">,</span> <span class="n">rcut</span><span class="o">=</span><span class="n">rcut</span>
 <span class="p">)</span>
 <span class="n">wf</span><span class="o">.</span><span class="n">run_linear_fit</span> <span class="o">=</span> <span class="n">RunLinearFit</span><span class="p">(</span>
     <span class="n">potential_config</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">parameterize_potential</span><span class="p">,</span>
@@ -762,29 +766,13 @@ INFO:root:split_dataset/df_testing -&gt; predict_energies_forces/df_test
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Restoring node outputs  59384d344030516be63515999a7e0560c01ce96d3d8d1a133fe0017ecb538ee9 run_linear_fit True
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Restoring node outputs  c3f1ae7423c83f5986c42e2be2bb7f336de8e449fab3010ce0896e72f6ddf419 run_linear_fit True
+None::
+restored node True
 Potentials &quot;Ca_Mg_linear_potential.yaml&quot; and &quot;Ca_Mg_linear_potential.yace&quot; are saved in &quot;/home/jovyan/Linear_ace_potentials&quot;.
-Restoring node outputs  36d3a45a5b22530344db3d84874ce5057f1b73dbe938f9854d4260e63cf0d288 predict_energies_forces False
-No stored data found for node:  predict_energies_forces
-serialization not needed
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;reference_training_epa&#39;: array([-0.68663657, -0.99923799, -1.08362327, ..., -1.47605157,
-        -1.44900232, -1.2044471 ]),
- &#39;reference_training_fpa&#39;: array([-0.0000e+00, -0.0000e+00,  0.0000e+00, ...,  5.5500e-06,
-         5.2099e-04,  3.0750e-05]),
- &#39;predicted_training_epa&#39;: array([-0.81386625, -0.87184381, -0.43534825, ..., -1.51306876,
-        -1.50692894, -1.07993029]),
- &#39;predicted_training_fpa&#39;: array([ 4.44089210e-16,  5.55111512e-16, -1.83880688e-15, ...,
-         3.04603864e-05,  5.53148274e-04,  5.84272215e-05]),
- &#39;reference_testing_epa&#39;: array([-1.50104811,  0.17800853, -0.57766618, ..., -0.83208959,
-        -0.25764739, -0.27296486]),
- &#39;reference_testing_fpa&#39;: array([ 0.        ,  0.        ,  0.        , ..., -0.05524943,
-        -0.03189827, -1.23912384]),
- &#39;predicted_testing_epa&#39;: array([-1.22525141,  0.06423183, -0.70620421, ..., -0.70818788,
-        -0.10829411, -0.20601877]),
- &#39;predicted_testing_fpa&#39;: array([ 0.        ,  0.        ,  0.        , ...,  0.00609773,
-         0.00352052, -1.0266855 ])}
+Restoring node outputs  50871f8c1f810888e270c048f045bcc677ccab67319788a0eb56d1c528eefb7e predict_energies_forces True
+None::
+restored node True
 </pre></div>
 </div>
 </div>
@@ -800,13 +788,13 @@ serialization not needed
 <img src="img/validation_schematic.png" width="60%"><p><strong>NOTE:</strong> You can change the ratio of the canvas to the whole screen by changing the value of <code class="docutils literal notranslate"><span class="pre">flow_widget_ratio</span></code> between 0 to 1 (try 0.6 or 0.7)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;pyiron_nodes&quot;</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "d823b5d9f5204f5a9bb8422d9bf127ce"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "5d0927a564c14f8c885516355337a5e7"}</script></div>
 </div>
 <p>Exercise: change the <code class="docutils literal notranslate"><span class="pre">number_of_functions_per_element</span></code> to a higher value (i.e., 50) and check the fitting curves. Did the fit get better or worse?</p>
 <p><strong>Note:</strong> You can save the potential under a new name using the <code class="docutils literal notranslate"><span class="pre">filename</span></code> input in <code class="docutils literal notranslate"><span class="pre">save_potential</span></code> node.</p>
@@ -843,24 +831,6 @@ serialization not needed
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="02_assyst.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="04_validation.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
