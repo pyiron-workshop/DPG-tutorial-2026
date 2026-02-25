@@ -59,9 +59,10 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '05_thermodynamics';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '07_thermodynamics';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Validation of interatomic potentials" href="06_validation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,8 +125,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -175,10 +174,14 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
 </ul>
 
     </div>
@@ -233,7 +236,7 @@
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/05_thermodynamics.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/07_thermodynamics.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch on Binder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -264,7 +267,7 @@
       
       
       
-      <li><a href="_sources/05_thermodynamics.ipynb" target="_blank"
+      <li><a href="_sources/07_thermodynamics.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -469,7 +472,7 @@ Please see the end of this notebook, or  <a href="https://journals.aps.org/prmat
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;calphy-fe1&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;calphy_fe1&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -493,7 +496,7 @@ Please see the end of this notebook, or  <a href="https://journals.aps.org/prmat
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "43947ffecfa840bdb18a2e65392672f8"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "ec46e0cc9eb7471893d9325e84af3c6f"}</script></div>
 </div>
 <div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
 <p class="title"><b>Need the solution?</b></p>
@@ -528,7 +531,7 @@ pf.gui
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;calphy-tm1&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;calphy_tm1&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -562,7 +565,7 @@ pf.gui
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "717f17644f3d44adaac6b38a9bb90cf3"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "8042fe2f31124b30b53812db4148eb2e"}</script></div>
 </div>
 <div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
 <p class="title"><b>Need the solution?</b></p>
@@ -586,7 +589,7 @@ pf.gui
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;landau-toy&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;landau_toy&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -614,7 +617,7 @@ pf.gui
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "8c9acc2f47a14f8cba10833d9fd25496"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "9d1c1155a9fc4fc29babf107c0f8c124"}</script></div>
 </div>
 </section>
 <section id="mgca-phase-diagram">
@@ -659,7 +662,7 @@ pf.gui
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;landau-MgCa&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;landau_MgCa&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -684,7 +687,7 @@ pf.gui
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "4ba7146b2da04a519cfbe33fc1dab516"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "08fc2b70dacd4f91966c3faa0d6d1bbe"}</script></div>
 </div>
 <hr class="docutils" />
 <hr class="docutils" />
@@ -930,6 +933,15 @@ E = - \epsilon \log(1-\exp(-r^2/\sigma^2))
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="06_validation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></p>
+      </div>
+    </a>
 </div>
                 </footer>
               

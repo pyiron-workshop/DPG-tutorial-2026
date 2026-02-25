@@ -59,9 +59,11 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '03_fitting';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '05_fitting';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Validation of interatomic potentials" href="06_validation.html" />
+    <link rel="prev" title="Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method" href="04_assyst.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -124,8 +126,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -175,10 +175,14 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html">Python Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
 </ul>
 
     </div>
@@ -233,7 +237,7 @@
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/03_fitting.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/05_fitting.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch on Binder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -264,7 +268,7 @@
       
       
       
-      <li><a href="_sources/03_fitting.ipynb" target="_blank"
+      <li><a href="_sources/05_fitting.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -482,7 +486,7 @@ Tilmann Hickel </br>
 <section id="loading-the-dataset">
 <h2><font style="font-family:roboto;color:#455e6c"> Loading the dataset </font><a class="headerlink" href="#loading-the-dataset" title="Link to this heading">#</a></h2>
 <p>Recalling the workflow, we are in the first essential step of loading the training dataset</p>
-<img src="img/highlighted_workflow.png" width="50%"><p>As a first step, we load the dataset by specifying the `file_path’. This dataset has been generated for the CaMg system using the ASSYST approach discussed in the previous session <a class="reference internal" href="02_assyst.html"><span class="std std-doc">02_assyst.ipynb</span></a>.</p>
+<img src="img/highlighted_workflow.png" width="50%"><p>As a first step, we load the dataset by specifying the `file_path’. This dataset has been generated for the CaMg system using the ASSYST approach discussed in the previous session <a class="reference internal" href="#02_assyst.ipynb"><span class="xref myst">02_assyst.ipynb</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;potential&quot;</span><span class="p">)</span>
@@ -831,6 +835,24 @@ restored node True
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="04_assyst.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_validation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
