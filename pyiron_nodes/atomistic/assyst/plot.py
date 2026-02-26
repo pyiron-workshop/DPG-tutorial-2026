@@ -4,7 +4,7 @@ import pandas as pd
 from typing import Optional 
 
 @as_function_node("plot")
-def PlotSPG(df_structures: pd.DataFrame, logscale: bool = False, figsize_x: int = 12, figsize_y:int = 6):
+def PlotSpaceGroups(df_structures: pd.DataFrame, logscale: bool = False, figsize_x: int = 12, figsize_y:int = 6):
     """Plot a histogram of space groups in input list."""
     import matplotlib.pyplot as plt
     import numpy as np
