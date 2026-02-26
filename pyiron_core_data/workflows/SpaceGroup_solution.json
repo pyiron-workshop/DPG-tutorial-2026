@@ -71,23 +71,6 @@
       },
       "expanded": false
     },
-    "PlotSPG": {
-      "type": "pyiron_nodes.atomistic.assyst.plot.PlotSPG",
-      "label": "PlotSPG",
-      "parent": null,
-      "inputs": {
-        "logscale": {
-          "value": false
-        },
-        "figsize_x": {
-          "value": 12
-        },
-        "figsize_y": {
-          "value": 6
-        }
-      },
-      "expanded": false
-    },
     "PlotEnergyVolumeData": {
       "type": "pyiron_nodes.atomistic.assyst.plot.PlotEnergyVolumeHistogram",
       "label": "PlotEnergyVolumeData",
@@ -107,6 +90,23 @@
       "label": "StoichiometryTable",
       "parent": null,
       "inputs": {},
+      "expanded": false
+    },
+    "PlotSpaceGroups": {
+      "type": "core.node.Node",
+      "label": "PlotSpaceGroups",
+      "parent": null,
+      "inputs": {
+        "logscale": {
+          "value": false
+        },
+        "figsize_x": {
+          "value": 12
+        },
+        "figsize_y": {
+          "value": 6
+        }
+      },
       "expanded": false
     }
   },
@@ -132,7 +132,7 @@
     {
       "source": "SpaceGroupSampling",
       "sourceHandle": "df_structures",
-      "target": "PlotSPG",
+      "target": "PlotSpaceGroups",
       "targetHandle": "df_structures"
     },
     {

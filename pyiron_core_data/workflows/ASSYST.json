@@ -74,24 +74,7 @@
           "value": 10
         },
         "store": {
-          "value": false
-        }
-      },
-      "expanded": false
-    },
-    "PlotSPG": {
-      "type": "pyiron_nodes.atomistic.assyst.plot.PlotSPG",
-      "label": "PlotSPG",
-      "parent": null,
-      "inputs": {
-        "logscale": {
-          "value": false
-        },
-        "figsize_x": {
-          "value": 12
-        },
-        "figsize_y": {
-          "value": 6
+          "value": true
         }
       },
       "expanded": false
@@ -137,6 +120,23 @@
         }
       },
       "expanded": false
+    },
+    "PlotSpaceGroups": {
+      "type": "pyiron_nodes.atomistic.assyst.plot.PlotSpaceGroups",
+      "label": "PlotSpaceGroups",
+      "parent": null,
+      "inputs": {
+        "logscale": {
+          "value": false
+        },
+        "figsize_x": {
+          "value": 12
+        },
+        "figsize_y": {
+          "value": 6
+        }
+      },
+      "expanded": false
     }
   },
   "edges": [
@@ -163,12 +163,6 @@
       "sourceHandle": "engine",
       "target": "SpaceGroupSampling",
       "targetHandle": "engine"
-    },
-    {
-      "source": "SpaceGroupSampling",
-      "sourceHandle": "df_structures",
-      "target": "PlotSPG",
-      "targetHandle": "df_structures"
     },
     {
       "source": "OptimizerSettings",
@@ -205,6 +199,12 @@
       "sourceHandle": "engine",
       "target": "FullRelax",
       "targetHandle": "engine"
+    },
+    {
+      "source": "SpaceGroupSampling",
+      "sourceHandle": "df_structures",
+      "target": "PlotSpaceGroups",
+      "targetHandle": "df_structures"
     }
   ]
 }
