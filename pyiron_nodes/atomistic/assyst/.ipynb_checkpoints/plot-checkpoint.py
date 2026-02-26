@@ -3,12 +3,44 @@ from core import as_function_node
 import pandas as pd
 from typing import Optional 
 
+
 @as_function_node("plot")
-def PlotSPG(df_structures: pd.DataFrame, logscale: bool = False, figsize_x: int = 12, figsize_y:int = 6):
-    """Plot a histogram of space groups in input list."""
+def PlotSpaceGroups(
+    df_structures: pd.DataFrame,
+    logscale: bool = False,
+    figsize_x: int = 12,
+    figsize_y: int = 6
+):
+    """
+    Visualize the distribution of crystal space groups in a structure dataset.
+
+    This node generates a histogram of space group numbers for a collection
+    of atomistic structures, typically produced by symmetry-based structure
+    generation or crystal structure prediction workflows. The plot highlights
+    crystallographic systems (triclinic through cubic) using colored background
+    spans to aid interpretation.
+
+    The function is intended for exploratory data analysis and validation of
+    structure sampling diversity in high-throughput materials simulations.
+
+    Args:
+        df_structures (pandas.DataFrame):
+            DataFrame containing structural data. Must include a ``"spacegroup"``
+            column with integer space group numbers (1–230).
+        logscale (bool):
+            If ``True``, use a logarithmic scale for the y-axis to emphasize
+            rare space groups.
+        figsize_x (int):
+            Width of the generated figure in inches.
+        figsize_y (int):
+            Height of the generated figure in inches.
+
+    Returns:
+        matplotlib.figure.Figure:
+            Matplotlib figure object containing the space group histogram.
+    """
     import matplotlib.pyplot as plt
     import numpy as np
-    # from structuretoolkit.analyse import get_symmetry
 
     plt.rcParams.update({'figure.figsize': [8.5,8.5],'axes.labelsize': 16,
                      'xtick.labelsize': 14.5, 'ytick.labelsize': 14.5, 'legend.fontsize': 12,
@@ -59,8 +91,41 @@ def PlotSPG(df_structures: pd.DataFrame, logscale: bool = False, figsize_x: int 
     ax.set_ylabel("# Structures")
     return fig
 
+
 @as_function_node
-def PlotEnergyVolumeHistogram(df_structures: pd.DataFrame, gridsize: int = 100, shift_convex: bool = False):
+def PlotEnergyVolumeHistogram(
+    df_structures: pd.DataFrame,
+    gridsize: int = 100,
+    shift_convex: bool = False
+):
+    """
+    Plot an energy–volume density map for atomistic structures.
+
+    This node visualizes the distribution of structures in atomic
+    energy–volume space using a hexagonal binning histogram. Energies
+    and volumes are normalized per atom, making the plot suitable for
+    comparing structures of different sizes.
+
+    The visualization is commonly used to:
+    - Inspect the energy landscape of generated structures
+    - Identify low-energy regions and outliers
+    - Assess structure generation quality before relaxation or screening
+
+    Args:
+        df_structures (pandas.DataFrame):
+            DataFrame containing structure data. Must include the columns
+            ``"energy"``, ``"volume"``, and ``"number_of_atoms"``.
+        gridsize (int):
+            Number of hexagons in the x-direction for the hexbin plot.
+            Higher values give finer resolution.
+        shift_convex (bool):
+            If ``True``, shift energies so that the minimum energy is zero.
+            This is useful for convex-hull–like visualizations.
+
+    Returns:
+        matplotlib.figure.Figure:
+            Matplotlib figure object containing the energy–volume histogram.
+    """
     import matplotlib.pyplot as plt
     import matplotlib.colors as mcolors
     
