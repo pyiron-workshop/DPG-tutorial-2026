@@ -14,23 +14,40 @@ import string
 @as_inp_dataclass_node
 @dataclass
 class MD:
-    """Molecular dynamics parameters.
+    """
+    Molecular-dynamics (MD) integration and sampling controls for Calphy/LAMMPS runs.
 
-    Attributes:
-        timestep (float):
-            See https://calphy.org/en/latest/inputfile.html#timestep
-        n_small_steps (int):
-            See https://calphy.org/en/latest/inputfile.html#n-small-steps
-        n_every_steps (int): 
-            See https://calphy.org/en/latest/inputfile.html#n-every-steps
-        n_repeat_steps (int): 
-            See https://calphy.org/en/latest/inputfile.html#n-repeat-steps
-        n_cycles (int): 
-            See https://calphy.org/en/latest/inputfile.html#n-cycles
-        thermostat_damping (float): 
-            See https://calphy.org/en/latest/inputfile.html#thermostat-damping
-        barostat_damping (float): 
-            See https://calphy.org/en/latest/inputfile.html#barostat-damping
+    **Scientific purpose**
+    Configure the low-level MD stepping and sampling schedule used by Calphy when computing
+    free energies (thermodynamic integration) or running temperature sweeps. These parameters
+    control timestep size, inner-loop sampling, repetition, and the strength of thermostat/barostat
+    coupling—directly affecting statistical convergence and numerical stability.
+
+    **Typical use-cases**
+    * Stabilize MD for solids/liquids prior to free-energy evaluation.
+    * Increase sampling (more steps/cycles) to reduce noise in free energies.
+    * Tune thermostat/barostat damping for specific potentials or system sizes.
+
+    Attributes
+    ----------
+    timestep:
+        MD timestep (Calphy input: ``timestep``).
+    n_small_steps:
+        Number of MD steps in the smallest integration block (``n-small-steps``).
+    n_every_steps:
+        Sampling stride inside a cycle (``n-every-steps``).
+    n_repeat_steps:
+        Number of repeats per cycle (``n-repeat-steps``).
+    n_cycles:
+        Number of cycles to perform (``n-cycles``).
+    thermostat_damping:
+        Thermostat damping parameter (``thermostat-damping``).
+    barostat_damping:
+        Barostat damping parameter (``barostat-damping``).
+
+    See Also
+    --------
+    https://calphy.org/en/latest/inputfile.html
     """
     timestep: float = 0.001
     n_small_steps: int = 10000
@@ -43,13 +60,28 @@ class MD:
 @as_inp_dataclass_node
 @dataclass
 class NoseHoover:
-    """Nose-Hoover parameters.
+    """
+    Nose–Hoover thermostat/barostat coupling parameters for Calphy.
 
-    Attributes:
-        thermostat_damping (float):
-            See https://calphy.org/en/latest/inputfile.html#nose-hoover-thermostat-damping
-        barostat_damping (float):
-            See https://calphy.org/en/latest/inputfile.html#nose-hoover-barostat-damping
+    **Scientific purpose**
+    Set the coupling (damping) timescales for Nose–Hoover temperature and pressure control
+    used during equilibration and production MD. These values influence how aggressively the
+    system is driven toward the target T/P and can affect equilibration quality and fluctuations.
+
+    **Typical use-cases**
+    * NPT equilibration for solids/liquids before free-energy calculations.
+    * Adjust damping to improve stability (avoid oscillations) for stiff systems.
+
+    Attributes
+    ----------
+    thermostat_damping:
+        Nose–Hoover thermostat damping (Calphy: ``nose-hoover-thermostat-damping``).
+    barostat_damping:
+        Nose–Hoover barostat damping (Calphy: ``nose-hoover-barostat-damping``).
+
+    See Also
+    --------
+    https://calphy.org/en/latest/inputfile.html
     """
     thermostat_damping: float = 0.1
     barostat_damping: float = 0.1
@@ -57,13 +89,28 @@ class NoseHoover:
 @as_inp_dataclass_node
 @dataclass
 class Berendsen:
-    """Berendsen parameters.
+    """
+    Berendsen thermostat/barostat coupling parameters for Calphy.
 
-    Attributes:
-        thermostat_damping (float):
-            See https://calphy.org/en/latest/inputfile.html#berendsen-thermostat-damping
-        barostat_damping (float):
-            See https://calphy.org/en/latest/inputfile.html#berendsen-barostat-damping
+    **Scientific purpose**
+    Provide damping parameters for Berendsen temperature/pressure coupling, which can be
+    useful for rapid initial equilibration. (Berendsen coupling does not generate the exact
+    NPT ensemble, but is often robust for pre-equilibration.)
+
+    **Typical use-cases**
+    * Quick pre-equilibration before switching to Nose–Hoover.
+    * Troubleshooting unstable Nose–Hoover settings.
+
+    Attributes
+    ----------
+    thermostat_damping:
+        Berendsen thermostat damping (Calphy: ``berendsen-thermostat-damping``).
+    barostat_damping:
+        Berendsen barostat damping (Calphy: ``berendsen-barostat-damping``).
+
+    See Also
+    --------
+    https://calphy.org/en/latest/inputfile.html
     """
     thermostat_damping: float = 100.0
     barostat_damping: float = 100.0
@@ -71,17 +118,34 @@ class Berendsen:
 @as_inp_dataclass_node
 @dataclass
 class Tolerance:
-    """Tolerance parameters.
+    """
+    Convergence/tolerance criteria for Calphy solid/liquid free-energy workflows.
 
-    Attributes:
-        spring_constant (float):
-            See https://calphy.org/en/latest/inputfile.html#tol-spring-constant
-        solid_fraction (float):
-            See https://calphy.org/en/latest/inputfile.html#tol-solid-fraction
-        liquid_fraction (float):
-            See https://calphy.org/en/latest/inputfile.html#tol-liquid-fraction
-        pressure (float):
-            See https://calphy.org/en/latest/inputfile.html#tol-pressure
+    **Scientific purpose**
+    Control acceptance thresholds used internally by Calphy to decide whether the system is
+    sufficiently “solid-like” or “liquid-like”, whether pressure is acceptable, and how strong
+    the spring coupling should be in reference calculations. These tolerances can determine
+    whether a run proceeds, repeats, or flags issues.
+
+    **Typical use-cases**
+    * Make solid/liquid identification stricter or more permissive.
+    * Tune spring constant tolerance for Einstein-crystal-like reference steps.
+    * Stabilize workflows when borderline melting/solidification occurs.
+
+    Attributes
+    ----------
+    spring_constant:
+        Spring constant used/checked for tolerance (Calphy: ``tol-spring-constant``).
+    solid_fraction:
+        Minimum fraction classified as solid (Calphy: ``tol-solid-fraction``).
+    liquid_fraction:
+        Maximum fraction classified as liquid (Calphy: ``tol-liquid-fraction``).
+    pressure:
+        Acceptable pressure tolerance (Calphy: ``tol-pressure``).
+
+    See Also
+    --------
+    https://calphy.org/en/latest/inputfile.html
     """
     spring_constant: float = 0.01
     solid_fraction: float = 0.7
@@ -91,34 +155,52 @@ class Tolerance:
 @as_inp_dataclass_node
 @dataclass
 class InputClass:
-    """Input parameters for calphy calculations.
+    """
+    High-level Calphy calculation input bundle (thermodynamic integration / temperature sweep).
 
-    Attributes:
-        md (MD): Molecular dynamics parameters.
-        tolerance (Tolerance): Tolerance parameters.
-        nose_hoover (NoseHoover): Nose-Hoover parameters.
-        berendsen (Berendsen): Berendsen parameters.
-        queue (Queue): Queue parameters.
-        pressure (int):
-            See https://calphy.org/en/latest/inputfile.html#pressure
-        temperature (int):
-            See https://calphy.org/en/latest/inputfile.html#temperature
-        npt (bool):
-            See https://calphy.org/en/latest/inputfile.html#npt
-        n_equilibration_steps (int):
-            See https://calphy.org/en/latest/inputfile.html#n-equilibration-steps
-        n_switching_steps (int):
-            See https://calphy.org/en/latest/inputfile.html#n-switching-steps
-        n_print_steps (int):
-            See https://calphy.org/en/latest/inputfile.html#n-print-steps
-        n_iterations (int):
-            See https://calphy.org/en/latest/inputfile.html#n-iterations
-        equilibration_control (str):
-            See https://calphy.org/en/latest/inputfile.html#equilibration-control
-        melting_cycle (bool):
-            See https://calphy.org/en/latest/inputfile.html#melting-cycle
-        spring_constants (Optional[float]):
-            See https://calphy.org/en/latest/inputfile.html#spring-constants        
+    **Scientific purpose**
+    Collect all key parameters needed to run Calphy free-energy calculations for solids and
+    liquids with an interatomic potential and an ASE `Atoms` structure. This input object
+    is converted into a `calphy.input.Calculation` and used to generate simulation folders,
+    run LAMMPS, and postprocess free energies.
+
+    **What this controls**
+    - Target state point(s): temperature, pressure, and optional temperature sweep range.
+    - Ensemble and equilibration: NPT toggle, equilibration/switching/print steps, iterations.
+    - Thermostat/barostat model: Nose–Hoover vs Berendsen selection and parameters.
+    - MD stepping and tolerances via nested dataclasses (MD, Tolerance, ...).
+    - Parallel resources via ``cores`` (mapped to Calphy ``queue.cores``).
+
+    **Typical use-cases**
+    * Compute absolute free energy of a solid at (T, P).
+    * Compute absolute free energy of a liquid at (T, P).
+    * Run a temperature sweep to obtain f(T) curves for melting point estimation.
+
+    Attributes
+    ----------
+    md, tolerance, nose_hoover, berendsen:
+        Optional nested parameter blocks; if left as ``None`` defaults are filled in by the
+        workflow before running Calphy.
+    pressure:
+        Target pressure (Calphy: ``pressure``).
+    temperature:
+        Start/target temperature in K (Calphy: ``temperature``).
+    temperature_stop:
+        End temperature in K for temperature sweeps (used when mode='ts').
+    npt:
+        Whether to run in NPT (Calphy: ``npt``).
+    n_equilibration_steps, n_switching_steps, n_print_steps, n_iterations:
+        Core Calphy run-length controls.
+    equilibration_control:
+        Which equilibration controller to use (e.g. ``"nose-hoover"``).
+    melting_cycle:
+        Enable/disable melting-cycle logic in Calphy.
+    cores:
+        Number of CPU cores to request/use (mapped to Calphy queue settings).
+
+    See Also
+    --------
+    https://calphy.org/en/latest/inputfile.html
     """
     md: Optional[MD] = None 
     tolerance: Optional[Tolerance] = None
@@ -148,7 +230,7 @@ def _generate_random_string(length: int) -> str:
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
 def _prepare_potential_and_structure(
-    potential: str, 
+    potential, 
     structure : Atoms
 ):
     """Prepare the potential and structure for calphy calculations.
@@ -168,9 +250,16 @@ def _prepare_potential_and_structure(
     from pyiron_lammps.structure import (
         LammpsStructure,
     ) 
+    from pyiron_nodes.atomistic.engine.generic import OutputEngine
 
     if isinstance(potential, str):
         potential = get_potential_by_name(potential_name=potential)
+
+    elif isinstance(potential, OutputEngine):
+        potential = potential.calculator()
+        potential = get_potential_by_name(potential_name=potential)
+
+    else: print('TYPE: ', type(potential))
 
     pair_style = []
     pair_coeff = []
@@ -206,7 +295,7 @@ def _prepare_potential_and_structure(
 
 def _prepare_input(
     input_class, 
-    potential: str, 
+    potential, 
     structure: Atoms, 
     mode='fe', 
     reference_phase='solid'
@@ -302,20 +391,39 @@ def _run_cleanup(simfolder: str, lattice: str, delete_folder: bool = False):
 def SolidFreeEnergy(
     input_class, 
     structure: Atoms, 
-    potential: str,
+    potential,
     delete_folder: bool = False,
     store: bool = True
 ) -> float:
-    """Calculate the free energy of a solid phase.
+    """
+    Compute the absolute free energy of a **solid** using Calphy thermodynamic integration.
 
-    Args:
-        input_class (InputClass): Input parameters for calphy calculations.
-        structure (Atoms): Atomic structure.
-        potential (str): Potential name or DataFrame.
-        delete_folder (bool): Whether to delete the simulation folder after calculation.
-    
-    Returns:
-        float: Free energy in eV/atom
+    **Scientific purpose**
+    Obtain the Gibbs/Helmholtz free energy (as reported by Calphy) for a crystalline solid
+    at a target temperature and pressure, using an interatomic potential and an ASE `Atoms`
+    structure. This is commonly used to compare solid polymorph stability and to determine
+    melting points via solid–liquid free-energy crossings.
+
+    **Required inputs**
+    - ``input_class``: Calphy run parameters (T, P, MD controls, tolerances, etc.).
+    - ``structure``: solid atomic configuration (ASE ``Atoms``).
+    - ``potential``: LAMMPS potential identifier (name) or an engine object that can be
+      resolved to a potential.
+
+    **Typical use-cases**
+    * Solid free energy at (T, P) for phase stability ranking.
+    * Solid vs liquid free-energy comparison for melting temperature estimation.
+    * Generate f(T) datasets by repeating at multiple temperatures.
+
+    Returns
+    -------
+    float
+        Free energy in eV/atom (as reported by Calphy).
+
+    Notes
+    -----
+    Creates a temporary LAMMPS structure file and a simulation folder. If ``delete_folder``
+    is True, the simulation folder is removed after completion.
     """
     from calphy.solid import Solid
     from calphy.routines import routine_fe
@@ -343,20 +451,36 @@ def SolidFreeEnergy(
 def LiquidFreeEnergy(
     input_class, 
     structure: Atoms, 
-    potential: str, 
+    potential, 
     delete_folder: bool = False,
     store: bool = True
 ) -> float:
-    """Calculate the free energy of a liquid phase.
+    """
+    Compute the absolute free energy of a **liquid** using Calphy thermodynamic integration.
 
-    Args:
-        input_class (InputClass): Input parameters for calphy calculations.
-        structure (Atoms): Atomic structure.
-        potential (str): Potential name or DataFrame.
-        delete_folder (bool): Whether to delete the simulation folder after calculation.
-    
-    Returns:
-        float: Free energy in eV/atom
+    **Scientific purpose**
+    Obtain the free energy of a liquid reference state at a target temperature and pressure.
+    Together with the corresponding solid free energy, this enables melting point estimation
+    by identifying the temperature where f_solid(T) = f_liquid(T).
+
+    **Required inputs**
+    - ``input_class``: Calphy run parameters (T, P, MD controls, tolerances, etc.).
+    - ``structure``: liquid atomic configuration (ASE ``Atoms``), typically pre-melted/relaxed.
+    - ``potential``: LAMMPS potential identifier (name) or resolvable potential object.
+
+    **Typical use-cases**
+    * Liquid free energy at (T, P) for solid–liquid equilibrium.
+    * Build liquid f(T) curves for melting point / coexistence analysis.
+
+    Returns
+    -------
+    float
+        Free energy in eV/atom (as reported by Calphy).
+
+    Notes
+    -----
+    Creates a temporary LAMMPS structure file and a simulation folder. If ``delete_folder``
+    is True, the simulation folder is removed after completion.
     """
     from calphy.liquid import Liquid
     from calphy.routines import routine_fe
@@ -384,20 +508,32 @@ def LiquidFreeEnergy(
 def SolidFreeEnergyWithTemp(
     input_class, 
     structure: Atoms, 
-    potential: str, 
+    potential, 
     delete_folder: bool = False,
     store: bool = True
 ):
-    """Calculate the free energy of a solid phase as a function of temperature.
+    """
+    Run a **temperature sweep** in Calphy and return solid free energy as f(T).
 
-    Args:
-        input_class (InputClass): Input parameters for calphy calculations.
-        structure (Atoms): Atomic structure.
-        potential (str): Potential name or DataFrame.
-        delete_folder (bool): Whether to delete the simulation folder after calculation.
+    **Scientific purpose**
+    Generate a free-energy curve for a solid across a temperature interval using Calphy’s
+    temperature-sweep mode. This is useful for locating phase transitions (e.g., melting)
+    by comparing with a corresponding liquid f(T) curve.
 
-    Returns:
-        Temperature and free energy in K and eV/atom, respectively.
+    **Required inputs**
+    - ``input_class``: must define ``temperature`` (start) and ``temperature_stop`` (end).
+    - ``structure``: solid ASE ``Atoms`` configuration.
+    - ``potential``: LAMMPS potential identifier or resolvable potential object.
+
+    **Typical use-cases**
+    * Produce solid f(T) for melting point estimation via free-energy crossing.
+    * Quickly assess temperature dependence without launching many single-T jobs.
+
+    Returns
+    -------
+    (list[float], list[float])
+        ``temperature`` in K and ``free_energy`` in eV/atom, read from Calphy’s
+        ``temperature_sweep.dat`` output.
     """
     from calphy.solid import Solid
     from calphy.routines import routine_ts
@@ -431,20 +567,31 @@ def SolidFreeEnergyWithTemp(
 def LiquidFreeEnergyWithTemp(
     input_class, 
     structure: Atoms, 
-    potential: str, 
+    potential, 
     delete_folder: bool = False,
     store: bool = True
 ):
-    """Calculate the free energy of a liquid phase as a function of temperature.
+    """
+    Run a **temperature sweep** in Calphy and return liquid free energy as f(T).
 
-    Args:
-        input_class (InputClass): Input parameters for calphy calculations.
-        structure (Atoms): Atomic structure.
-        potential (str): Potential name or DataFrame.
-        delete_folder (bool): Whether to delete the simulation folder after calculation.
+    **Scientific purpose**
+    Generate a free-energy curve for a liquid across a temperature interval using Calphy’s
+    temperature-sweep mode. Combined with a solid f(T) curve, this enables determination
+    of melting/transition temperatures from free-energy intersections.
 
-    Returns:
-        Temperature and free energy in K and eV/atom, respectively.
+    **Required inputs**
+    - ``input_class``: must define ``temperature`` (start) and ``temperature_stop`` (end).
+    - ``structure``: liquid ASE ``Atoms`` configuration (typically equilibrated liquid).
+    - ``potential``: LAMMPS potential identifier or resolvable potential object.
+
+    **Typical use-cases**
+    * Produce liquid f(T) for melting point estimation via free-energy crossing.
+
+    Returns
+    -------
+    (list[float], list[float])
+        ``temperature`` in K and ``free_energy`` in eV/atom, read from Calphy’s
+        ``temperature_sweep.dat`` output.
     """
     from calphy.liquid import Liquid
     from calphy.routines import routine_ts
@@ -475,14 +622,25 @@ def LiquidFreeEnergyWithTemp(
 
 @as_function_node("fig")
 def PlotFreeEnergy(temperature: np.ndarray, free_energy: np.ndarray) -> plt.Figure:
-    """Plot the free energy as a function of temperature.
+    """
+    Plot a free-energy curve f(T) from temperature-sweep or multi-point calculations.
 
-    Args:
-        temperature (np.ndarray): Temperature array in K.
-        free_energy (np.ndarray): Free energy array in eV/atom.
-    
-    Returns:
-        plt.Figure: Figure showing the free energy as a function of temperature.
+    **Scientific purpose**
+    Visualize the temperature dependence of free energy to inspect trends, noise, and
+    potential crossings between phases (e.g., solid vs liquid).
+
+    **Required inputs**
+    - ``temperature``: temperatures in K.
+    - ``free_energy``: free energies in eV/atom, same length as ``temperature``.
+
+    **Typical use-cases**
+    * Plot solid and liquid f(T) curves prior to estimating melting temperature.
+    * Quality control: identify outliers or non-smooth behavior in computed free energies.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Figure containing the f(T) line plot.
     """
     import matplotlib.pyplot as plt
 
@@ -502,19 +660,36 @@ def CalcPhaseTransformationTemp(
     fe_B: np.ndarray, 
     fit_order: int = 4
 ) -> plt.Figure:
-    """Calculate the phase transformation temperature from free energy data.
-
-    Args:
-        temp_A (np.ndarray): Temperature array for phase 1.
-        fe_A (np.ndarray): Free energy array for phase 1.
-        temp_B (np.ndarray): Temperature array for phase 2.
-        fe_B (np.ndarray): Free energy array for phase 2.
-        fit_order (int): Order of the polynomial fit.
-    
-    Returns:
-        plt.Figure: Figure showing the phase transformation temperature.
     """
+    Estimate a phase transformation (crossing) temperature from two free-energy curves.
 
+    **Scientific purpose**
+    Given free energies f_A(T) and f_B(T) for two phases (often solid vs liquid),
+    fit polynomials and find the temperature where the fitted curves are closest/
+    intersect. This is a common practical method to estimate melting temperature
+    or polymorphic transition temperature from noisy free-energy data.
+
+    **Required inputs**
+    - ``temp_A``, ``fe_A``: temperature (K) and free energy (eV/atom) for phase A.
+    - ``temp_B``, ``fe_B``: temperature (K) and free energy (eV/atom) for phase B.
+    - ``fit_order``: polynomial order used to smooth data before locating the crossing.
+
+    **Typical use-cases**
+    * Estimate melting temperature from Calphy solid/liquid f(T) data.
+    * Compare two solid polymorphs and estimate transition temperature.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        Plot showing raw data, polynomial fits, and a vertical line at the estimated
+        transition temperature.
+
+    Notes
+    -----
+    If the temperature ranges do not overlap, the method extrapolates and emits warnings.
+    The returned value is visual (in the plot); the temperature is not returned explicitly
+    by this function.
+    """
     import matplotlib.pyplot as plt
     import warnings
 
@@ -572,10 +747,23 @@ def CalcPhaseTransformationTemp(
 
 @as_function_node
 def CollectResults() -> pd.DataFrame:
-    """Collect the results from calphy calculations.
+    """
+    Gather Calphy outputs in the current working directory into a single results table.
 
-    Returns:
-        pd.DataFrame: DataFrame containing the results of the calculations.
+    **Scientific purpose**
+    Aggregate completed Calphy runs (often many folders/jobs) into one pandas DataFrame for
+    downstream analysis: comparing free energies, checking convergence diagnostics, or
+    exporting summarized thermodynamic data.
+
+    **Typical use-cases**
+    * Collect results after running multiple temperatures or multiple phases.
+    * Build a dataset for plotting f(T) curves or fitting transition temperatures.
+    * Quickly inspect which jobs completed successfully and what free energies were obtained.
+
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame produced by ``calphy.postprocessing.gather_results('.')``.
     """
     from calphy.postprocessing import gather_results
     results = gather_results('.')

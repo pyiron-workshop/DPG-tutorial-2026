@@ -1,5 +1,5 @@
 {
-  "label": "Free_Energy_Unary_Solution",
+  "label": "Transition_Temp_Unary",
   "nodes": {
     "BulkStructure": {
       "type": "pyiron_nodes.atomistic.structure.build.Bulk",
@@ -91,10 +91,10 @@
           "value": 0
         },
         "temperature": {
-          "value": 300
+          "value": 900
         },
         "temperature_stop": {
-          "value": 600
+          "value": 1100
         },
         "npt": {
           "value": true
@@ -137,11 +137,21 @@
       },
       "expanded": false
     },
-    "PlotUnaryFreeEnergy": {
-      "type": "pyiron_nodes.atomistic.calculator.calphy.PlotFreeEnergy",
-      "label": "PlotUnaryFreeEnergy",
+    "SolidLinePhase": {
+      "type": "pyiron_nodes.thermodynamics.landau.TemperatureDependentLinePhase",
+      "label": "SolidLinePhase",
       "parent": null,
-      "inputs": {},
+      "inputs": {
+        "name": {
+          "value": "Solid"
+        },
+        "fixed_concentration": {
+          "value": 0
+        },
+        "num_parameters": {
+          "value": 3
+        }
+      },
       "expanded": false
     }
   },
@@ -191,14 +201,14 @@
     {
       "source": "SolidFreeEnergyWithTemp",
       "sourceHandle": "temperature",
-      "target": "PlotUnaryFreeEnergy",
-      "targetHandle": "temperature"
+      "target": "SolidLinePhase",
+      "targetHandle": "temperatures"
     },
     {
       "source": "SolidFreeEnergyWithTemp",
       "sourceHandle": "free_energy",
-      "target": "PlotUnaryFreeEnergy",
-      "targetHandle": "free_energy"
+      "target": "SolidLinePhase",
+      "targetHandle": "free_energies"
     }
   ]
 }

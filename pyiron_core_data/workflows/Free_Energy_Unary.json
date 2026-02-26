@@ -1,0 +1,79 @@
+{
+  "label": "Free_Energy_Unary",
+  "nodes": {
+    "BulkStructure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "BulkStructure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Al"
+        },
+        "crystalstructure": {
+          "value": null
+        },
+        "a": {
+          "value": null
+        },
+        "c": {
+          "value": null
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "RepeatStructure": {
+      "type": "pyiron_nodes.atomistic.structure.transform.Repeat",
+      "label": "RepeatStructure",
+      "parent": null,
+      "inputs": {
+        "repeat_scalar": {
+          "value": 3
+        }
+      },
+      "expanded": false
+    },
+    "SolidFreeEnergyWithTemp": {
+      "type": "pyiron_nodes.atomistic.calculator.calphy.SolidFreeEnergyWithTemp",
+      "label": "SolidFreeEnergyWithTemp",
+      "parent": null,
+      "inputs": {
+        "input_class": {
+          "value": "NotData"
+        },
+        "potential": {
+          "value": "NotData"
+        },
+        "delete_folder": {
+          "value": false
+        },
+        "store": {
+          "value": true
+        }
+      },
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "BulkStructure",
+      "sourceHandle": "structure",
+      "target": "RepeatStructure",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "RepeatStructure",
+      "sourceHandle": "structure",
+      "target": "SolidFreeEnergyWithTemp",
+      "targetHandle": "structure"
+    }
+  ]
+}

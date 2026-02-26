@@ -1,11 +1,12 @@
-from ase import Atoms
+from typing import Optional
 
+from ase import Atoms
 from core import as_function_node
 
 @as_function_node
 def ListPotentials(
     structure: Atoms, 
-    resource_path: str=None
+    resource_path: Optional[str] = None
 ) -> list:
     
     import os
