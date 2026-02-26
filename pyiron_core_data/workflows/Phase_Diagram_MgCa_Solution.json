@@ -59,6 +59,9 @@
         },
         "refine": {
           "value": true
+        },
+        "store": {
+          "value": true
         }
       },
       "expanded": false
