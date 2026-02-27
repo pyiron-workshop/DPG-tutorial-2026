@@ -52,3 +52,64 @@ def Bulk(
         orthorhombic=orthorhombic,
         cubic=cubic,
     )
+
+def _parse_formula(formula):
+    import re
+    parts = re.findall(r'([A-Z][a-z]?)(\d*)', formula)
+    elements = [el for el, num in parts]
+    return elements
+
+def _generate_CaMg_ortho():
+    from ase import Atoms
+    import numpy as np
+    # Lattice vectors
+    cell = np.array([
+        [3.692641, 0.0, 0.0000000000000002],
+        [-0.0000000000000004, 5.809565, 0.0000000000000004],
+        [0.0, 0.0, 5.9892969999999996]
+    ])
+
+    # Element symbols
+    symbols = ['Ca', 'Ca', 'Mg', 'Mg']
+
+    # Fractional coordinates
+    scaled_positions = np.array([
+        [0.0000000000000000, 0.0000000000000000, 0.0932210000000000],
+        [0.5000000000000000, 0.5000000000000000, 0.9067790000000000],
+        [0.5000000000000000, 0.0000000000000000, 0.5849690000000000],
+        [0.0000000000000000, 0.5000000000000000, 0.4150310000000000]
+    ])
+
+    # Create ASE Atoms object
+    atoms = Atoms(symbols=symbols, scaled_positions=scaled_positions, cell=cell, pbc=True)
+
+    return atoms
+    
+@as_function_node
+def Bulk2(
+    name: str,
+    crystalstructure: Optional[
+        Literal["fcc", "bcc", "hcp", "diamond", "rocksalt"]
+    ] = None,
+    a: Optional[float] = None,
+    c: Optional[float] = None,
+    u: Optional[float] = None,
+    orthorhombic: bool = False,
+    cubic: bool = True,    #<--- Changed to True
+) -> Atoms:
+    species = _parse_formula(name)
+    if len(species)==1:
+        structure = bulk(
+                            name=name,
+                            crystalstructure=crystalstructure,
+                            a=a,
+                            c=c,
+                            u=u,
+                            orthorhombic=orthorhombic,
+                            cubic=cubic,
+                        )
+    else:
+        print("Building Orthorhombic CaMg")
+        structure = _generate_CaMg_ortho()
+        
+    return structure
