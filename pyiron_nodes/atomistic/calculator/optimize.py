@@ -228,7 +228,6 @@ def SinglePointStatic(structure:Atoms,
                  engine: OutputEngine,
                 opt:dict | None = None):
     
-    from ase.optimize import BFGS
     structure_temp = structure.copy()
     
     structure_temp.calc = engine.calculator
