@@ -3,8 +3,7 @@ from core import as_function_node
 
 @as_function_node
 def Ace(potential_file, use_symmetry:bool=True):
-
-     """
+    """
     Create an ACE (Atomic Cluster Expansion) atomistic engine.
 
     This node initializes a PyACE calculator from a potential file and wraps
