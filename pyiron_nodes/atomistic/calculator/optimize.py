@@ -222,3 +222,17 @@ def Relax(
     relaxed_structure = structure
     relaxed_structure.constraints.clear()
     return relaxed_structure
+
+@as_function_node
+def SinglePointStatic(structure:Atoms,
+                 engine: OutputEngine,
+                opt:dict | None = None):
+    
+    from ase.optimize import BFGS
+    structure_temp = structure.copy()
+    
+    structure_temp.calc = engine.calculator
+    energy = structure_temp.get_potential_energy()
+    volume = structure_temp.get_volume()
+
+    return energy, volume, structure_temp
