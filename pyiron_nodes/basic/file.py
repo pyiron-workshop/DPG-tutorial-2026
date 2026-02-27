@@ -13,3 +13,12 @@ def ReadDataFrame(filename: str, compression: str = None):
 
     return pd.read_pickle(filename, compression=compression)
 
+import pandas as pd
+@as_function_node
+def DataframeToList(dataframe:pd.DataFrame, column:str='structure'):
+    if column:
+        list_of_values = dataframe[column].tolist()
+    else:
+        print("Give column name")
+        list_of_values = None
+    return list_of_values
