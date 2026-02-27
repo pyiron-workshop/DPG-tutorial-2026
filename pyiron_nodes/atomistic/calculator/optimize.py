@@ -222,3 +222,47 @@ def Relax(
     relaxed_structure = structure
     relaxed_structure.constraints.clear()
     return relaxed_structure
+
+@as_function_node
+def SinglePointStatic(structure:Atoms,
+                 engine: OutputEngine,
+                opt:dict | None = None):
+    """
+    Perform a single-point static energy calculation on an atomic structure.
+
+    This node attaches the calculator from the provided engine to a copy of
+    the input structure and evaluates its potential energy and volume without
+    performing any geometry optimization. The original structure is left
+    unmodified.
+
+    Typical use cases include:
+    - Computing the potential energy of a structure at a fixed geometry
+    - Evaluating energy-volume relationships across a set of structures
+    - Benchmarking interatomic potentials against DFT reference energies
+    - Generating input data for equation-of-state fitting
+
+    Args:
+        structure (ase.Atoms):
+            Atomic structure to evaluate. A copy is made internally so the
+            original object is not modified.
+        engine (OutputEngine):
+            Engine object wrapping an ASE-compatible calculator (e.g. GRACE,
+            ACE, or a LAMMPS potential) used to evaluate energies and forces.
+        opt (dict or None):
+            Optional dictionary of additional calculator or run settings.
+            Currently reserved for future use. Defaults to ``None``.
+
+    Returns:
+        tuple:
+            - **energy** (float): Potential energy of the structure in eV.
+            - **volume** (float): Volume of the simulation cell in Å³.
+            - **structure** (ase.Atoms): Copy of the input structure with the
+              calculator attached and results cached.
+    """
+    structure_temp = structure.copy()
+    
+    structure_temp.calc = engine.calculator
+    energy = structure_temp.get_potential_energy()
+    volume = structure_temp.get_volume()
+
+    return energy, volume, structure_temp
