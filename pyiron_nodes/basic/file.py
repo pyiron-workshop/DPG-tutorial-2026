@@ -3,7 +3,7 @@ import pandas as pd
 
 @as_function_node("csv")
 def ReadCSV(filename: str, header: list = [0, 1], decimal: str = ",", delimiter: str = ";"):
-     """
+    """
     Read a CSV file into a pandas DataFrame.
 
     This node loads a delimited text file using pandas, supporting
