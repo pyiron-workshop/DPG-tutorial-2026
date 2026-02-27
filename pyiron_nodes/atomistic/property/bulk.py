@@ -4,69 +4,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-@as_function_node
-def CalculateEVCurve(
-    structure: Atoms,
-    calculator: Node,
-    num_of_points: int = 7,
-    vol_range: float = 0.3,
-    per_atom: bool = True,
-    opt: dict | None = None,
-):
-    """
-    Computes an energy vs volume (EV) curve for a given structure.
-
-    Args:
-        structure (Atoms): atomic structure
-        calculator (AseCalculatorConfig): energy/force engine to use
-        num_of_points (int): volume samples
-        vol_range (float): minimum/maximum volumetric strain
-        per_atom (float): output per atom quantities rather than supercell quantities
-
-    Returns:
-        DataFrame: columns 'volume', 'energy', 'ase_atoms'
-    """
-    from ase.optimize import BFGS
-    from ase.filters import ExpCellFilter
-
-    volume_factors = np.linspace((1 - vol_range)**(1/3), (1.0 + vol_range)**(1/3), num_of_points)
-
-    structure = structure.copy()
-
-    if per_atom:
-        nd = len(structure)
-    else:
-        nd = 1
-
-    calculator.inputs.use_symmetry = False
-    structure.calc = calculator.pull()
-    initial_volume = structure.get_volume()
-
-    data = {"volume": [], "energy": [], "ase_atoms":[]}
-
-    for factor in volume_factors:
-        scaled_structure = structure.copy()
-        scaled_structure.set_cell(structure.cell * factor, scale_atoms=True)
-        calculator.inputs.use_symmetry = False
-        scaled_structure.calc = calculator.run()
-
-        if opt is not None:
-            opt = BFGS(scaled_structure)
-            # Relax atomic positions
-            opt.run(fmax=opt.force_tolerance, steps=opt.max_steps)
-
-        energy = scaled_structure.get_potential_energy()
-        volume = scaled_structure.get_volume()
-
-        data["volume"].append(volume/nd)
-        data["energy"].append(energy/nd)
-        data["ase_atoms"].append(scaled_structure)
-
-    df = pd.DataFrame(data)
-    return df
-
-
 def birch_murnaghan(vol, E0, V0, B0, BP):
     """
     Birch-Murnaghan EOS.
