@@ -17,17 +17,17 @@ This document explains how to write a **pyiron** workflow for a given task using
 
 Construct the import path of a node from the metadata:
     "name": "IterToDataFrame",
-    "module": "dpg2026.basic.loop",
+    "module": "basic.loop",
 
 The corresponding import statement is:
 
 ```python
-from pyiron_nodes.dpg2026.basic.loop import IterToDataFrame
+from pyiron_nodes.basic.loop import IterToDataFrame
 ```
 
 __Procedure__
 
-1. Prefix the `module` value with `pyiron_nodes.` → `pyiron_nodes.dpg2026.basic.loop`.
+1. Prefix the `module` value with `pyiron_nodes.` → `pyiron_nodes.basic.loop`.
 2. Append the `name` value after `import`.
 3. Verify that both parts match the metadata exactly (no extra spaces, trailing dots, or case changes).
 
@@ -38,8 +38,8 @@ Below is the minimal template you should follow when constructing a workflow.
 from core import Workflow
 
 # Import all required nodes
-from pyiron_nodes.dpg2026.atomistic.structure.build import Bulk
-from pyiron_nodes.dpg2026.atomistic.structure.transform import CreateVacancy
+from pyiron_nodes.atomistic.structure.build import Bulk
+from pyiron_nodes.atomistic.structure.transform import CreateVacancy
 
 # Create the workflow instance
 wf = Workflow("myWorkflow")          # or Workflow(label="myWorkflow")
@@ -78,8 +78,8 @@ When you generate the final workflow (or custom node), wrap **all** Python code 
 
 ```python
 from core import Workflow, as_function_node
-from pyiron_nodes.dpg2026.atomistic.structure.build import Bulk
-from pyiron_nodes.dpg2026.atomistic.structure.transform import CreateVacancy
+from pyiron_nodes.atomistic.structure.build import Bulk
+from pyiron_nodes.atomistic.structure.transform import CreateVacancy
 
 
 
