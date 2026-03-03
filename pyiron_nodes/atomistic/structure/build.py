@@ -1,8 +1,8 @@
-from core import as_function_node
-from ase.build import bulk
 from typing import Optional, Literal
-from ase.atoms import Atoms
 
+from ase.atoms import Atoms
+from ase.build import bulk
+from core import as_function_node
 
 @as_function_node("structure")
 def Bulk(

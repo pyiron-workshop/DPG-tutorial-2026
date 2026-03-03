@@ -16,19 +16,31 @@ def LinePhase(
     line_energy: float, 
     line_entropy: float
 ) -> LinePhase:
-    """Create a line phase with given energy and entropy, that does not depend on temperature.
+    """
+    Create a temperature-independent *line compound* phase at a fixed composition.
 
-    Wrapper over the LinePhase class in landau. 
-    See https://github.com/eisenforschung/landau/blob/main/landau/phases.py#L115
+    **Scientific purpose**
+    Represent a stoichiometric (single-composition) phase with a simple linear free-energy
+    model, typically
+    \n    f(T) = E - T S
+    \nwhere `E` is the energy/intercept and `S` is the entropy/slope. This is commonly used
+    for terminal reference states and line compounds in CALPHAD-/Landau-style phase-diagram
+    calculations.
 
-    Args:
-        name (str): name of the phase
-        fixed_concentration (float): concentration of the phase; should be between 0 and 1
-        line_energy (float): energy of the phase
-        line_entropy (float): entropy of the phase
-        
-    Returns:
-        LinePhase: the created line phase
+    **Required inputs**
+    - ``name``: phase label used in tables and plots.
+    - ``fixed_concentration``: composition (mole fraction) at which this phase exists (usually in [0, 1]).
+    - ``line_energy``: energy/intercept term (e.g., eV/atom).
+    - ``line_entropy``: entropy/slope term (e.g., eV/atom/K), contributing ``-T*line_entropy``.
+
+    **Typical use-cases**
+    * Define stoichiometric phases (line compounds) for binary phase diagrams.
+    * Provide endmember phases for building solution models (ideal/regular solutions).
+    * Quick two-phase comparisons when only linear-in-T free energies are available.
+
+    Returns
+    -------
+    A ``landau.phases.LinePhase`` instance compatible with ``landau.calculate.calc_phase_diagram``.
     """
     from landau.phases import LinePhase
 
@@ -49,20 +61,30 @@ def TemperatureDependentLinePhase(
     free_energies: np.ndarray | list[float],
     num_parameters: int | None = 3
 ) -> TemperatureDependentLinePhase:
-    """Create a temperature dependent line phase.
+    """
+    Create a fixed-composition phase with *temperature-dependent* free energy from tabulated data.
 
-    Wrapper over the TemperatureDependentLinePhase class in landau.
-    See https://github.com/eisenforschung/landau/blob/main/landau/phases.py#L137
-    
-    Args:
-        name (str): name of the phase
-        fixed_concentration (float): concentration of the phase; should be between 0 and 1
-        temperatures (array-like): temperatures at which free energies were sampled
-        free_energies (array-like): free energies corresponding to the temperatures
-        num_parameters (int, optional): how many parameters to use when interpolating free energies in temperature
+    **Scientific purpose**
+    Fit/interpolate sampled free energies f(T) at one composition into a smooth model using an
+    SGTE-style parameterization. This is the standard way to turn discrete thermodynamic data
+    (e.g., from CALPHAD assessments, DFT+phonons, MD free energies) into a phase object usable
+    in phase-diagram calculations.
 
-    Returns:
-        TemperatureDependentLinePhase: the created phase at a single concentration with temperature dependent free energy
+    **Required inputs**
+    - ``name``: phase label used in tables and plots.
+    - ``fixed_concentration``: composition (mole fraction) at which the data applies.
+    - ``temperatures``: temperature samples (K).
+    - ``free_energies``: free energies (same length as ``temperatures``, typically eV/atom).
+    - ``num_parameters``: number of SGTE coefficients used to fit/interpolate f(T).
+
+    **Typical use-cases**
+    * Use computed/assessed f(T) data for a stoichiometric compound or a phase at a single composition.
+    * Later combine multiple such line phases across compositions into a solution model.
+
+    Returns
+    -------
+    A ``landau.phases.TemperatureDependentLinePhase`` with an SGTE interpolator, usable in
+    ``CalcPhaseDiagram`` / ``landau.calculate.calc_phase_diagram``.
     """
     import numpy as np
     from landau.interpolate import SGTE
@@ -87,18 +109,30 @@ def TransitionTemperature(
     Tmin: float,
     Tmax: float,
 ) -> plt.Figure:
-    """Plot free energies of two phases and find their intersection, i.e. the transition temperature.
+    """
+    Plot free energy vs temperature for two phases and mark their crossing (transition temperature).
 
-    Assumes that both phases are of the same concentration, otherwise the results will be off, 
-    as it takes the chemical potential difference to be zero.
+    **Scientific purpose**
+    Identify a phase transition temperature (e.g., polymorph A→B) by locating where the two
+    free-energy curves intersect. This is a common analysis for line compounds or fixed-composition
+    phases where the equilibrium transition is well approximated by the f(T) crossing.
 
-    Args:
-        phase1, phase2 (Phase): the two phases to plot
-        Tmin (float): minimum temperature
-        Tmax (float): maximum temperature
+    **Required inputs**
+    - ``phase1``, ``phase2``: two ``landau`` Phase objects to compare.
+    - ``Tmin``, ``Tmax``: temperature search window (K).
 
-    Returns:
-        float: transition temperature if found, else NaN
+    **Assumptions / limitations**
+    This routine computes stability at ``mu = 0`` and is most meaningful when both phases refer
+    to the *same concentration*. If the phases have different concentrations, the reported crossing
+    may not correspond to true equilibrium.
+
+    **Typical use-cases**
+    * Determine the melting/ordering/polymorphic transition temperature at fixed composition.
+    * Sanity-check fitted/interpolated f(T) models by visual inspection.
+
+    Returns
+    -------
+    A Matplotlib ``Figure`` showing both free-energy curves and an annotated transition temperature.
     """
     from landau.phases import Phase
     from landau.calculate import calc_phase_diagram
@@ -145,19 +179,25 @@ def IdealSolution(
     phase1: Phase, 
     phase2: Phase
 ) -> Phase:
-    """Create an ideal solution phase from two given phases.
-
-    Wrapper over the IdealSolution class in landau.
-    See https://github.com/eisenforschung/landau/blob/64efae5bc1ba17b54c5ff3e6e34af93af3560900/landau/phases.py#L216
-
-    Args:
-        name (str): name of the phase
-        phase1, phase2 (Phase): the two phases to create an ideal solution from
-
-    Returns:
-        IdealSolution: the created ideal solution phase
     """
-    
+    Build an *ideal mixing* solution phase from two endmember phases.
+
+    **Scientific purpose**
+    Create a binary solution model with ideal configurational entropy (no excess enthalpy),
+    commonly used as a baseline mixing model between two terminal phases.
+
+    **Required inputs**
+    - ``name``: name of the resulting solution phase.
+    - ``phase1``, ``phase2``: endmember phases (often line phases near c=0 and c=1).
+
+    **Typical use-cases**
+    * Model substitutional solid solutions without interaction parameters.
+    * Provide a reference solution to compare against regular/non-ideal solution models.
+
+    Returns
+    -------
+    A ``landau.phases.IdealSolution`` (returned as ``Phase``) suitable for phase-diagram calculations.
+    """
     from landau.phases import IdealSolution
 
     solution_phase = IdealSolution(
@@ -225,23 +265,36 @@ def CalcPhaseDiagram(
     phases: list,
     temperatures: list[float] | np.ndarray,
     chemical_potentials: list[float] | np.ndarray | int = 100,
-    refine: bool = True
+    refine: bool = True,
+    store: bool = True
 ) -> pd.DataFrame:
-    """Calculate thermodynamic potentials and respective stable phases in a range of temperatures.
-
-    The chemical potential range is chosen automatically to cover the full concentration space.
-
-    Args:
-        phases: list of phases to consider
-        temperatures: temperature samples
-        chemical_potentials: chemical potential samples or number of samples in chemical potential space
-        refine (bool): add additional sampling points along exact phase transitions
-
-    Returns:
-        pd.DataFrame
-            dataframe with phase data
     """
+    Compute a semigrand-canonical phase-diagram dataset over temperature and chemical potential.
 
+    **Scientific purpose**
+    Sample thermodynamic stability across temperature T and chemical potential difference μ to
+    determine stable phases, phase boundaries, equilibrium concentrations, and free energies.
+    The result is a tabular dataset that can be plotted as c–T (composition–temperature) or μ–T
+    diagrams.
+
+    **Required inputs**
+    - ``phases``: list of ``landau`` phase objects (line phases and/or solution phases).
+    - ``temperatures``: temperature grid (K).
+    - ``chemical_potentials``:
+        * an explicit μ grid (eV), or
+        * an integer N meaning “auto-generate N μ samples”.
+      When an integer is given, μ bounds are estimated to approximately span c≈0…1 at the highest T.
+
+    **Typical use-cases**
+    * Generate data for binary phase diagrams in c–T or μ–T form.
+    * Locate phase boundaries and triple points (optionally with refinement).
+    * Produce input for ``PlotConcPhaseDiagram`` and ``PlotMuPhaseDiagram``.
+
+    Returns
+    -------
+    A ``pandas.DataFrame`` of sampled states (T, μ, c, f, phase labels, stability/border flags),
+    as produced by ``landau.calculate.calc_phase_diagram``.
+    """
     from landau.calculate import calc_phase_diagram
 
     if isinstance(chemical_potentials, int):
@@ -272,20 +325,28 @@ def PlotConcPhaseDiagram(
     linephase_width: float = 0.01,
     concavity: float | None = None,
 ) -> plt.Figure:
-    """Plot a concentration-temperature phase diagram.
+    """
+    Plot a concentration–temperature (c–T) phase diagram from a Landau phase-diagram DataFrame.
 
-    phase_data should originate from CalcPhaseDiagram.
+    **Scientific purpose**
+    Visualize phase fields in composition–temperature space for a binary system, highlighting
+    single-phase regions and coexistence regions derived from semigrand-canonical sampling.
 
-    Args:
-        phases: list of phases to consider
-        plot_samples (bool): overlay points where phase data has been sampled
-        plot_isolines (bool): overlay lines of constance chemical potential
-        plot_tielines (bool): add grey lines connecting triple points
-        linephase_width (float): phases that have a solubility less than this
-            will be plotted as a rectangle
-        concavity (float, optional, range in [0, 1]): how aggressive to be when
-            fitting polyhedra to samples phase data; lower means more ragged
-            shapes, higher means smoother; 1 corresponds to convex hull of points
+    **Required inputs**
+    - ``phase_data``: DataFrame output from ``CalcPhaseDiagram`` (must contain at least ``c``, ``T``, ``phase``).
+
+    **Optional overlays**
+    - ``plot_samples``: show the raw sampled (c, T) points used to build the diagram.
+    - ``plot_isolines``: draw lines of constant chemical potential μ (helps diagnose sampling).
+    - ``plot_tielines``: draw tie lines at refined triple points (if refinement metadata exists).
+
+    **Plot controls**
+    - ``linephase_width``: treat very narrow-solubility phases as rectangles (line-compound styling).
+    - ``concavity``: smoothing/shape parameter for polygon fitting; higher is smoother (1≈convex hull).
+
+    Returns
+    -------
+    A Matplotlib ``Figure`` containing the c–T phase diagram.
     """
     import matplotlib.pyplot as plt
     import seaborn as sns
@@ -325,10 +386,26 @@ def PlotConcPhaseDiagram(
 
 @as_function_node
 def PlotMuPhaseDiagram(phase_data) -> plt.Figure:
-    """Plot a chemical potential-temperature phase diagram.
+    """
+    Plot a chemical potential–temperature (μ–T) phase diagram from a Landau phase-diagram DataFrame.
 
-    phase_data should originate from CalcPhaseDiagram.
-    Phase boundaries are plotted in black.
+    **Scientific purpose**
+    Visualize which phase is stable as a function of temperature and chemical potential difference μ.
+    This representation is natural for semigrand-canonical calculations and is useful for diagnosing
+    phase boundaries and stability switches.
+
+    **Required inputs**
+    - ``phase_data``: DataFrame output from ``CalcPhaseDiagram`` (should contain ``mu``, ``T``, ``phase``;
+      if it contains ``border``, boundary points are highlighted).
+
+    **Typical use-cases**
+    * Inspect stability regions in μ–T space.
+    * Debug/validate phase-diagram sampling before converting to c–T plots.
+
+    Returns
+    -------
+    A Matplotlib ``Figure`` containing the μ–T phase diagram with phases colored by label and
+    boundaries optionally shown in black.
     """
     import seaborn as sns
     import matplotlib.pyplot as plt
@@ -365,28 +442,36 @@ def PhasesFromDataFrame(
     concentration_parameters: int | None = 1,
 ):
     """
-    Convert a dataframe of free energies to list of phase objects.
+    Convert tabulated free-energy data into Landau phase objects (line phases and solution phases).
 
-    Prints the names of all found phases.
+    **Scientific purpose**
+    Turn a CALPHAD-/DFT-like dataset (free energy vs temperature at multiple compositions) into a set
+    of `landau` Phase objects with interpolated temperature dependence (SGTE) and optional composition
+    interpolation. This enables automated phase-diagram construction directly from a DataFrame.
 
-    Args:
-        dataframe: should contain columns
-                    `phase`: the name of the phase; rows of the same phase name
-                             will be grouped in a solution phase
-                    `composition`: the mole fraction of one of the constitutents
-                    `temperature`: array of temperature at which free energy
-                                   was sampled
-                    `free_energy`: corresponding free energies
-        temperature_parameters (int): how many parameters to use when
-                    interpolating free energies in temperature
-        concentration_parameters (int, optional): how many parameters to use
-                    when interpolating free energies in concentration; if not
-                    given output individual phases and change the name to
-                    include the concentration
+    **Required input data columns**
+    - ``phase``: phase name; rows with the same name are grouped into one phase model.
+    - ``composition``: mole fraction/composition coordinate (typically in [0, 1]).
+    - ``temperature``: temperature samples (K) for that composition (often stored as an array per row).
+    - ``free_energy``: free energies (eV/atom) corresponding to ``temperature``.
 
-    Returns:
-        list of Phase objects
-        dict of Phase objects, where the dict keys are the names of the phases
+    **How it builds phases**
+    1. For each (phase, composition) it builds a temperature-dependent line phase f(T).
+    2. If multiple compositions exist:
+       - if terminals (c=0 and c=1) only: create an IdealSolution,
+       - if terminals plus intermediates: create a RegularSolution,
+       - otherwise: create an InterpolatingPhase.
+       If ``concentration_parameters is None``, it returns individual line phases instead of a solution.
+
+    **Typical use-cases**
+    * Build an entire binary phase model from a table of assessed/computed free energies.
+    * Rapidly prototype phase diagrams from high-throughput thermodynamic data.
+
+    Returns
+    -------
+    ``(phase_list, phase_dict)``
+    - ``phase_list``: list of created ``landau.phases.Phase`` objects.
+    - ``phase_dict``: dict mapping phase name to object for convenient lookup.
     """
     phases = dataframe.groupby('phase')[dataframe.columns].apply(
             make_phase, include_groups=False,
