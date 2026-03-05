@@ -1,0 +1,69 @@
+{
+  "label": "05_01_SinglePoint_solution",
+  "nodes": {
+    "structure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "structure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Ca"
+        },
+        "crystalstructure": {
+          "value": null
+        },
+        "a": {
+          "value": null
+        },
+        "c": {
+          "value": null
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "engine": {
+      "type": "pyiron_nodes.atomistic.engine.ace.Ace",
+      "label": "engine",
+      "parent": null,
+      "inputs": {
+        "potential_file": {
+          "value": "potentials/Ca_Mg_linear_potential.yace"
+        },
+        "use_symmetry": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "SinglePointCalculator": {
+      "type": "pyiron_nodes.atomistic.calculator.optimize.SinglePointStatic",
+      "label": "SinglePointCalculator",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "structure",
+      "sourceHandle": "structure",
+      "target": "SinglePointCalculator",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "engine",
+      "sourceHandle": "out",
+      "target": "SinglePointCalculator",
+      "targetHandle": "engine"
+    }
+  ]
+}
