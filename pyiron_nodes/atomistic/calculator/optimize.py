@@ -225,8 +225,7 @@ def Relax(
 
 @as_function_node
 def SinglePointStatic(structure:Atoms,
-                 engine: OutputEngine,
-                opt:dict | None = None):
+                 engine: OutputEngine):
     """
     Perform a single-point static energy calculation on an atomic structure.
 
@@ -247,10 +246,7 @@ def SinglePointStatic(structure:Atoms,
             original object is not modified.
         engine (OutputEngine):
             Engine object wrapping an ASE-compatible calculator (e.g. GRACE,
-            ACE, or a LAMMPS potential) used to evaluate energies and forces.
-        opt (dict or None):
-            Optional dictionary of additional calculator or run settings.
-            Currently reserved for future use. Defaults to ``None``.
+            ACE, LAMMPS, Quantum ESPRESSO, etc) used to evaluate energies and forces.
 
     Returns:
         tuple:
@@ -259,10 +255,10 @@ def SinglePointStatic(structure:Atoms,
             - **structure** (ase.Atoms): Copy of the input structure with the
               calculator attached and results cached.
     """
-    structure_temp = structure.copy()
+    structure_new = structure.copy()
     
-    structure_temp.calc = engine.calculator
-    energy = structure_temp.get_potential_energy()
-    volume = structure_temp.get_volume()
+    structure_new.calc = engine.calculator
+    energy = structure_new.get_potential_energy()
+    volume = structure_new.get_volume()
 
-    return energy, volume, structure_temp
+    return energy, volume, structure_new
