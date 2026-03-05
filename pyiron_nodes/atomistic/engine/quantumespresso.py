@@ -93,7 +93,7 @@ def QuantumEspresso(kpts=(3, 3, 3), ecutwfc=20, smearing=0.02):
 
     from ase.calculators.espresso import Espresso, EspressoProfile
     profile = EspressoProfile(
-        command='pw.x', pseudo_dir='/home/jovyan/espresso/pseudo'
+        command='pw.x', pseudo_dir='/home/jovyan/dpg_tutorial_2026/espresso/pseudo'
     )
     calc = Espresso(
         pseudopotentials=pseudopotentials,
