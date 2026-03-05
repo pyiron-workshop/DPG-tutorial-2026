@@ -1,0 +1,88 @@
+{
+  "label": "05_02_IterToDataframe_solution",
+  "nodes": {
+    "structure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "structure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Ca"
+        },
+        "crystalstructure": {
+          "value": null
+        },
+        "a": {
+          "value": null
+        },
+        "c": {
+          "value": null
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "linspace": {
+      "type": "pyiron_nodes.basic.math.Linspace",
+      "label": "linspace",
+      "parent": null,
+      "inputs": {
+        "x_min": {
+          "value": 0
+        },
+        "x_max": {
+          "value": 1
+        },
+        "num_points": {
+          "value": 50
+        },
+        "endpoint": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "Iterator": {
+      "type": "pyiron_nodes.basic.loop.IterToDataFrame",
+      "label": "Iterator",
+      "parent": null,
+      "inputs": {
+        "input_label": {
+          "value": "a"
+        },
+        "debug": {
+          "value": false
+        },
+        "executor": {
+          "value": null
+        },
+        "store": {
+          "value": false
+        }
+      },
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "structure",
+      "sourceHandle": "self",
+      "target": "Iterator",
+      "targetHandle": "node"
+    },
+    {
+      "source": "linspace",
+      "sourceHandle": "linspace",
+      "target": "Iterator",
+      "targetHandle": "values"
+    }
+  ]
+}
