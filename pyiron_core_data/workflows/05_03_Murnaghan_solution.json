@@ -1,0 +1,209 @@
+{
+  "label": "05_03_Murnaghan_solution",
+  "nodes": {
+    "a_list": {
+      "type": "pyiron_nodes.basic.math.Linspace",
+      "label": "a_list",
+      "parent": null,
+      "inputs": {
+        "x_min": {
+          "value": 4.0
+        },
+        "x_max": {
+          "value": 8.0
+        },
+        "num_points": {
+          "value": 80
+        },
+        "endpoint": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "structure": {
+      "type": "pyiron_nodes.atomistic.structure.build.Bulk",
+      "label": "structure",
+      "parent": null,
+      "inputs": {
+        "name": {
+          "value": "Ca"
+        },
+        "crystalstructure": {
+          "value": null
+        },
+        "a": {
+          "value": null
+        },
+        "c": {
+          "value": null
+        },
+        "u": {
+          "value": null
+        },
+        "orthorhombic": {
+          "value": false
+        },
+        "cubic": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "IterateStructures": {
+      "type": "pyiron_nodes.basic.loop.IterToDataFrame",
+      "label": "IterateStructures",
+      "parent": null,
+      "inputs": {
+        "input_label": {
+          "value": "a"
+        },
+        "debug": {
+          "value": false
+        },
+        "executor": {
+          "value": null
+        },
+        "store": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "engine": {
+      "type": "pyiron_nodes.atomistic.engine.ace.Ace",
+      "label": "engine",
+      "parent": null,
+      "inputs": {
+        "potential_file": {
+          "value": "potentials/Ca_Mg_linear_potential.yace"
+        },
+        "use_symmetry": {
+          "value": true
+        }
+      },
+      "expanded": false
+    },
+    "singlepoint": {
+      "type": "pyiron_nodes.atomistic.calculator.optimize.SinglePointStatic",
+      "label": "singlepoint",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    },
+    "DF2List": {
+      "type": "pyiron_nodes.basic.file.DataframeToList",
+      "label": "DF2List",
+      "parent": null,
+      "inputs": {
+        "column": {
+          "value": "structure"
+        }
+      },
+      "expanded": false
+    },
+    "IterateCalculations": {
+      "type": "pyiron_nodes.basic.loop.IterToDataFrame",
+      "label": "IterateCalculations",
+      "parent": null,
+      "inputs": {
+        "input_label": {
+          "value": "structure"
+        },
+        "debug": {
+          "value": false
+        },
+        "executor": {
+          "value": null
+        },
+        "store": {
+          "value": false
+        }
+      },
+      "expanded": false
+    },
+    "plotting": {
+      "type": "pyiron_nodes.atomistic.property.bulk.PlotEVCurve",
+      "label": "plotting",
+      "parent": null,
+      "inputs": {
+        "xlabel": {
+          "value": "Volume (\u00c5\u00b3)"
+        },
+        "ylabel": {
+          "value": "Energy (eV)"
+        },
+        "title": {
+          "value": "Energy vs Volume Curve"
+        },
+        "fontsize": {
+          "value": 12
+        }
+      },
+      "expanded": false
+    },
+    "ExtractData": {
+      "type": "pyiron_nodes.atomistic.property.bulk.FitBirchMurnaghanEOS",
+      "label": "ExtractData",
+      "parent": null,
+      "inputs": {},
+      "expanded": false
+    }
+  },
+  "edges": [
+    {
+      "source": "structure",
+      "sourceHandle": "self",
+      "target": "IterateStructures",
+      "targetHandle": "node"
+    },
+    {
+      "source": "a_list",
+      "sourceHandle": "linspace",
+      "target": "IterateStructures",
+      "targetHandle": "values"
+    },
+    {
+      "source": "structure",
+      "sourceHandle": "structure",
+      "target": "singlepoint",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "engine",
+      "sourceHandle": "out",
+      "target": "singlepoint",
+      "targetHandle": "engine"
+    },
+    {
+      "source": "IterateStructures",
+      "sourceHandle": "df",
+      "target": "DF2List",
+      "targetHandle": "dataframe"
+    },
+    {
+      "source": "singlepoint",
+      "sourceHandle": "self",
+      "target": "IterateCalculations",
+      "targetHandle": "node"
+    },
+    {
+      "source": "DF2List",
+      "sourceHandle": "list_of_values",
+      "target": "IterateCalculations",
+      "targetHandle": "values"
+    },
+    {
+      "source": "IterateCalculations",
+      "sourceHandle": "df",
+      "target": "plotting",
+      "targetHandle": "ev_curve_df"
+    },
+    {
+      "source": "IterateCalculations",
+      "sourceHandle": "df",
+      "target": "ExtractData",
+      "targetHandle": "ev_curve_df"
+    }
+  ]
+}
