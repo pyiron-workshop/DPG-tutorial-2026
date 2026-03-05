@@ -113,9 +113,6 @@
       "label": "SolidFreeEnergyWithTemp",
       "parent": null,
       "inputs": {
-        "potential": {
-          "value": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
-        },
         "delete_folder": {
           "value": false
         },
@@ -130,9 +127,6 @@
       "label": "LiquidFreeEnergyWithTemp",
       "parent": null,
       "inputs": {
-        "potential": {
-          "value": "2009--Mendelev-M-I--Al-Mg--LAMMPS--ipr1"
-        },
         "delete_folder": {
           "value": false
         },
@@ -148,7 +142,7 @@
       "parent": null,
       "inputs": {
         "name": {
-          "value": "MgSolid"
+          "value": "AlSolid"
         },
         "fixed_concentration": {
           "value": 0
@@ -165,7 +159,7 @@
       "parent": null,
       "inputs": {
         "name": {
-          "value": "MgLiquid"
+          "value": "AlLiquid"
         },
         "fixed_concentration": {
           "value": 0
@@ -188,6 +182,35 @@
           "value": 1100
         }
       },
+      "expanded": false
+    },
+    "ListPotentials": {
+      "type": "pyiron_nodes.atomistic.engine.lammps.ListPotentials",
+      "label": "ListPotentials",
+      "parent": null,
+      "inputs": {
+        "resource_path": {
+          "value": null
+        }
+      },
+      "expanded": false
+    },
+    "PickElement": {
+      "type": "pyiron_nodes.basic.list.PickElement",
+      "label": "PickElement",
+      "parent": null,
+      "inputs": {
+        "index": {
+          "value": 20
+        }
+      },
+      "expanded": false
+    },
+    "EAM": {
+      "type": "pyiron_nodes.atomistic.engine.eam.EAM",
+      "label": "EAM",
+      "parent": null,
+      "inputs": {},
       "expanded": false
     }
   },
@@ -263,6 +286,36 @@
       "sourceHandle": "phase",
       "target": "TransitionTemperature",
       "targetHandle": "phase2"
+    },
+    {
+      "source": "BulkStructure",
+      "sourceHandle": "structure",
+      "target": "ListPotentials",
+      "targetHandle": "structure"
+    },
+    {
+      "source": "ListPotentials",
+      "sourceHandle": "potentials",
+      "target": "PickElement",
+      "targetHandle": "lst"
+    },
+    {
+      "source": "PickElement",
+      "sourceHandle": "element",
+      "target": "EAM",
+      "targetHandle": "potential_name"
+    },
+    {
+      "source": "EAM",
+      "sourceHandle": "engine",
+      "target": "SolidFreeEnergyWithTemp",
+      "targetHandle": "potential"
+    },
+    {
+      "source": "EAM",
+      "sourceHandle": "engine",
+      "target": "LiquidFreeEnergyWithTemp",
+      "targetHandle": "potential"
     }
   ]
 }
