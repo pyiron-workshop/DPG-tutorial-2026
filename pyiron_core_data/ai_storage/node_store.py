@@ -27,6 +27,9 @@ from dataclasses import dataclass
 import json
 import warnings
 
+import os
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
 from core import Workflow
 
 _CONFIG_PATH = pathlib.Path.home() / ".pyiron_aiflow_config.json"
