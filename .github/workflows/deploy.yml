@@ -17,7 +17,9 @@ jobs:
     - name: Install Jupyterbook
       shell: bash -l {0}
       run: |
-        conda install -y -c conda-forge "jupyter-book<2" 
+        conda install -y -c conda-forge "jupyter-book<2"
+        mv .github/workflows/_toc.yml .
+        mv .github/workflows/_config.yml . 
         jupyter-book build . --path-output public
     - run: mv public/_build/html public_html
     - run: touch public_html/.nojekyll

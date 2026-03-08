@@ -1,0 +1,9 @@
+format: jb-book
+root: README
+chapters:
+- file: 01_introduction.ipynb
+- file: 02_pythoninterface.ipynb
+- file: 03_assyst.ipynb
+- file: 04_fitting.ipynb 
+- file: 05_validation.ipynb
+- file: 06_thermodynamics.ipynb
