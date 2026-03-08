@@ -1,0 +1,760 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Validation of Interatomic Potentials &#8212; DPG tutorial 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '05_validation';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Calculation of phase diagrams" href="06_thermodynamics.html" />
+    <link rel="prev" title="Parametrising a Machine Learning Interatomic Potential" href="04_fitting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DPG tutorial 2026</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html"><font style="font-family:roboto;color:#455e6c"> Python Interface </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="06_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/05_validation.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/05_validation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#birch-murnaghan-equation-of-state">Birch-Murnaghan equation of state</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-workflows">Load Workflows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#single-point-calculation">Single Point Calculation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Birch-Murnaghan equation of state</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changing-engines">Changing Engines</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="validation-of-interatomic-potentials">
+<h1><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font><a class="headerlink" href="#validation-of-interatomic-potentials" title="Link to this heading">#</a></h1>
+<div class="admonition note" name="html-admonition" style="background:#e3f2fd; padding: 10px">
+<font style="font-family:roboto;color:#455e6c"> <b> DPG Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations </b> </font> </br>
+<font style="font-family:roboto;color:#455e6c"> 8 March 2026 </font> </br> </br>
+Sriram Anand, Prabhath Chilakalapudi, Haitham Gaafer, Marvin Poul, Jan Janssen, Jörg Neugebauer </br>
+<i> Max Planck Institute for Sustainable Materials </i></br>
+</br>
+Sarath Menon, Minaam Qamar, Ralf Drautz </br>
+<i> Ruhr-Universität Bochum </i></br>
+</br>
+Tilmann Hickel </br>
+<i> Bundesanstalt für Materialforschung und -prüfung </i></br>
+</div><div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Task</b></p>
+Build a workflow to <code>iterate</code> over different (hydrostatic) strain states and get energies of the system.
+To break it down, we need to
+<ol>
+    <li>Construct a set of structures that span different volumes
+        <ul>
+            <li>Construct the initial crystal</li>
+            <li>Create an array of strains</li>
+            <li>Apply the strains</li>
+        </ul>
+        <b>Simpler to change the volume by altering the lattice parameter</b>
+    </li>
+    Hint: Use the <code>IterateToDataframe</code> node
+    <li>Calculate the energy at each volume
+        <ul>
+            <li>Loop over each strained structure</li>
+            <li>Run a static single-point energy calculation, so that the volume isn't changed</li>
+            <li>Collect the resulting energy for each structure</li>
+        </ul>
+    </li>
+    Which node should we use?  <code>SinglePointStatic</code> or <code>Relax</code> ?
+    <li>Gather the results into a usable format
+        <ul>
+            <li>Extract the volume from each structure</li>
+            <li>Pair each volume with its corresponding energy to form (V, E) data points</li>
+        </ul>
+    </li>
+    <li>Fit an equation of state (EOS) to the (V, E) data
+        <ul>
+            <li>Choose an EOS, using the Birch-Murnaghan equation</li>
+            <li>Fit the model to extract equilibrium volume V&#8320;, cohesive energy E&#8320;, and bulk modulus B&#8320;</li>
+        </ul>
+    </li>
+    <li>Visualize the results
+        <ul>
+            <li>Plot the raw (V, E) data points</li>
+            <li>Overlay the fitted EOS curve</li>
+            <li>Annotate the plot with the extracted quantities</li>
+        </ul>
+    </li>
+</ol>
+</div><section id="birch-murnaghan-equation-of-state">
+<h2>Birch-Murnaghan equation of state<a class="headerlink" href="#birch-murnaghan-equation-of-state" title="Link to this heading">#</a></h2>
+<p>\begin{equation}
+E(V) = E_0 + \frac{9V_0 B_0}{16}
+\left{
+\left[\left(\frac{V_0}{V}\right)^{2/3} - 1\right]^3 B_0’
++
+\left[\left(\frac{V_0}{V}\right)^{2/3} - 1\right]^2
+\left[6 - 4\left(\frac{V_0}{V}\right)^{2/3}\right]
+\right}
+\end{equation}</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">as_function_node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyironFlow</span><span class="p">,</span> <span class="n">GUILayout</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="load-workflows">
+<h3>Load Workflows<a class="headerlink" href="#load-workflows" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single point calculation</span>
+<span class="n">wf_onept</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;05_01_SinglePoint&quot;</span><span class="p">)</span>
+<span class="n">wf_onept_sol</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;05_01_SinglePoint_solution&quot;</span><span class="p">)</span>
+<span class="c1"># Introduction to IterToDataFrame</span>
+<span class="n">wf_iter</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;05_02_IterToDataframe_intro&quot;</span><span class="p">)</span>
+<span class="n">wf_iter_sol</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;05_02_IterToDataframe_solution&quot;</span><span class="p">)</span>
+<span class="c1">#Murnaghan EV Workflow</span>
+<span class="n">wf_murn</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s1">&#39;05_03_Murnaghan&#39;</span><span class="p">)</span>
+<span class="n">wf_murn_sol</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s1">&#39;05_03_Murnaghan_solution&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="single-point-calculation">
+<h1>Single Point Calculation<a class="headerlink" href="#single-point-calculation" title="Link to this heading">#</a></h1>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Task</b></p>
+Build a workflow to <code>iterate</code> over different (hydrostatic) strain states and get energy of the system.
+To break it down, we need to
+<ol>
+    <li>Construct a simple workflow to evaluate the total energy and volume of a given structure
+        <ul>
+            <li>Construct the initial crystal with a guess-timate lattice parameter: <code>bulk</code></li>
+            <li> Define a calculation engine: simplest and fastest - <code>Ace</code></li>  
+            <li>Calculate the energy: <code>SinglePointCalculator</code> </li>
+        </ul>
+    </li>
+</ol>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf_onept</span><span class="p">,</span> <span class="n">wf_onept_sol</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;./pyiron_nodes/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cd89579cdcd24c5f9b4fed1064ea12ca", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><img alt="SinglePoint" src="_images/SinglepointSolution.png" /></p>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"> <b>Get structures with different volumes over which to iterate </b></p>
+<p><b>Q: Which single parameter can we change to explore different volumes?</b></p>
+<ul>
+    <li> Get a list of values to use: <code>Linspace</code></li>
+    <li> Functional Programming: Use a node as an input - iterate the node's operation: <code>IterToDataFrame</code> </li>
+</ul>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_iter</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf_iter</span><span class="p">,</span> <span class="n">wf_iter_sol</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;./pyiron_nodes/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_iter</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e6ea9ccfce8a459ab877e5dabd998514", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><img alt="iterate" src="_images/IteratorSolution.png" /></p>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"> <b> Task: Merge the two </b></p>
+<ul>
+    <li> The <code>IterToDataFrame</code> node only takes a list or array as input for values, what should we do? <i> search for nodes to convert dataframe to list</i></li>
+    <li> <b>Note:</b> We need to iterate the single point calculation over the list of structures</li>
+    <li> Functional Programming: Use a node as an input - iterate the node's operation: <code>IterToDataFrame</code> </li>
+</ul>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wf_murn</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s1">&#39;05_03_Murnaghan&#39;</span><span class="p">)</span>
+<span class="n">wf_murn_sol</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s1">&#39;05_03_Murnaghan_solution&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_murn</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf_murn</span><span class="p">,</span> <span class="n">wf_murn_sol</span><span class="p">],</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;./pyiron_nodes/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_murn</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6dcf64ddca074754a37711f646872ed2", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><img alt="murnaghan" src="_images/MurnaghanSolution.png" /></p>
+<section id="id1">
+<h2>Birch-Murnaghan equation of state<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>\begin{equation}
+E(V) = E_0 + \frac{9V_0 B_0}{16}
+\left{
+\left[\left(\frac{V_0}{V}\right)^{2/3} - 1\right]^3 B_0’
++
+\left[\left(\frac{V_0}{V}\right)^{2/3} - 1\right]^2
+\left[6 - 4\left(\frac{V_0}{V}\right)^{2/3}\right]
+\right}
+\end{equation}</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="changing-engines">
+<h1>Changing Engines<a class="headerlink" href="#changing-engines" title="Link to this heading">#</a></h1>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"> <b> Task: Use different Engines </b></p>
+<ul>
+    <li> The <code>Ace</code> node gives an ASE engine to evaluate the energies and forces using an ACE interatomic potential. Try using <code>GRACE</code> engine</li>
+    <li> Benchmarking means that we compare a computed property in the fit model against the "Ground truth / reality". Try the <code>QuantumEspresso</code> engine</li>  
+</ul>
+</div>
+<div class="admonition warning" name="html-admonition" style="background: #FFECEC; padding: 10px; border-left: 4px solid #FF4C4C; margin-top: 8px">
+<p class="title"> <b> ⚠️ Warning: QuantumEspresso and GRACE are computationally more intensive than ACE</b></p>
+<p> Before running with the <code>QuantumEspresso</code> or <code>GRACE</code> engines, <b>please reduce the number of points</b> in your calculation. Using a lot of points can make the workflow run very slow and may crash your Jupyter terminal. </p>
+<p> 💡 <span style="background: #D4EDDA; color: #155724; padding: 2px 6px; border-radius: 4px; font-family: monospace;">Set <b>num_points = 7</b> for <code>QuantumEspresso</code> and <b>num_points = 15</b> for <code>GRACE</code> in the <b>linspace</b> a.k.a <b>a_list</b> node</span> </p>
+</div><p>Several pre-fitted GRACE foundation models are available for use. You can choose from the following options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MP_GRACE_1L_r6_4Nov2024</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MP_GRACE_1L_r6_07Nov2024</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MP_GRACE_2L_r6_11Nov2024</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MP_GRACE_2L_r5_4Nov2024</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MP_GRACE_2L_r5_07Nov2024</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GRACE_2L_OAM_28Jan25</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GRACE-1L-OAM_2Feb25</span></code></p></li>
+</ul>
+<p>For further details about the GRACE foundation models, please refer to the <a class="reference external" href="https://gracemaker.readthedocs.io/en/latest/gracemaker/foundation/">Grace documentation</a>.</p>
+<p>Note that you only need to provide the model string as an argument—the associated potential files will be downloaded at runtime.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_murn_qe</span> <span class="o">=</span> <span class="n">PyironFlow</span><span class="p">([</span><span class="n">wf_murn_sol</span><span class="p">],</span> <span class="n">workflow_path</span><span class="o">=</span><span class="s2">&quot;./pyiron_core_data/workflows/&quot;</span><span class="p">,</span> <span class="n">nodes_path</span><span class="o">=</span><span class="s2">&quot;./pyiron_nodes/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_murn_qe</span><span class="o">.</span><span class="n">gui</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ef16496a483b4a02bda3dfaee6853f5f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><img alt="solution" src="_images/EV_Workflow_solved.png" /></p>
+<p><img alt="roll" src="_images/logo_roll.png" /></p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_fitting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_thermodynamics.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#birch-murnaghan-equation-of-state">Birch-Murnaghan equation of state</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#load-workflows">Load Workflows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#single-point-calculation">Single Point Calculation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Birch-Murnaghan equation of state</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#changing-engines">Changing Engines</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jan Janssen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

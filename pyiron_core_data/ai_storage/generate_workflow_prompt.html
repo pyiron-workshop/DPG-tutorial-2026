@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PyIron Workflow Creation Guide &#8212; DPG tutorial 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pyiron_core_data/ai_storage/generate_workflow_prompt';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DPG tutorial 2026</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../README.html">
+                    Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_pythoninterface.html"><font style="font-family:roboto;color:#455e6c"> Python Interface </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../03_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../06_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/pyiron_core_data/ai_storage/generate_workflow_prompt.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>PyIron Workflow Creation Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">PyIron Workflow Creation Guide</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-node-metadata">1. Task &amp; Node Metadata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-workflow-template">2. Basic Workflow Template</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-output-only-the-python-source-code">3. Goal – Output Only the Python Source Code</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-runnable-code">… complete, runnable code …</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-full-workflow">4. Example: Full Workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflows">5. Example Workflows</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-calculation-of-a-solid-unary-phase">Free energy calculation of a solid unary phase</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pyiron-workflow-creation-guide">
+<h1>PyIron Workflow Creation Guide<a class="headerlink" href="#pyiron-workflow-creation-guide" title="Link to this heading">#</a></h1>
+<p>This document explains how to write a <strong>pyiron</strong> workflow for a given task using specified nodes. It is formatted for both human readers and LLMs, with clear sections and properly fenced code blocks.</p>
+<hr class="docutils" />
+<section id="task-node-metadata">
+<h2>1. Task &amp; Node Metadata<a class="headerlink" href="#task-node-metadata" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Task</strong>: <code class="docutils literal notranslate"><span class="pre">{task}</span></code></p></li>
+<li><p><strong>Node metadata</strong>: <code class="docutils literal notranslate"><span class="pre">{node_meta_data}</span></code></p></li>
+</ul>
+<p><em>(Replace the placeholders with the actual task description and node parameters.)</em></p>
+</section>
+<hr class="docutils" />
+<section id="basic-workflow-template">
+<h2>2. Basic Workflow Template<a class="headerlink" href="#basic-workflow-template" title="Link to this heading">#</a></h2>
+<p>Construct the import path of a node from the metadata:
+“name”: “IterToDataFrame”,
+“module”: “basic.loop”,</p>
+<p>The corresponding import statement is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.loop</span><span class="w"> </span><span class="kn">import</span> <span class="n">IterToDataFrame</span>
+</pre></div>
+</div>
+<p><strong>Procedure</strong></p>
+<ol class="arabic simple">
+<li><p>Prefix the <code class="docutils literal notranslate"><span class="pre">module</span></code> value with <code class="docutils literal notranslate"><span class="pre">pyiron_nodes.</span></code> → <code class="docutils literal notranslate"><span class="pre">pyiron_nodes.basic.loop</span></code>.</p></li>
+<li><p>Append the <code class="docutils literal notranslate"><span class="pre">name</span></code> value after <code class="docutils literal notranslate"><span class="pre">import</span></code>.</p></li>
+<li><p>Verify that both parts match the metadata exactly (no extra spaces, trailing dots, or case changes).</p></li>
+</ol>
+<p>Below is the minimal template you should follow when constructing a workflow.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
+
+<span class="c1"># Import all required nodes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateVacancy</span>
+
+<span class="c1"># Create the workflow instance</span>
+<span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;myWorkflow&quot;</span><span class="p">)</span>          <span class="c1"># or Workflow(label=&quot;myWorkflow&quot;)</span>
+
+<span class="c1"># Add nodes to the workflow</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">vacancy</span> <span class="o">=</span> <span class="n">CreateVacancy</span><span class="p">(</span>
+    <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">bulk</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Important:</strong></p>
+<ul class="simple">
+<li><p>Do <strong>not</strong> create a <code class="docutils literal notranslate"><span class="pre">Project</span></code> object (e.g., <code class="docutils literal notranslate"><span class="pre">proj</span> <span class="pre">=</span> <span class="pre">Project(&quot;...&quot;)</span></code>).</p></li>
+<li><p>Only import nodes that are explicitly listed in the metadata.</p></li>
+<li><p>Do <strong>not</strong> write nodes, e.g. by using &#64;as_function_node</p></li>
+<li><p>Do <strong>not</strong> assume port labels that are not explicitly given in the metadata for a node (avoid errors such as: Invalid code - workflow creation failed: Input port “temperature_step” does not exist on node “InputClass”)</p></li>
+<li><p>Double check that a port label that you want to use is explicitly listed in the node metadata. Be conservative, it is better to have a missing port label rather than a wrong one!</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="goal-output-only-the-python-source-code">
+<h2>3. Goal – Output Only the Python Source Code<a class="headerlink" href="#goal-output-only-the-python-source-code" title="Link to this heading">#</a></h2>
+<p>When you generate the final workflow (or custom node), wrap <strong>all</strong> Python code in a single fenced block:</p>
+<p>```python</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="complete-runnable-code">
+<h1>… complete, runnable code …<a class="headerlink" href="#complete-runnable-code" title="Link to this heading">#</a></h1>
+<p>```</p>
+<ul class="simple">
+<li><p>No extra text, headings, or stray back‑ticks should appear <strong>inside</strong> the fenced block.</p></li>
+<li><p>The block must be syntactically correct so that an extraction utility can retrieve it without modification.</p></li>
+</ul>
+<hr class="docutils" />
+<section id="example-full-workflow">
+<h2>4. Example: Full Workflow<a class="headerlink" href="#example-full-workflow" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span><span class="p">,</span> <span class="n">as_function_node</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateVacancy</span>
+
+
+
+<span class="c1"># ----------------------------------------------------------------------</span>
+<span class="c1"># Workflow definition</span>
+<span class="c1"># ----------------------------------------------------------------------</span>
+<span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;myWorkflow&quot;</span><span class="p">)</span>
+
+<span class="c1"># Node 1: Build bulk structure</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Al&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="c1"># Node 2: Create a vacancy using the (possibly) modified structure</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">vacancy</span> <span class="o">=</span> <span class="n">CreateVacancy</span><span class="p">(</span>
+    <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">bulk</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># End of workflow</span>
+</pre></div>
+</div>
+</section>
+<section id="example-workflows">
+<h2>5. Example Workflows<a class="headerlink" href="#example-workflows" title="Link to this heading">#</a></h2>
+<section id="free-energy-calculation-of-a-solid-unary-phase">
+<h3>Free energy calculation of a solid unary phase<a class="headerlink" href="#free-energy-calculation-of-a-solid-unary-phase" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.calculator.calphy</span><span class="w"> </span><span class="kn">import</span> <span class="n">InputClass</span><span class="p">,</span> <span class="n">PlotFreeEnergy</span><span class="p">,</span> <span class="n">SolidFreeEnergyWithTemp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.eam</span><span class="w"> </span><span class="kn">import</span> <span class="n">EAM</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.engine.lammps</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListPotentials</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bulk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.atomistic.structure.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repeat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyiron_nodes.basic.list</span><span class="w"> </span><span class="kn">import</span> <span class="n">PickElement</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Workflow</span>
+
+<span class="n">wf</span> <span class="o">=</span> <span class="n">Workflow</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+
+<span class="n">wf</span><span class="o">.</span><span class="n">BulkStructure</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">CalphyInputClass</span> <span class="o">=</span> <span class="n">InputClass</span><span class="p">()</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">RepeatStructure</span> <span class="o">=</span> <span class="n">Repeat</span><span class="p">(</span><span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">BulkStructure</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> <span class="n">repeat_scalar</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">ListPotentials</span> <span class="o">=</span> <span class="n">ListPotentials</span><span class="p">(</span><span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">BulkStructure</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">PickElement</span> <span class="o">=</span> <span class="n">PickElement</span><span class="p">(</span><span class="n">lst</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">ListPotentials</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">potentials</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">EAM</span> <span class="o">=</span> <span class="n">EAM</span><span class="p">(</span><span class="n">potential_name</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">PickElement</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">element</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">SolidFreeEnergyWithTemp</span> <span class="o">=</span> <span class="n">SolidFreeEnergyWithTemp</span><span class="p">(</span><span class="n">input_class</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">CalphyInputClass</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">RepeatStructure</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> <span class="n">potential</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">EAM</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+<span class="n">wf</span><span class="o">.</span><span class="n">PlotUnaryFreeEnergy</span> <span class="o">=</span> <span class="n">PlotFreeEnergy</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">SolidFreeEnergyWithTemp</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span> <span class="n">free_energy</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">SolidFreeEnergyWithTemp</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">free_energy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Follow the guidelines above to construct any pyiron workflow while ensuring the generated code is clean, deterministic, and ready for automated extraction.</em></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pyiron_core_data/ai_storage"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">PyIron Workflow Creation Guide</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-node-metadata">1. Task &amp; Node Metadata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-workflow-template">2. Basic Workflow Template</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal-output-only-the-python-source-code">3. Goal – Output Only the Python Source Code</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-runnable-code">… complete, runnable code …</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-full-workflow">4. Example: Full Workflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-workflows">5. Example Workflows</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-calculation-of-a-solid-unary-phase">Free energy calculation of a solid unary phase</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jan Janssen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '02_pythoninterface';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Advanced Features" href="03_quantumespresso.html" />
+    <link rel="next" title="Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method" href="03_assyst.html" />
     <link rel="prev" title="Introduction" href="01_introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,13 +174,14 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01_introduction.html">Introduction</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Python Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="03_quantumespresso.html">Advanced Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="05_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="06_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of interatomic potentials </font></a></li>
-<li class="toctree-l1"><a class="reference internal" href="07_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction </font></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><font style="font-family:roboto;color:#455e6c"> Python Interface </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="06_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
 </ul>
 
     </div>
@@ -350,7 +351,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Python Interface</h1>
+    <h1><font style="font-family:roboto;color:#455e6c"> Python Interface </font></h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -360,9 +361,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#young-s-modulus">Young’s Modulus</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-functions">Python Functions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-functions-to-modulus">From Functions to Modulus</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#young-s-modulus"><font style="font-family:roboto;color:#455e6c"> Young’s Modulus </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-functions"><font style="font-family:roboto;color:#455e6c"> Python Functions </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-functions-to-modulus"><font style="font-family:roboto;color:#455e6c"> From Functions to Modulus </font></a></li>
 </ul>
             </nav>
         </div>
@@ -375,10 +376,10 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="python-interface">
-<h1>Python Interface<a class="headerlink" href="#python-interface" title="Link to this heading">#</a></h1>
+<h1><font style="font-family:roboto;color:#455e6c"> Python Interface </font><a class="headerlink" href="#python-interface" title="Link to this heading">#</a></h1>
 <p>On of the core strength of <a class="reference external" href="https://pyiron.org">pyiron</a> is the one to one mapping between the visual programming interface and the underlying Python framework. This enables collaborators with different preferences to work seamlessly together, as the same workflow can be edited from the Python interface or the visual programming interface.</p>
 <section id="young-s-modulus">
-<h2>Young’s Modulus<a class="headerlink" href="#young-s-modulus" title="Link to this heading">#</a></h2>
+<h2><font style="font-family:roboto;color:#455e6c"> Young’s Modulus </font><a class="headerlink" href="#young-s-modulus" title="Link to this heading">#</a></h2>
 <p>To demonstrate this functionality we take the same Young’s Modulus example from the previous tutorial but this time rather than creating the workflow visually, we first create and evaluate it from Python before transferring it to the visual programming interface.</p>
 <p>Again, as a reminder in Jupyter notebooks the individual cells are evaluated by pressing <strong>Shift</strong> and <strong>Enter</strong>.</p>
 <p>Start by creating a workflow named <code class="docutils literal notranslate"><span class="pre">YoungsModulusPython</span></code> using the <code class="docutils literal notranslate"><span class="pre">Workflow</span></code> class from the <code class="docutils literal notranslate"><span class="pre">pyiron_core</span></code> module:</p>
@@ -475,12 +476,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8902159d6bc44ffbb3fb97b388a841bf", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "58dbd67d67fc4ceaa48b33785cabcec7", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <p>The different workflows in the <code class="docutils literal notranslate"><span class="pre">wf_list</span></code> are loaded as different tabs. In case a workflow is not directly visible you can use the <strong>Refresh</strong> button in the top left menu of the canvas to refresh the visualization. Finally, to evaluate the workflow again you can click the <strong>Run</strong> button on the menu on top of the <strong>Plot</strong> node. Or alternatively, you can also evaluate one node at a time, which can be helpful for debugging.</p>
 </section>
 <section id="python-functions">
-<h2>Python Functions<a class="headerlink" href="#python-functions" title="Link to this heading">#</a></h2>
+<h2><font style="font-family:roboto;color:#455e6c"> Python Functions </font><a class="headerlink" href="#python-functions" title="Link to this heading">#</a></h2>
 <p>On of the core features of the pyiron workflow framework is its extendability, in particular pyiron allows you to define nodes directly inside your Jupyter notebook to simplify rapid prototyping. Again staying with the example of the Youngs modulus we define the individual Python functions using the <code class="docutils literal notranslate"><span class="pre">&#64;as_function_node</span></code> decorator.</p>
 <p>Starting with the <strong>ReadCSV</strong> node to read the CSV file and convert it to a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> DataFrame. By adding the parameter <code class="docutils literal notranslate"><span class="pre">&quot;csv&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">as_function_node</span></code> decorator the output port of the <strong>ReadCSV</strong> node is named <code class="docutils literal notranslate"><span class="pre">csv</span></code>.</p>
 <div class="cell docutils container">
@@ -579,9 +580,10 @@ document.write(`
 </div>
 </section>
 <section id="from-functions-to-modulus">
-<h2>From Functions to Modulus<a class="headerlink" href="#from-functions-to-modulus" title="Link to this heading">#</a></h2>
+<h2><font style="font-family:roboto;color:#455e6c"> From Functions to Modulus </font><a class="headerlink" href="#from-functions-to-modulus" title="Link to this heading">#</a></h2>
 <p>If you use the file browser in jupyter lab and navigate to the <code class="docutils literal notranslate"><span class="pre">pyiron_nodes</span></code> folder and inside open the subfolder <code class="docutils literal notranslate"><span class="pre">experiment</span></code> and the Python file <code class="docutils literal notranslate"><span class="pre">youngs_modulus.py</span></code> then you see that the nodes we defined in the Jupyter notebook are exactly the same as the ones which are used in the <strong>Node Library</strong> of the visual programming interface. More specifically, you can simply add your own nodes to the local <strong>Node Library</strong> by using the <code class="docutils literal notranslate"><span class="pre">&#64;as_function_node</span></code> decorator and placing them in the <code class="docutils literal notranslate"><span class="pre">pyiron_nodes</span></code> folder.</p>
 <p>For development purposes it might even be helpful to create a separate folder in the <code class="docutils literal notranslate"><span class="pre">pyiron_nodes</span></code> or a standalone nodes library for you project. All you have to do to load nodes from a different location on the file system is to change the <code class="docutils literal notranslate"><span class="pre">nodes_path</span></code> when you initialize the visual programming interface. This highlights the extendability of the <a class="reference external" href="https://pyiron.org">pyiron</a> workflow framework.</p>
+<p><img alt="footer" src="_images/logo_roll.png" /></p>
 </section>
 </section>
 
@@ -621,15 +623,15 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Introduction</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Introduction </font></p>
       </div>
     </a>
     <a class="right-next"
-       href="03_quantumespresso.html"
+       href="03_assyst.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Advanced Features</p>
+        <p class="prev-next-title"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -649,9 +651,9 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#young-s-modulus">Young’s Modulus</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-functions">Python Functions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-functions-to-modulus">From Functions to Modulus</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#young-s-modulus"><font style="font-family:roboto;color:#455e6c"> Young’s Modulus </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-functions"><font style="font-family:roboto;color:#455e6c"> Python Functions </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-functions-to-modulus"><font style="font-family:roboto;color:#455e6c"> From Functions to Modulus </font></a></li>
 </ul>
   </nav></div>
 
@@ -666,7 +668,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Sarath Menon
+By Jan Janssen
 </p>
 
   </div>

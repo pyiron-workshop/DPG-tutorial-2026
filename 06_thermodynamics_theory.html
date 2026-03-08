@@ -1,0 +1,776 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Calculation of phase diagrams &#8212; DPG tutorial 2026</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '06_thermodynamics_theory';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DPG tutorial 2026</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="README.html">
+                    Hands-on Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_introduction.html"><font style="font-family:roboto;color:#455e6c"> Introduction </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_pythoninterface.html"><font style="font-family:roboto;color:#455e6c"> Python Interface </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_assyst.html"><font style="font-family:roboto;color:#455e6c"> Generating datasets for Machine Learning Interatomic Potentials with the ASSYST method </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_fitting.html"><font style="font-family:roboto;color:#455e6c"> Parametrising a Machine Learning Interatomic Potential </font></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_validation.html"><font style="font-family:roboto;color:#455e6c"> Validation of Interatomic Potentials </font></a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="06_thermodynamics.html"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/pyiron-workshop/DPG-tutorial-2026/master?urlpath=lab/tree/06_thermodynamics_theory.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Binder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Binder logo" src="_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/06_thermodynamics_theory.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-simple-phase-diagram"><font style="font-family:roboto;color:#455e6c"> A simple phase diagram </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculation-of-phase-diagrams-the-essential-ingredients"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams: the essential ingredients </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory-behind-free-energy-calculation"><font style="font-family:roboto;color:#455e6c">Theory behind free energy calculation</font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculation-of-free-energies-thermodynamic-integration"><font face="Helvetica" style="color:#455e6c"> Calculation of free energies: Thermodynamic integration </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#speeding-things-up-non-equilibrium-calculations"><font face="Helvetica" style="color:#455e6c"> Speeding things up: Non-equilibrium calculations </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#non-equilibrium-hamiltonian-interpolation">Non-Equilibrium Hamiltonian Interpolation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-for-solids"><font face="Helvetica" style="color:#455e6c"> Free energy for solids </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#task-find-free-energy-of-al-in-fcc-lattice-at-500-k-and-0-pressure">Task: Find free energy of Al in FCC lattice at 500 K and 0 pressure</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-as-function-of-temperature"><font face="Helvetica" style="color:#455e6c"> Free energy as function of temperature </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-for-liquids"><font face="Helvetica" style="color:#455e6c"> Free energy for liquids </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-of-melting-temperature-methods"><font face="Helvetica" style="color:#455e6c"> Comparison of melting temperature methods </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading"><font face="Helvetica" style="color:#455e6c"> Further reading </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-used-in-this-notebook"><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="calculation-of-phase-diagrams">
+<h1><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams </font><a class="headerlink" href="#calculation-of-phase-diagrams" title="Link to this heading">#</a></h1>
+<div class="admonition note" name="html-admonition" style="background:#e3f2fd; padding: 10px">
+<font style="font-family:roboto;color:#455e6c"> <b> DPG Tutorial: Automated Workflows and Machine Learning for Materials Science Simulations </b> </font> </br>
+<font style="font-family:roboto;color:#455e6c"> 8 March 2026 </font> </br> </br>
+Sriram Anand, Prabhath Chilakalapudi, Haitham Gaafer, Marvin Poul, Jan Janssen, Jörg Neugebauer </br>
+<i> Max Planck Institute for Sustainable Materials </i></br>
+</br>
+Sarath Menon, Minaam Qamar, Ralf Drautz </br>
+<i> Ruhr-Universität Bochum </i></br>
+</br>
+Tilmann Hickel </br>
+<i> Bundesanstalt für Materialforschung und -prüfung </i></br>
+</div><section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.nature.com/articles/s41524-024-01441-0">Menon, S. et al. From electrons to phase diagrams with machine learning potentials using pyiron based automated workflows. npj Comput Mater 10, 261 (2024)</a></p></li>
+<li><p><a class="reference external" href="https://link.aps.org/doi/10.1103/PhysRevMaterials.5.103801">Menon, S., Lysogorskiy, Y., Rogal, J. &amp; Drautz, R. Automated free-energy calculation from atomistic simulations. Phys. Rev. Materials 5, 103801 (2021)</a></p></li>
+<li><p><a class="reference external" href="https://doi.org/10.21203/rs.3.rs-4732459/v1">Poul, M., Huber, L. &amp; Neugebauer, J. Automated Generation of Structure Datasets for Machine Learning Potentials and Alloys. Preprint</a> (2024)</p></li>
+</ul>
+<p>In this notebook, we will use the interatomic potentials for calculation of thermodynamic properties such as Helmholtz and Gibbs free energies, which in turn can be used for the calculation of phase diagrams. We will discuss <a class="reference external" href="https://calphy.org/">calphy</a>, the tool for automated calculation of free energies, and the methology involved. Furthermore, we will also discuss <a class="reference external" href="https://github.com/eisenforschung/landau">Landau</a> which can be used to arrive at phase diagrams from free energies.</p>
+</section>
+<section id="a-simple-phase-diagram">
+<h2><font style="font-family:roboto;color:#455e6c"> A simple phase diagram </font><a class="headerlink" href="#a-simple-phase-diagram" title="Link to this heading">#</a></h2>
+<p><img alt="phase" src="_images/phase_dia_1.png" /></p>
+<p>Phase diagrams provide a wealth of information such as: coexisting lines, melting temperature, phase stability, nucleation mechanism.</p>
+</section>
+<section id="calculation-of-phase-diagrams-the-essential-ingredients">
+<h2><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams: the essential ingredients </font><a class="headerlink" href="#calculation-of-phase-diagrams-the-essential-ingredients" title="Link to this heading">#</a></h2>
+<p><img alt="transition" src="_images/cimg4.png" /></p>
+<p>Phase diagrams can be evaluated from free energy diagrams. The required input are:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G(P, T)\)</span> for unary systems</p></li>
+<li><p><span class="math notranslate nohighlight">\(G(x, T)\)</span> for binary systems</p></li>
+</ul>
+<p>To calculate this, we employ thermodynamic integration, in conjuction with a number of methodological improvements.</p>
+<div class="admonition note" name="html-admonition" style="background: #FFEDD1; padding: 10px">
+<p class="title"><b>Theory behind free energy calculation </b></p>
+Please see the end of this notebook, or  <a href="https://journals.aps.org/prmaterials/abstract/10.1103/PhysRevMaterials.5.103801">this publication</a> for a longer discussion on the theory and algorithms.
+</div><p>Due to our limited time, we will show the calculation of melting temperature, the end point on the phase diagram. We leverage a software tool for calculation of free energies, <a class="reference external" href="https://calphy.org">calphy</a> along with pyiron for efficient and automated free energy calculations. For a detailed tutorial, see <a class="reference external" href="https://workshop.pyiron.org/potentials-workshop-2022/phase_diagram/Intro.html">here</a>.</p>
+</section>
+<section id="theory-behind-free-energy-calculation">
+<h2><font style="font-family:roboto;color:#455e6c">Theory behind free energy calculation</font><a class="headerlink" href="#theory-behind-free-energy-calculation" title="Link to this heading">#</a></h2>
+<section id="calculation-of-free-energies-thermodynamic-integration">
+<h3><font style="color:#455e6c" face="Helvetica" > Calculation of free energies: Thermodynamic integration </font><a class="headerlink" href="#calculation-of-free-energies-thermodynamic-integration" title="Link to this heading">#</a></h3>
+<p><img alt="sampling" src="_images/fig1.png" /></p>
+<ul class="simple">
+<li><p>free energy of reference system are known: Einstein crystal, <a class="reference external" href="https://doi.org/10.1063/1.4967775">Uhlenbeck-Ford model</a></p></li>
+<li><p>the two systems are coupled by
+$<span class="math notranslate nohighlight">\(
+H(\lambda) = \lambda H_f + (1-\lambda)\lambda H_i
+\)</span>$</p></li>
+<li><p>Run calculations for each <span class="math notranslate nohighlight">\(\lambda\)</span> and integrate
+$<span class="math notranslate nohighlight">\(
+G_f = G_i + \int_{\lambda=0}^1 d\lambda \bigg \langle  \frac{\partial H(\lambda)}{\partial \lambda } \bigg \rangle
+\)</span>$</p></li>
+</ul>
+<p>To calculate <span class="math notranslate nohighlight">\(F\)</span>,</p>
+<ul class="simple">
+<li><p>for each phase</p>
+<ul>
+<li><p>for each pressure</p>
+<ul>
+<li><p>for each temperature</p>
+<ul>
+<li><p>for each <span class="math notranslate nohighlight">\(\lambda\)</span></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>If we choose 100 different <span class="math notranslate nohighlight">\(\lambda\)</span> values; 100 calculations are needed for each temperature and pressure!</p>
+<p><strong>Dimensionality: (phase, <span class="math notranslate nohighlight">\(P\)</span>, <span class="math notranslate nohighlight">\(T\)</span>, <span class="math notranslate nohighlight">\(\lambda\)</span>)</strong></p>
+</section>
+<section id="speeding-things-up-non-equilibrium-calculations">
+<h3><font style="color:#455e6c" face="Helvetica" > Speeding things up: Non-equilibrium calculations </font><a class="headerlink" href="#speeding-things-up-non-equilibrium-calculations" title="Link to this heading">#</a></h3>
+<section id="non-equilibrium-hamiltonian-interpolation">
+<h4>Non-Equilibrium Hamiltonian Interpolation<a class="headerlink" href="#non-equilibrium-hamiltonian-interpolation" title="Link to this heading">#</a></h4>
+<p><img alt="coupling" src="_images/cimg5.png" /></p>
+<p>In this method:</p>
+<ul class="simple">
+<li><p>Discrete <span class="math notranslate nohighlight">\(\lambda\)</span> parameter is replaced by a time dependent <span class="math notranslate nohighlight">\(\lambda(t)\)</span></p></li>
+<li><p>Instead of running calculations at each <span class="math notranslate nohighlight">\(\lambda\)</span>, run a single, short, non-equilibrium calculation</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+G_f = G_i + \int_{t_i}^{t_f} dt \frac{d\lambda (t)}{dt}  \frac{ H(\lambda)}{\partial \lambda }
+\]</div>
+<p>As discussed:</p>
+<ul class="simple">
+<li><p>the coupling parameter <span class="math notranslate nohighlight">\(\lambda\)</span> earlier is replaced by a time dependent parameter</p></li>
+<li><p>The equation also no longer has an ensemble average</p></li>
+</ul>
+<p>These aspects makes it quite easy and fast to estimate this integral.</p>
+<p>However:</p>
+<ul class="simple">
+<li><p>this equation holds when the switching betwen the system of interest and reference system is carried out infinitely slowly</p></li>
+<li><p>Practically, this is not not possible.</p></li>
+</ul>
+<p>Therefore we can write:</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta G = W_{rev} = W_s - E_d
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+W_s = \int_{t_i}^{t_f} dt \frac{d\lambda (t)}{dt}  \frac{ H(\lambda)}{\partial \lambda }
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(E_d\)</span> is the energy dissipation</p></li>
+<li><p><span class="math notranslate nohighlight">\(E_d \to 0\)</span> when <span class="math notranslate nohighlight">\(t_f-t_i \to \infty\)</span></p></li>
+</ul>
+<p>So far, so good, but how is this useful?</p>
+<ul class="simple">
+<li><p>Instead of a single transformation from system of interest to reference, we switch back too</p></li>
+<li><p>These are called forward <span class="math notranslate nohighlight">\((i \to f)\)</span> and backward <span class="math notranslate nohighlight">\((f \to i)\)</span> switching</p></li>
+<li><p><span class="math notranslate nohighlight">\(t_f - t_i = t_{sw}\)</span> is the switching time in each direction</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(t_{sw}\)</span> is long enough, <span class="math notranslate nohighlight">\(E_d^{i \to f} = E_d^{f \to i}\)</span></p></li>
+<li><p>and <span class="math notranslate nohighlight">\(\Delta G = \frac{1}{2} (W_s^{i \to f} - W_s^{f \to i})\)</span></p></li>
+</ul>
+<p>Now, we have all the components required for actual calculations.</p>
+<p>We have also managed to successfully reduce the dimensionality</p>
+<ul class="simple">
+<li><p>for each phase</p>
+<ul>
+<li><p>for each pressure</p>
+<ul>
+<li><p>for each temperature</p>
+<ul>
+<li><p>~~for each <span class="math notranslate nohighlight">\(\lambda\)</span>~~</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Dimensionality: (phase, <span class="math notranslate nohighlight">\(P\)</span>, <span class="math notranslate nohighlight">\(T\)</span>)</strong></p>
+<p>So, how do we calculate the free energy of a system modelled with a given interatomic potential?</p>
+</section>
+</section>
+<section id="free-energy-for-solids">
+<h3><font style="color:#455e6c" face="Helvetica" > Free energy for solids </font><a class="headerlink" href="#free-energy-for-solids" title="Link to this heading">#</a></h3>
+<section id="task-find-free-energy-of-al-in-fcc-lattice-at-500-k-and-0-pressure">
+<h4>Task: Find free energy of Al in FCC lattice at 500 K and 0 pressure<a class="headerlink" href="#task-find-free-energy-of-al-in-fcc-lattice-at-500-k-and-0-pressure" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p>Create an Al FCC lattice</p></li>
+<li><p>Choose an interatomic potential</p></li>
+<li><p>Run MD calculations at 500 K and 0 pressure to equilibrate the system</p></li>
+<li><p>Introduce the reference system</p></li>
+<li><p>Switch….</p></li>
+<li><p>…..</p></li>
+</ol>
+<p>Steps 1-3 should be fairly easy, we saw this in the last days and also in the first session. But how do we introduce a reference system?</p>
+<ul class="simple">
+<li><p>A reference system is simply one for which the free energy is analytically known (<span class="math notranslate nohighlight">\(G_i\)</span>)</p></li>
+<li><p>We calculate the free energy difference between this and the system of interest.</p></li>
+</ul>
+<p>In case of solids, a good choice of a reference system is the Einstein crystal. An Einstein crystal is a set of independent harmonic oscillators attached to the lattice positions.</p>
+<p>The free energy of the Einstein crystal is:</p>
+<div class="math notranslate nohighlight">
+\[
+F_E = 3 k_B T \sum_{i} ln \bigg ( \frac{\hbar \omega_i}{k_B T} \bigg )
+\]</div>
+<p>We need to calculate:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\omega\)</span></p></li>
+<li><p>A common way is $<span class="math notranslate nohighlight">\(  \frac{1}{2} k_i \langle (\Delta \pmb{r}_i)^2 \rangle = \frac{3}{2} k_\mathrm{B} T \)</span>$</p></li>
+<li><p><span class="math notranslate nohighlight">\(\langle (\Delta \pmb{r}_i)^2 \rangle\)</span> is the mean squared displacement.</p></li>
+</ul>
+<p>Now that we know about the reference system, let’s update our pseudo workflow:</p>
+<ol class="arabic simple">
+<li><p>Create an Al fcc lattice</p></li>
+<li><p>Choose an interatomic potential</p></li>
+<li><p>Run MD calculations at 500 K and 0 pressure to equilibrate the system</p></li>
+<li><p>Calculate the mean squared displacement, therefore spring constants</p></li>
+<li><p>Switch system of interest to reference system</p></li>
+<li><p>Equilibrate the system</p></li>
+<li><p>Switch back to system of interest</p></li>
+<li><p>Find the work done</p></li>
+<li><p>Add to the free energy of the Einstein crystal</p></li>
+</ol>
+<p>As you can see, there are a number of steps that need to be done. This is where <strong>calphy</strong> and <strong>pyiron</strong> come in. These tools automatise all of the above steps and makes it easy to perform these calculations.</p>
+</section>
+</section>
+<section id="free-energy-as-function-of-temperature">
+<h3><font style="color:#455e6c" face="Helvetica" > Free energy as function of temperature </font><a class="headerlink" href="#free-energy-as-function-of-temperature" title="Link to this heading">#</a></h3>
+<p><img alt="final" src="_images/cimg6.png" /></p>
+<p>Gibb’s free energy via reversible scaling at a constant pressure is given by,</p>
+<p><span class="math notranslate nohighlight">\( G(N,P,T_f) = G(N,P,T_i) + \dfrac{3}{3}Nk_BT_f\ln{\dfrac{T_f}{T_i}} + \dfrac{T_f}{T_i}\Delta G \)</span>,</p>
+<p>Therefore, <span class="math notranslate nohighlight">\(G(N,P,T_f)\)</span> can be computed from <span class="math notranslate nohighlight">\(G(N,P,T_i)\)</span> via the free energy difference <span class="math notranslate nohighlight">\(\Delta G\)</span>.</p>
+<p>Here, <span class="math notranslate nohighlight">\(\Delta G = \dfrac{1}{2}[W_{if}-W_{fi}\)</span>] — (2)</p>
+<p>The reversible work is related to the internal energy <span class="math notranslate nohighlight">\(U\)</span> by,
+<span class="math notranslate nohighlight">\(W = \int_{1}^{\lambda_f}&lt;U&gt; \,d\lambda\)</span> — (3)</p>
+<p>Using MD <span class="math notranslate nohighlight">\(W\)</span> can be computed as:</p>
+<ul class="simple">
+<li><p>equilibrate for time <span class="math notranslate nohighlight">\(t_{eq}\)</span> in NPT ensemble</p></li>
+<li><p>switch <span class="math notranslate nohighlight">\(\lambda\)</span> : <span class="math notranslate nohighlight">\(1-&gt;\dfrac{T_f}{T_i}\)</span> over time <span class="math notranslate nohighlight">\(t_{sw}\)</span></p></li>
+<li><p>calculate work <span class="math notranslate nohighlight">\(W_{if}\)</span> from (3)</p></li>
+<li><p>equilibrate for time <span class="math notranslate nohighlight">\(t_{eq}\)</span> in NPT ensemble</p></li>
+<li><p>switch <span class="math notranslate nohighlight">\(\lambda\)</span> : <span class="math notranslate nohighlight">\(\dfrac{T_f}{T_i}-&gt;1\)</span> over time <span class="math notranslate nohighlight">\(t_{sw}\)</span></p></li>
+<li><p>calculate work <span class="math notranslate nohighlight">\(W_{fi}\)</span> from (3).</p></li>
+</ul>
+</section>
+<section id="free-energy-for-liquids">
+<h3><font style="color:#455e6c" face="Helvetica" > Free energy for liquids </font><a class="headerlink" href="#free-energy-for-liquids" title="Link to this heading">#</a></h3>
+<p><strong>How is the liquid prepared in this calculation?</strong></p>
+<ul class="simple">
+<li><p>Start from the given structure</p></li>
+<li><p>This structure is heated until it melts.</p></li>
+<li><p>Melting of the structure is automatically detected by calphy</p></li>
+<li><p>Once melted, it is equilibrated to the required temperature and pressure.</p></li>
+</ul>
+<p><strong>What about the reference system for liquid?</strong></p>
+<p>The reference system for the Liquid structure is also different. In this case, the Uhlenbeck-Ford system is used as the reference system for liquid.</p>
+<p>The Uhlenbeck-Ford model is described by,</p>
+<div class="math notranslate nohighlight">
+\[
+E = - \epsilon \log(1-\exp(-r^2/\sigma^2))
+\]</div>
+<p>where,</p>
+<div class="math notranslate nohighlight">
+\[
+\epsilon = p k_B T
+\]</div>
+<p><span class="math notranslate nohighlight">\(\epsilon\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> are energy and length scales, respectively.</p>
+<p>It is purely repulsive liquid model which does not undergo any phase transformations.</p>
+</section>
+<section id="comparison-of-melting-temperature-methods">
+<h3><font style="color:#455e6c" face="Helvetica" > Comparison of melting temperature methods </font><a class="headerlink" href="#comparison-of-melting-temperature-methods" title="Link to this heading">#</a></h3>
+<p><img alt="literature" src="_images/tm_methods.png" /></p>
+</section>
+<section id="further-reading">
+<h3><font style="color:#455e6c" face="Helvetica" > Further reading </font><a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.nature.com/articles/s41524-024-01441-0">Menon et al. “From electrons to phase diagrams with machine learning potentials using pyiron based automated workflows.” npj Computational Materials 10, 2024</a></p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1103/PhysRevMaterials.5.103801">Menon, Sarath, Yury Lysogorskiy, Jutta Rogal, and Ralf Drautz. “Automated Free-Energy Calculation from Atomistic Simulations.” Physical Review Materials 5, no. 10 (October 11, 2021): 103801.</a>.</p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1016/j.commatsci.2015.10.050">Freitas, Rodrigo, Mark Asta, and Maurice de Koning. “Nonequilibrium Free-Energy Calculation of Solids Using LAMMPS.” Computational Materials Science 112 (February 2016): 333–41.</a>.</p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1016/j.commatsci.2018.12.029">Paula Leite, Rodolfo, and Maurice de Koning. “Nonequilibrium Free-Energy Calculations of Fluids Using LAMMPS.” Computational Materials Science 159 (March 2019): 316–26.</a>.</p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1103/PhysRevLett.83.3973">Koning, Maurice de, A. Antonelli, and Sidney Yip. “Optimized Free-Energy Evaluation Using a Single Reversible-Scaling Simulation.” Physical Review Letters 83, no. 20 (November 15, 1999): 3973–77.</a>.</p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1063/1.4967775">Paula Leite, Rodolfo, Rodrigo Freitas, Rodolfo Azevedo, and Maurice de Koning. “The Uhlenbeck-Ford Model: Exact Virial Coefficients and Application as a Reference System in Fluid-Phase Free-Energy Calculations.” The Journal of Chemical Physics 145, no. 19 (November 21, 2016): 194101.</a>.</p></li>
+</ul>
+</section>
+<section id="software-used-in-this-notebook">
+<h3><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font><a class="headerlink" href="#software-used-in-this-notebook" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://calphy.org">calphy</a></p></li>
+<li><p><a class="reference external" href="https://github.com/eisenforschung/landau">landau</a></p></li>
+<li><p><a class="reference external" href="https://www.lammps.org/">LAMMPS</a></p></li>
+<li><p><a class="reference external" href="https://pyiron.org/">pyiron</a></p></li>
+<li><p><a class="reference external" href="https://github.com/pyiron/pyiron_workflow">pyiron_workflow</a></p></li>
+</ul>
+<p><img alt="roll" src="_images/logo_roll.png" /></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-simple-phase-diagram"><font style="font-family:roboto;color:#455e6c"> A simple phase diagram </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculation-of-phase-diagrams-the-essential-ingredients"><font style="font-family:roboto;color:#455e6c"> Calculation of phase diagrams: the essential ingredients </font></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory-behind-free-energy-calculation"><font style="font-family:roboto;color:#455e6c">Theory behind free energy calculation</font></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculation-of-free-energies-thermodynamic-integration"><font face="Helvetica" style="color:#455e6c"> Calculation of free energies: Thermodynamic integration </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#speeding-things-up-non-equilibrium-calculations"><font face="Helvetica" style="color:#455e6c"> Speeding things up: Non-equilibrium calculations </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#non-equilibrium-hamiltonian-interpolation">Non-Equilibrium Hamiltonian Interpolation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-for-solids"><font face="Helvetica" style="color:#455e6c"> Free energy for solids </font></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#task-find-free-energy-of-al-in-fcc-lattice-at-500-k-and-0-pressure">Task: Find free energy of Al in FCC lattice at 500 K and 0 pressure</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-as-function-of-temperature"><font face="Helvetica" style="color:#455e6c"> Free energy as function of temperature </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#free-energy-for-liquids"><font face="Helvetica" style="color:#455e6c"> Free energy for liquids </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-of-melting-temperature-methods"><font face="Helvetica" style="color:#455e6c"> Comparison of melting temperature methods </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading"><font face="Helvetica" style="color:#455e6c"> Further reading </font></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#software-used-in-this-notebook"><font style="font-family:roboto;color:#455e6c"> Software used in this notebook </font></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jan Janssen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
