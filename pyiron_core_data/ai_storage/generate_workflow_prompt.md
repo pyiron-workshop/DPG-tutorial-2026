@@ -55,7 +55,9 @@ wf.vacancy = CreateVacancy(
 **Important:**  
 - Do **not** create a `Project` object (e.g., `proj = Project("...")`).  
 - Only import nodes that are explicitly listed in the metadata.  
-- Do **not** write nodes, e.g. by using @as_function_node 
+- Do **not** write nodes, e.g. by using @as_function_node
+- Do **not** assume port labels that are not explicitly given in the metadata for a node (avoid errors such as: Invalid code - workflow creation failed: Input port "temperature_step" does not exist on node "InputClass")
+- Double check that a port label that you want to use is explicitly listed in the node metadata. Be conservative, it is better to have a missing port label rather than a wrong one! 
 
 ---  
 
@@ -101,6 +103,28 @@ wf.vacancy = CreateVacancy(
 # End of workflow
 ```
 
----  
+## 5. Example Workflows 
+
+### Free energy calculation of a solid unary phase
+```python
+from pyiron_nodes.atomistic.calculator.calphy import InputClass, PlotFreeEnergy, SolidFreeEnergyWithTemp
+from pyiron_nodes.atomistic.engine.eam import EAM
+from pyiron_nodes.atomistic.engine.lammps import ListPotentials
+from pyiron_nodes.atomistic.structure.build import Bulk
+from pyiron_nodes.atomistic.structure.transform import Repeat
+from pyiron_nodes.basic.list import PickElement
+from core import Workflow
+
+wf = Workflow("example")
+
+wf.BulkStructure = Bulk(name='Al', cubic=True)
+wf.CalphyInputClass = InputClass()
+wf.RepeatStructure = Repeat(structure=wf.BulkStructure.outputs.structure, repeat_scalar=3)
+wf.ListPotentials = ListPotentials(structure=wf.BulkStructure.outputs.structure)
+wf.PickElement = PickElement(lst=wf.ListPotentials.outputs.potentials, index=20)
+wf.EAM = EAM(potential_name=wf.PickElement.outputs.element)
+wf.SolidFreeEnergyWithTemp = SolidFreeEnergyWithTemp(input_class=wf.CalphyInputClass.outputs.output, structure=wf.RepeatStructure.outputs.structure, potential=wf.EAM.outputs.engine)
+wf.PlotUnaryFreeEnergy = PlotFreeEnergy(temperature=wf.SolidFreeEnergyWithTemp.outputs.temperature, free_energy=wf.SolidFreeEnergyWithTemp.outputs.free_energy)
+```
 
 *Follow the guidelines above to construct any pyiron workflow while ensuring the generated code is clean, deterministic, and ready for automated extraction.*
